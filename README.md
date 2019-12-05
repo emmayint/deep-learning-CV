@@ -1,1 +1,1 @@
-# csc899_imageUploadML
+# Image Analysis Web Application
