@@ -64,7 +64,7 @@ public/uploads/
 # next.js build output
 .next
 
-bin/*
+
 .idea/
 .DS_Store 
 package-lock.json
