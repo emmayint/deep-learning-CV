@@ -54,34 +54,89 @@ let upload = multer({
 
 router.post("/:id", function(req, res, next) {
   let user = req.user;
+  let exp_id = req.params.id;
+  let bodyObject = req.body
+  let bodyLength = Object.keys(bodyObject).length;
+  
   console.log("From frontEndBody: ------------- ", req.body);
-  console.log("From frontEndparam: ------------- ", req.user);
-  // console.log("From frontEnd:User*********** ", req.body.user);
-  // console.log("From frontEnd: ", req.body.imageID);
-  // let user = req.user;
-  // let id = req.params.id;
-  // const bodydata = req.body;
-  // const paramsdata = req.params;
-  // console.log("user_id: " + user.user_id);
-  // let prevdate = req.body.prevdate;
-  // var prevdateonly = "'" + prevdate + "'";
+  // console.log("From frontEndBody length: ------------- ", bodyLength);
+  // console.log("From frontEndBody ID: ------------- ", req.params.id);
+  // console.log("From frontEndparam: ------------- ", Object.keys(bodyObject));
+  // console.log("From frontEndparam: ------------- ", Object.entries(bodyObject));
+  
 
-  // db.query(
-  //   "SELECT * FROM prediction_type WHERE exp_id = " +
-  //     id +
-  //     " AND DATE(created_at) = " +
-  //     prevdateonly +
+  var imageIDval =[]
+  var isCheckedval = []
+    Object.keys(bodyObject)
+      .forEach(function eachKey(key) {
+        if (key.startsWith('imageID')) {
+          imageIDval.push(bodyObject[key]);
+        }
+        else{
+          isCheckedval.push(bodyObject[key]);
+        }
+      });
+    
+  // for (let i = 0; i < bodyLength/2; i++) {
+  //   db.query(
+  //     'UPDATE prediction_type SET user_validate ="' +
+  //     isCheckedval[i] +
+  //     '" WHERE exp_img_id = ' +
+  //     imageIDval[i] + 
+  //     ' AND exp_id = ' + 
+  //     exp_id +
   //     ";",
-  //   function(error, results, fields) {
-  //     if (error) throw error;
+  //     function (error, results, fields) {
+  //       if (error) throw error;
+  //       res.redirect("/prediction/view");
+  // }
+  //   )
+  // }
+  
+  for (let i = 0; i < bodyLength / 2; i++) {
+    db.query(
+      'UPDATE prediction_type SET user_validate ="' +
+      isCheckedval[i] +
+      '" WHERE exp_img_id = ' +
+      imageIDval[i] + 
+      ' AND exp_id = ' + 
+      exp_id +
+      ";",
+      function (error, results, fields) {
+        if (error) throw error;
+        res.redirect("/prevprediction/" + exp_id + "");
+      }
+    )
+  };
+        // db.query(
+        //   "SELECT * from prediction_type WHERE exp_id = "+ exp_id + "; ",
+        //     function (error, results, fields) {
+        //     if (error) throw error;
+        //     console.log("Results-------", results);
+        //       console.log("Before Render......");
+        //       res.render("Prevprediction/" + exp_id, {
+        //       uname: user.user_name,
+        //       data: results,
+        //       id: exp_id
+        //     });
+        //   }
+        // )
 
-  res.render(
-    "home"
-    // uname: user.user_name,
-    // data: results,
-    // id: id
-  );
 });
+  // res.redirect("/Prevprediction/" + exp_id);
+  
+  // res.render("prevprediction", {
+  //   uname: user.user_name,
+  //   data: results,
+  //   id: id
+  // });
+  // res.render(
+  //   "home"
+  //   // uname: user.user_name,
+  //   // data: results,
+  //   // id: id
+  // );
+// });
 // });
 
 // @route   GET /:id
