@@ -55,89 +55,38 @@ let upload = multer({
 router.post("/:id", function(req, res, next) {
   let user = req.user;
   let exp_id = req.params.id;
-  let bodyObject = req.body
+  let bodyObject = req.body;
   let bodyLength = Object.keys(bodyObject).length;
-  
-  console.log("From frontEndBody: ------------- ", req.body);
-  // console.log("From frontEndBody length: ------------- ", bodyLength);
-  // console.log("From frontEndBody ID: ------------- ", req.params.id);
-  // console.log("From frontEndparam: ------------- ", Object.keys(bodyObject));
-  // console.log("From frontEndparam: ------------- ", Object.entries(bodyObject));
-  
 
-  var imageIDval =[]
-  var isCheckedval = []
-    Object.keys(bodyObject)
-      .forEach(function eachKey(key) {
-        if (key.startsWith('imageID')) {
-          imageIDval.push(bodyObject[key]);
-        }
-        else{
-          isCheckedval.push(bodyObject[key]);
-        }
-      });
-    
-  // for (let i = 0; i < bodyLength/2; i++) {
-  //   db.query(
-  //     'UPDATE prediction_type SET user_validate ="' +
-  //     isCheckedval[i] +
-  //     '" WHERE exp_img_id = ' +
-  //     imageIDval[i] + 
-  //     ' AND exp_id = ' + 
-  //     exp_id +
-  //     ";",
-  //     function (error, results, fields) {
-  //       if (error) throw error;
-  //       res.redirect("/prediction/view");
-  // }
-  //   )
-  // }
-  
+  var imageIDval = [];
+  var isCheckedval = [];
+  Object.keys(bodyObject).forEach(function eachKey(key) {
+    if (key.startsWith("imageID")) {
+      imageIDval.push(bodyObject[key]);
+    } else {
+      isCheckedval.push(bodyObject[key]);
+    }
+  });
+
   for (let i = 0; i < bodyLength / 2; i++) {
     db.query(
       'UPDATE prediction_type SET user_validate ="' +
-      isCheckedval[i] +
-      '" WHERE exp_img_id = ' +
-      imageIDval[i] + 
-      ' AND exp_id = ' + 
-      exp_id +
-      ";",
-      function (error, results, fields) {
-        if (error) throw error;
-        res.redirect("/prevprediction/" + exp_id + "");
-      }
-    )
-  };
-        // db.query(
-        //   "SELECT * from prediction_type WHERE exp_id = "+ exp_id + "; ",
-        //     function (error, results, fields) {
-        //     if (error) throw error;
-        //     console.log("Results-------", results);
-        //       console.log("Before Render......");
-        //       res.render("Prevprediction/" + exp_id, {
-        //       uname: user.user_name,
-        //       data: results,
-        //       id: exp_id
-        //     });
-        //   }
-        // )
+        isCheckedval[i] +
+        '" WHERE exp_img_id = ' +
+        imageIDval[i] +
+        " AND exp_id = " +
+        exp_id +
+        ";",
 
+      function(error, results, fields) {
+        if (error) throw error;
+
+        // res.redirect("/Prevprediction/" + exp_id + "");
+      }
+    );
+  }
+  res.redirect("/Prevprediction/" + exp_id + "");
 });
-  // res.redirect("/Prevprediction/" + exp_id);
-  
-  // res.render("prevprediction", {
-  //   uname: user.user_name,
-  //   data: results,
-  //   id: id
-  // });
-  // res.render(
-  //   "home"
-  //   // uname: user.user_name,
-  //   // data: results,
-  //   // id: id
-  // );
-// });
-// });
 
 // @route   GET /:id
 // @desc    Get previous prediction of the selected images by experiment id
