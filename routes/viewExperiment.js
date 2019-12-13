@@ -16,7 +16,8 @@ let upload = multer({
     filename: (req, file, cb) => {
       console.log(file.originalname);
       let ext = path.extname(file.originalname);
-      cb(null, Date.now().toString() + ".jpg");
+      // cb(null, Date.now().toString() + ".jpg");
+      cb(null, file.originalname);
     }
   })
 });

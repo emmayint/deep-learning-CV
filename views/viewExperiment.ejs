@@ -6,8 +6,7 @@
         <link href="/stylesheets/style.css" rel="stylesheet">
         <link href="/stylesheets/croppr.css" rel="stylesheet">
         <link href="/stylesheets/cropper.css" rel="stylesheet">
-        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-
+        <script data-auto-a11y="true" src="https://use.fontawesome.com/releases/v5.11.2/js/all.js"></script>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -36,9 +35,7 @@
         <!-- Display loading gif till the async call does not return a response -->
         <div id="loadingPredict" style="display: none"></div>
 
-
         <!-- Navigation Bar -->
-        <!-- <div class="container"> -->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <button aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarNavDropdown" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -67,7 +64,6 @@
                 </ul>
             </div>
         </nav>
-        <!-- </div> -->
         <br>
         <div
             class="container">
@@ -98,13 +94,11 @@
                 <button class="btn btn-primary btnStyle" id="btnEnableCrop" type="button">Enable Selected Crop
                 </button>
 
-                <button class="btn btn-primary btnStyle" disabled id="prediction" type="button">
+                <button class="btn btn-primary btnStyle" id="prediction" type="button">
                     Predict
                 </button>
 
             </div>
-
-            <br>
 
             <!-- Display images -->
             <div
@@ -116,9 +110,24 @@
                     <!-- If images are already cropped, highlight the cropped portion -->
                     <% if (data[i].rect) { %>
 
-                        <div class="col-md-3">
+                        <div class="col-md-3" style="margin: 30px 0 10px 0;">
 
                             <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>"/>
+
+                            <div>
+                                <p style="float:right">
+                                    <label class="switch">
+                                        <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop" id="cbToggle<%= data[i].id %>"/>
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop" type='button' value='Crop'/>
+                                </p>
+                                <p>
+                                    <b>Image Id:
+                                        <%= data[i].id %></b>
+                                </p>
+                            </div>
+
 
                             <div class="img-thumbnail">
                                 <div class="croppr-container object-fit_cover">
@@ -136,6 +145,26 @@
                                 </div>
 
                                 <br>
+                                <!-- <p style="float:right">
+                                    <label class="switch">
+                                        <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop" id="cbToggle<%= data[i].id %>"/>
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop" type='button' value='Crop'/>
+                                </p>
+                                <p>
+                                    <b>Image Id:
+                                        <%= data[i].id %></b>
+                                </p> -->
+                            </div>
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="col-md-3">
+                            <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>"/>
+                            
+                            <div>
                                 <p style="float:right">
                                     <label class="switch">
                                         <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop" id="cbToggle<%= data[i].id %>"/>
@@ -148,17 +177,12 @@
                                         <%= data[i].id %></b>
                                 </p>
                             </div>
-                        </div>
-
-                    <% } else { %>
-
-                        <div class="col-md-3">
-                            <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>"/>
+                            
                             <div class="img-thumbnail">
 
                                 <img class="large-image" src="/uploads/<%= data[i].exp_images %>"/>
 
-                                <br>
+                                <!-- <br>
                                 <p style="float:right">
                                     <label class="switch">
                                         <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop" id="cbToggle<%= data[i].id %>"/>
@@ -169,7 +193,7 @@
                                 <p>
                                     <b>Image Id:
                                         <%= data[i].id %></b>
-                                </p>
+                                </p> -->
                             </div>
                         </div>
 

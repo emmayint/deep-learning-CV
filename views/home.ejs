@@ -1,96 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Home</title>
-        <meta content="width=device-width, initial-scale=1" name="viewport">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-        <link href='/stylesheets/style.css' rel='stylesheet'/>
-        <link href="/stylesheets/viewexperiment.css" rel="stylesheet">
+<head>
+    <title>Home</title>
+    <% include partials/head %>
+    <link href="/stylesheets/style.css" rel="stylesheet" />
+    <link href="/stylesheets/home.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
+    <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
+</head>
 
-
-    </head>
-
-    <body>
-        <!-- Navigation Bar -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <button aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarNavDropdown" data-toggle="collapse" type="button">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="navbar-collapse collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item" style="padding-top:5px;">
-                        <a " href=" #" class=" btn btn-primary btn-sm">
-                            <i class="fa fa-user"></i>
-                            Welcome,
-                            <%= uname %>!</a>
-                    </li>
-                    <li class="nav-item active home">
-                        <a class="nav-link" href="/home">Home
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item logout">
-                        <form action="/logout" id="form" method="POST">
-                            <a class="nav-link" href="/logout" onclick="document.getElementById('form').submit(); return false;">Logout</a>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="container">
-            <div class="row div">
-
-                <div class="col-md-12 btn-group-toggle viewexp">
-<a aria-pressed="true" class="btn btn-lg btn-outline-warning" href="/addExperiment" role="button">
-    <i class="fas fa-plus fa-spin"></i> Add a New Experiment Here!</a>
-
-                    <div>
-                        <h4>Experiments Gallary</h4>
-                    </div>
+<body>
+    <!-- Navigation Bar -->
+    <% include partials/home-header %>
+    <div class="container">
+        <div class="row div">
+            <div class="col-md-12 btn-group-toggle topmargin">
+                <div class="heading">
+                    <h2>EXPERIMENTS GALLARY
+                        <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Add New Experiment" class="custombtn btn-primary btn-lg" href="/addExperiment" role="button">
+                        <i class="fas fa-plus"></i></a>
+                    </h2>
+                    <hr class="mt-2 mb-5"> 
                 </div>
-                <!-- <div id="viewExp" class="container" style="display: none;">
-                                                <div class="row div"> -->
-
-                <% for (var i = 0; i < data.length; i++) { %>
-                    <div
-                        class="col-md-3" style="margin: 5px 0 5px 0;">
-                        <!-- <div class="img-responsive img-rounded"> -->
-                        <div class="img-responsive thumbnail">
-                            <a href="viewExperiment/<%= data[i].exp_id %>">
-                                <p><img class="scaled" src="/uploads/<%= data[i].exp_images %>">
-                                </p>
-                                <p class="imgmetadata">
-
-                                    Exp Date: <%= data[i].exp_birth_date %><br>
-                                    Exp Title: 
-                                    <%= data[i].exp_title %>
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                <% } %>
-                <!-- </div>
-                                                </div> -->
             </div>
-
+            <section class="gallery-block cards-gallery">
+                <div class="container">
+                    <div class="row">
+                        <% for (var i = 0; i < data.length; i++) { %>
+                        <div class="col-md-3 col-lg-3">
+                            <div class="card border-0 transform-on-hover">
+                                <a class="lightbox" href="viewExperiment/<%= data[i].exp_id %>">
+                                    <img src="/uploads/<%= data[i].exp_images %>" alt="Card Image"
+                                        class="card-img-top scaled">
+                                </a>
+                                <div class="card-body">
+                                    <h6><a href="#">Exp Title:
+                                            <%= data[i].exp_title %></a></h6>
+                                    <p class="text-muted card-text">Exp Date: <%= data[i].exp_birth_date %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %></div>
+                </div>
+            </section>
         </div>
+    </div>
+    <% include partials/footer %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script>
+        baguetteBox.run('.cards-gallery', { animation: 'slideIn' });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
-        <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script crossorigin="anonymous" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-        <script crossorigin="anonymous" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-        <!-- <script type="text/javascript">
-                                function viewExpFun() {
-                                    $('#viewExp').show();
-                                }
-                                </script> -->
+</body>
 
-    </body>
 </html>

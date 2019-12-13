@@ -1,20 +1,14 @@
 <!doctype html>
 <html>
 <head>
-    <title>View Experiment</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Previous Predictions</title>
+    <% include partials/head %>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/croppr.css">
     <link rel="stylesheet" href="/stylesheets/cropper.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="/javascripts/viewexperiment.js"></script>
-    <link rel="stylesheet" href="/stylesheets/viewexperiment.css">
-    <script src="/javascripts/croppr.js"></script>
-    <script src="/javascripts/cropper.js"></script>
-    <script src="/javascripts/cropper.js"></script>
-    <script src="/javascripts/prevprediction.js"></script>
+    <!-- <link rel="stylesheet" href="/stylesheets/viewexperiment.css"> -->
+    <link rel="stylesheet" href="/stylesheets/prevprediction.css">
+    <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
 
     <style>
         #loadingPredict {
@@ -38,51 +32,37 @@
 
 <div id="loadingPredict" style="display: none"></div>
 
-<div class="container">
+<!-- <div class="container"> -->
     <!-- Navigation Bar -->
+    <% include partials/home-header %>
     <div class="container">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/home">Home </a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Welcome, <%= uname %>!</a></li>
-                        <li>
-                            <form class="form" id="form" method="POST" action="/logout">
-                                <a href="/logout" onclick="document.getElementById('form').submit(); return false;">Logout</a>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
 
     <!-- Apply Filter by date  -->
-    <div class="row filterForm">
-        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+    <div class="row div">
+        <div class="col-md-12 btn-group-toggle topmargin">
+            <div class="heading toprow">
+                <h2>Predictions to be validated
+                    <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Go Back to View Experiments"
+                        class="custombtn btn-primary btn-sm" href="/viewExperiment/<%= id %>" role="button">
+                        <i class="fas fa-angle-double-left"></i></a>
+                </h2>
+                <hr class="mt-2 mb-1">
+            </div>
+        </div>
+        <!-- <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
             <form class="form" method="POST" action="<%= id %>/filter" >
                 <div class="input-group">
-                    <span class="input-group-btn expBirthDate">Previous date </span>
+                    <span class="input-group-btn expBirthDate">Previous date</span>
                     <span class="date_filter"><input type="date" class="form-control" name="prevdate" required autofocus id="prevdate" /></span>
                     <span class="input-group-btn applydate apply_date"> <input type="submit" value="apply" id="applydate"></span>
                 </div>
             </form>
-        </div>
+        </div> -->
 
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 backBtn">
+        <!-- <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 backBtn">
             <a href="/viewExperiment/<%= id %>"><button type="button" class="btn btn-primary" id="Back">Back</button></a>
-        </div>
+        </div> -->
     </div>
-
-    <br>
 
     <!-- Display predictions -->
     <div class="row">
@@ -116,5 +96,15 @@
     </style>
 
 </div>
+<% include partials/footer %>
+<script src="/javascripts/viewexperiment.js"></script>
+<script src="/javascripts/prevprediction.js"></script>
+<script src="/javascripts/croppr.js"></script>
+<script src="/javascripts/cropper.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 </body>
 </html>

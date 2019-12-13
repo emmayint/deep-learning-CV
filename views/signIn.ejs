@@ -1,85 +1,42 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Sign In</title>
-        <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <link href="/stylesheets/login.css" rel="stylesheet"/>
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-between">
-            <a class="navbar-brand mx-auto d-block text-center order-0 order-md-1" href="#">
-                <h3>Image Classification Portal</h3>
-            </a>
-        </nav>
-        <div class="container login-container">
-            <div class="row rounded">
-                <div class="col-md-6 login-form-1">
-                    <form action="/signUp" method="POST" name="registerForm">
-                        <h3>Register</h3>
-                        <div class="form-group">
-                            <input class="form-control" name="username" placeholder="User Name *" required type="text" value=""/>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" name="email" placeholder="Email *" required type="text" value=""/>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" id="password" name="password" placeholder="Password *" required type="password" value=""/>
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" id="passwordMatch" name="passwordMatch" placeholder="Confirm password *" required type="password" value=""/>
-                        </div>
-                        <div class="form-group center">
-                            <input class="btnSubmit" type="submit" value="Register"/>
-                        </div>
-                    </form>
-                    <div style="margin-top:3%;">
-                        <% if (typeof error != 'undefined' && error) { %>
-                            <div class="alert alert-warning"><%= error %></div>
-                        <% } %>
-                    </div>
-                </div>
 
-                <div class="col-md-6 login-form-2">
-                    <form action="/" method="POST" name="loginForm">
-                        <h3>Login</h3>
-                        <div class="form-group">
-                            <input class="form-control" name="username" placeholder="Email *" required type="text" value=""/>
+<head>
+    <title>Sign In</title>
+    <% include partials/head %>
+    <link href="/stylesheets/login.css" rel="stylesheet" />
+</head>
+
+<body>
+    <% include partials/login-header %>
+    <div class="container login-container">
+        <div class="row">
+            <div class="signup-form">
+                <form action="/" method="post">
+                    <h2>Login</h2>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input type="text" class="form-control" name="username" placeholder="Username"
+                                required="required">
                         </div>
-                        <div class="form-group">
-                            <input class="form-control" name="password" placeholder="Password *" required type="password" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                            <input type="password" class="form-control" name="password" placeholder="Password"
+                                required="required">
                         </div>
-                        <div class="form-group center">
-                            <input class="btnSubmit" type="submit" value="Login"/>
-                        </div>
-                        <div class="form-group center">
-                            <a class="btnForgetPwd" href="#">
-                                <u>Forgot Password?</u>
-                            </a>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg" value="Login">Sign In</button>
+                    </div>
+                </form>
+                <div class="text-center">Don't an account? <a href="/signUp">Sign Up here</a>.</div>
             </div>
         </div>
+    </div>
+    <% include partials/footer %>
+</body>
 
-        <script type="text/javascript">
-            window.onload = function () {
-                document.getElementById("password").onchange = validatePassword;
-                document.getElementById("passwordMatch").onchange = validatePassword;
-            };
-
-            function validatePassword() {
-                var pass2 = document.getElementById("passwordMatch").value;
-                var pass1 = document.getElementById("password").value;
-                if (pass1 !== pass2) 
-                    document.getElementById("passwordMatch").setCustomValidity("Passwords Don't Match");
-                 else 
-                    document.getElementById("passwordMatch").setCustomValidity("");
-                
-            }
-        </script>
-    </body>
 </html>

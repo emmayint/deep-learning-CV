@@ -51,7 +51,7 @@ router.post('/', function (req, res, next) {
                     console.log('UserId' + user_id);
                     req.logIn(user_id, function (err) {
                         // if success
-                        res.redirect('/home');
+                        res.redirect('/signUp');
 
                     });
                 });
