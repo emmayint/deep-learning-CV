@@ -130,7 +130,7 @@ router.post("/getImagePrediction", function(req, res) {
                                 result.exp_label_name,
                                 result.exp_crop_img,
                                 result.id,
-                                type,
+                                type.toUpperCase(),
                                 created_at,
                                 updated_at
                               ]
@@ -147,7 +147,7 @@ router.post("/getImagePrediction", function(req, res) {
                       [
                         pyResponse[k].exp_img_id,
                         exp_id,
-                        pyResponse[k].type,
+                        pyResponse[k].type.toUpperCase(),
                         dataImage[pyResponse[k].exp_img_id],
                         now
                       ]
@@ -198,7 +198,7 @@ router.get("/view/:id", function(req, res) {
       }
 
       let array = smallArr.toString();
-      console.log("ARRAY----- ",array);
+      console.log("ARRAY----- ", array);
 
       // Get prediction to be displayed on the web interface
       db.query(
@@ -225,7 +225,7 @@ router.get("/view/:id", function(req, res) {
 // @route   GET /prediction/view
 // @desc    Display predictions on the web interface
 // @access  Private
-router.get("/view/validate/:id", function (req, res) {
+router.get("/view/validate/:id", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
     let id = req.params.id;
@@ -233,7 +233,7 @@ router.get("/view/validate/:id", function (req, res) {
     if (req.session.predictionData) {
       let responseData = req.session.predictionData;
       console.log("Response Data: ", responseData);
-      setTimeout(function () {
+      setTimeout(function() {
         req.session.predictionData = "";
       }, 2000);
 
@@ -247,10 +247,11 @@ router.get("/view/validate/:id", function (req, res) {
       // Get prediction to be displayed on the web interface
       db.query(
         "SELECT exp_id,img AS exp_images,exp_img_id AS id,exp_type FROM prediction_type WHERE exp_id = " +
-        id +
-        " AND user_validate is NULL " +" AND exp_validate = 0 ;",
-        function (err, resultImg) {
-          console.log("SELECT QUERY=-=====",this.sql);
+          id +
+          " AND user_validate is NULL " +
+          " AND exp_validate = 0 ;",
+        function(err, resultImg) {
+          console.log("SELECT QUERY=-=====", this.sql);
           if (resultImg) {
             res.render("viewPrediction", {
               uname: user.user_name,
@@ -266,7 +267,6 @@ router.get("/view/validate/:id", function (req, res) {
     }
   }
 });
-
 
 // @route   POST /checkCrop
 // @desc    Enable Predict button, if image is previously cropped

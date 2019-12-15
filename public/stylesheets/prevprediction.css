@@ -43,30 +43,30 @@
   display: inline-block;
   padding: 20px 0;
 }
-.tab{
-    margin-top: 100px;
+.tab {
+  margin-top: 100px;
 }
-.tab-a{
-    font-size: 20px;
-    font-weight: bold;
+.tab-a {
+  font-size: 20px;
+  font-weight: bold;
 }
-.tab-li{
-    margin-right: 500px;
-    margin-top: 10px;
+.tab-li {
+  margin-right: 500px;
+  margin-top: 10px;
 }
-.rowmargin{
-    margin-top:30px;
+.rowmargin {
+  margin-top: 30px;
 }
-.case{
-text-transform: capitalize;
+.case {
+  text-transform: uppercase;
 }
-.row.rowmargin .gap{
-    margin: 10px 0 10px 0;
+.row.rowmargin .gap {
+  margin: 10px 0 10px 0;
 }
-.actualtop{
-    margin-top: 10px;
+.actualtop {
+  margin-top: 10px;
 }
-.all-p{
-margin-left: 5px;
-margin-bottom: 2px;
+.all-p {
+  margin-left: 5px;
+  margin-bottom: 2px;
 }

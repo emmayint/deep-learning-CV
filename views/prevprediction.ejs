@@ -51,10 +51,10 @@
                         <div class="img-responsive img-thumbnail">
                             <a href="viewExperiment/<%= data[i].exp_id %>"></a>
                             <img class=scaled src="/uploads/<%= data[i].img %>">
-                            <% if (data[i].user_validate == "No" && data[i].exp_type == "control") { %>
-                            <p class="actualtop all-p">Actual : <b class="case"> Mutant</b></p>
-                            <% } else if (data[i].user_validate == "No" && data[i].exp_type == "mutant") { %>
-                            <p class="actualtop all-p">Actual : <b class="case"> Control</b></p>
+                            <% if (data[i].user_validate == "No" && data[i].exp_type == "CONTROL") { %>
+                            <p class="actualtop all-p">Actual : <b class="case"> MUTANT</b></p>
+                            <% } else if (data[i].user_validate == "No" && data[i].exp_type == "MUTANT") { %>
+                            <p class="actualtop all-p">Actual : <b class="case"> CONTROL</b></p>
                             <% } else { %>
                             <p class="actualtop all-p">Actual : <b class="case"> <%= data[i].exp_type %></b></p>
                             <% } %>
