@@ -72,16 +72,15 @@ router.post("/:id", function(req, res, next) {
     db.query(
       'UPDATE prediction_type SET user_validate ="' +
         isCheckedval[i] +
-        '" WHERE exp_img_id = ' +
+        '" ,exp_validate = 1 WHERE exp_img_id = ' +
         imageIDval[i] +
         " AND exp_id = " +
         exp_id +
-        ";",
+      " AND user_validate is NULL;",
 
       function(error, results, fields) {
+        console.log("QUERY---", this.sql);
         if (error) throw error;
-
-        // res.redirect("/Prevprediction/" + exp_id + "");
       }
     );
   }
@@ -102,7 +101,7 @@ router.get("/:id", function(req, res, next) {
     console.log(req.params);
 
     db.query(
-      "SELECT * FROM prediction_type WHERE exp_id = " + id + ";",
+      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS created_at, update_at, exp_validate, user_validate FROM prediction_type WHERE exp_id = " + id + ";",
       function(error, results, fields) {
         if (error) throw error;
 

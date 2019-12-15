@@ -156,7 +156,8 @@ router.post("/getImagePrediction", function(req, res) {
 
                   req.session.predictionData = "";
                   req.session.predictionData = pyResponse;
-                  res.redirect("/prediction/view");
+                  // res.redirect("/prediction/view");
+                  res.redirect("/prediction/view/" + exp_id);
                 } catch (e) {
                   console.log("Error", e);
                   req.session.predictionDataerror = e;
@@ -178,7 +179,7 @@ router.post("/getImagePrediction", function(req, res) {
 // @route   GET /prediction/view
 // @desc    Display predictions on the web interface
 // @access  Private
-router.get("/view", function(req, res) {
+router.get("/view/:id", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
 
@@ -197,10 +198,11 @@ router.get("/view", function(req, res) {
       }
 
       let array = smallArr.toString();
+      console.log("ARRAY----- ",array);
 
       // Get prediction to be displayed on the web interface
       db.query(
-        "SELECT exp_images,exp_id,id FROM experiment_images WHERE id IN (" +
+        "SELECT exp_images,exp_id,id,DATE_FORMAT(created_at,'%m/%d/%Y %T') AS created_at FROM experiment_images WHERE id IN (" +
           array +
           ");",
         function(err, resultImg) {
@@ -219,6 +221,52 @@ router.get("/view", function(req, res) {
     }
   }
 });
+
+// @route   GET /prediction/view
+// @desc    Display predictions on the web interface
+// @access  Private
+router.get("/view/validate/:id", function (req, res) {
+  if (req.isAuthenticated()) {
+    let user = req.user;
+    let id = req.params.id;
+
+    if (req.session.predictionData) {
+      let responseData = req.session.predictionData;
+      console.log("Response Data: ", responseData);
+      setTimeout(function () {
+        req.session.predictionData = "";
+      }, 2000);
+
+      let smallArr = [];
+
+      for (let i = 0; i < responseData.length; i++) {
+        let image_id = responseData[i].exp_img_id;
+        smallArr.push(image_id);
+      }
+
+      // Get prediction to be displayed on the web interface
+      db.query(
+        "SELECT exp_id,img AS exp_images,exp_img_id AS id,exp_type FROM prediction_type WHERE exp_id = " +
+        id +
+        " AND user_validate is NULL " +" AND exp_validate = 0 ;",
+        function (err, resultImg) {
+          console.log("SELECT QUERY=-=====",this.sql);
+          if (resultImg) {
+            res.render("viewPrediction", {
+              uname: user.user_name,
+              // data: responseData,
+              dataImg: resultImg
+            });
+            console.log("dataImg:------------- ", resultImg);
+          }
+        }
+      );
+    } else {
+      res.redirect("back");
+    }
+  }
+});
+
 
 // @route   POST /checkCrop
 // @desc    Enable Predict button, if image is previously cropped

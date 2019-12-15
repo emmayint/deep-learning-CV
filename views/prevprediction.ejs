@@ -1,110 +1,113 @@
 <!doctype html>
 <html>
+
 <head>
     <title>Previous Predictions</title>
     <% include partials/head %>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="/stylesheets/croppr.css">
     <link rel="stylesheet" href="/stylesheets/cropper.css">
-    <!-- <link rel="stylesheet" href="/stylesheets/viewexperiment.css"> -->
     <link rel="stylesheet" href="/stylesheets/prevprediction.css">
     <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
-
-    <style>
-        #loadingPredict {
-            position: fixed;
-            width: 100%;
-            height: 100vh;
-            /* background: rgb(255, 255, 255, 0.5) url('/images/loading.gif') no-repeat center center; */
-            background: #ffffff url('/images/loading.gif') no-repeat center center;
-            z-index: 9999;
-        }
-        .filterForm{display:block;width:100%;background:#fff;margin:80px 0 0;}
-        .input-group .form-control{height:40px;}
-        .input-group-btn{font-size:24px;color:#000;padding-right:15px;}
-        #applydate{margin:0;width:auto;height:40px;margin-left:15px;background:#337ab7;border:None;border-radius:5px;color:#fff;padding:0px 20px;line-height:40px;text-transform:uppercase;}
-        .backBtn{text-align:right;}
-        .backBtn a{display:inline-block;padding:20px 0;}
-    </style>
-
 </head>
+
 <body>
 
-<div id="loadingPredict" style="display: none"></div>
+    <div id="loadingPredict" style="display: none"></div>
 
-<!-- <div class="container"> -->
     <!-- Navigation Bar -->
     <% include partials/home-header %>
     <div class="container">
-
-    <!-- Apply Filter by date  -->
-    <div class="row div">
-        <div class="col-md-12 btn-group-toggle topmargin">
-            <div class="heading toprow">
-                <h2>Predictions to be validated
-                    <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Go Back to View Experiments"
-                        class="custombtn btn-primary btn-sm" href="/viewExperiment/<%= id %>" role="button">
+        <div class="row div">
+            <!-- Tabbed Interface -->
+            <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active tab-a" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        aria-controls="profile" aria-selected="false">Validated Predictions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  tab-a" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        aria-controls="home" aria-selected="true">Predictions to be validated</a>
+                </li>
+                <li>
+                    <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom"
+                        title="Go Back to View Experiments" class="custombtn btn-primary btn-lg"
+                        href="/viewExperiment/<%= id %>" role="button" style="
+                margin-left: 76px;">
                         <i class="fas fa-angle-double-left"></i></a>
-                </h2>
-                <hr class="mt-2 mb-1">
-            </div>
+                </li>
+            </ul>
+
         </div>
-        <!-- <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-            <form class="form" method="POST" action="<%= id %>/filter" >
-                <div class="input-group">
-                    <span class="input-group-btn expBirthDate">Previous date</span>
-                    <span class="date_filter"><input type="date" class="form-control" name="prevdate" required autofocus id="prevdate" /></span>
-                    <span class="input-group-btn applydate apply_date"> <input type="submit" value="apply" id="applydate"></span>
+        <div class="tab-content" id="myTabContent">
+            <!-- Validated Predictions Content -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="row rowmargin">
+
+                    <% for (var i = 0; i < data.length; i++) { %>
+
+                    <% if (data[i].exp_validate == 1 && data[i].user_validate) { %>
+                    <div class="col-md-3 gap">
+                        <div class="img-responsive img-thumbnail">
+                            <a href="viewExperiment/<%= data[i].exp_id %>"></a>
+                            <img class=scaled src="/uploads/<%= data[i].img %>">
+                            <% if (data[i].user_validate == "No" && data[i].exp_type == "control") { %>
+                            <p class="actualtop all-p">Actual : <b class="case"> Mutant</b></p>
+                            <% } else if (data[i].user_validate == "No" && data[i].exp_type == "mutant") { %>
+                            <p class="actualtop all-p">Actual : <b class="case"> Control</b></p>
+                            <% } else { %>
+                            <p class="actualtop all-p">Actual : <b class="case"> <%= data[i].exp_type %></b></p>
+                            <% } %>
+                            <p class="all-p">Predicted : <b class="case"> <%= data[i].exp_type %></b></p>
+
+                            <p class="all-p">Prediction On : <b> <%= data[i].created_at %> </b></p>
+                            </a>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% } %>
                 </div>
-            </form>
-        </div> -->
-
-        <!-- <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 backBtn">
-            <a href="/viewExperiment/<%= id %>"><button type="button" class="btn btn-primary" id="Back">Back</button></a>
-        </div> -->
-    </div>
-
-    <!-- Display predictions -->
-    <div class="row">
-
-        <% for (var i = 0; i < data.length; i++) { %>
-
-        <div class="col-md-4" style="margin: 10px 0 10px 0;">
-            <div class="img-responsive img-thumbnail">
-                <a href="viewExperiment/<%= data[i].exp_id %>"></a>
-                <p><img class=scaled src="/uploads/<%= data[i].img %>"></p>
-                <hr>
-
-                <p>Type : <b>  <%= data[i].exp_type %></b></p>
-                <p>Prediction On : <b> <%= data[i].created_at %> </b></p>
-                </a>
+            </div>
+            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <!-- To Be Validated Predictions Content -->
+                <div class="row rowmargin">
+                    <section class="gallery-block cards-gallery">
+                        <div class="container">
+                            <div class="row">
+                                <% for (var i = 0; i < data.length; i++) { %>
+                                    <% if (data[i].exp_validate == 0 && !data[i].user_validate) { %>
+                                <div class="col-md-3 col-lg-3">
+                                    <div class="card border-0 transform-on-hover">
+                                        <a class="lightbox" href="/prediction/view/validate/<%= data[i].exp_id %>">
+                                            <img src="/uploads/<%= data[i].img %>" alt="Card Image"
+                                                class="card-img-top scaled">
+                                        </a>
+                                        <div class="card-body-prevpred">
+                                            <h6><a href="#" class="case">Predicted :
+                                                    <%= data[i].exp_type %></a></h6>
+                                            <p class="text-muted card-text">Prediction On : <%= data[i].created_at %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% } %></div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
-        <% } %>
-
-
     </div>
-
-    <br>
-    <br>
-
-    <style>
-        .btn {
-            padding: 6px 11px;
-
-        }
-    </style>
-
-</div>
-<% include partials/footer %>
-<script src="/javascripts/viewexperiment.js"></script>
-<script src="/javascripts/prevprediction.js"></script>
-<script src="/javascripts/croppr.js"></script>
-<script src="/javascripts/cropper.js"></script>
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
+    <% include partials/footer %>
+    <script src="/javascripts/viewexperiment.js"></script>
+    <script src="/javascripts/prevprediction.js"></script>
+    <script src="/javascripts/croppr.js"></script>
+    <script src="/javascripts/cropper.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 </body>
+
 </html>
