@@ -4,3 +4,9 @@
 .hideimageid {
   display: none;
 }
+.fileName {
+  padding: 3px;
+  width: auto;
+  word-break: break-all;
+  word-wrap: break-word;
+}

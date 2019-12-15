@@ -37,6 +37,10 @@
 .gallery-block.cards-gallery .card-body {
   text-align: center; 
 }
+.gallery-block.cards-gallery .card-body-prevpred {
+  text-align: left; 
+  margin: 10px;
+}
 
 .gallery-block.cards-gallery .card-body p {
   font-size: 15px; 

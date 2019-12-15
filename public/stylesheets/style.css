@@ -168,7 +168,9 @@ input:checked + .slider:before {
 .date_filter{
     margin-right: 7px;
     float: left;
-}.del_img_view{
+}
+
+.del_img_view{
 
 }
 

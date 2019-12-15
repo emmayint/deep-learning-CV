@@ -29,13 +29,28 @@ body {
   background: #636363;
   margin-top: 20px;
 }
- 
 
-.imgid{
+.imgid {
   color: #636363;
 }
-.cropBtn{
+.cropBtn {
   background: #179b81;
   font-size: 16px;
-        font-weight: bold;
+  font-weight: bold;
+}
+
+.topmargin {
+  margin-top: 80px;
+}
+
+#loadingPredict {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  /* background: rgb(255, 255, 255, 0.5) url('/images/loading.gif') no-repeat center center; */
+  background: #ffffff url("/images/loading.gif") no-repeat center center;
+  z-index: 9999;
+}
+.backBtn {
+  text-align: right;
 }
