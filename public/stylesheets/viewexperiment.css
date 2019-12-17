@@ -43,6 +43,14 @@ body {
   margin-top: 80px;
 }
 
+.fileName {
+  padding: 3px;
+  width: auto;
+  height: auto;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
 #loadingPredict {
   position: fixed;
   width: 100%;

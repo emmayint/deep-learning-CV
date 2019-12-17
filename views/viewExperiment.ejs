@@ -68,9 +68,17 @@
             <div class="col-md-3" style="margin: 30px 0 10px 0;">
 
                 <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>" />
-
+                <p style="float:right">
+                    <label class="switch">
+                        <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                            id="cbToggle<%= data[i].id %>" />
+                        <span class="slider round"></span>
+                    </label>
+                    <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                        type='button' value='Crop' />
+                </p><br><br>
                 <div class="img-thumbnail">
-                    <p style="float:right">
+                    <!-- <p style="float:right">
                         <label class="switch">
                             <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
                                 id="cbToggle<%= data[i].id %>" />
@@ -78,11 +86,8 @@
                         </label>
                         <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
                             type='button' value='Crop' />
-                    </p>
-                    <p>
-                        <b>Image Id:
-                            <%= data[i].id %></b>
-                    </p>
+                    </p> -->
+                    <div class="fileName"><p>Name: <b> <%= data[i].exp_images%></b></p></div>
                     <div class="croppr-container object-fit_cover">
                         <div class="croppr ">
 
@@ -105,9 +110,17 @@
 
             <div class="col-md-3" style="margin: 30px 0 10px 0;">
                 <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>" />
-
+                <p style="float:right">
+                    <label class="switch">
+                        <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                            id="cbToggle<%= data[i].id %>" />
+                        <span class="slider round"></span>
+                    </label>
+                    <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                        type='button' value='Crop' />
+                </p><br><br>
                 <div class="img-thumbnail">
-                    <p style="float:right">
+                    <!-- <p style="float:right">
                         <label class="switch">
                             <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
                                 id="cbToggle<%= data[i].id %>" />
@@ -115,11 +128,8 @@
                         </label>
                         <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
                             type='button' value='Crop' />
-                    </p>
-                    <p>
-                        <b>Image Id:
-                            <%= data[i].id %></b>
-                    </p>
+                    </p> -->
+                    <div class="fileName"><p>Name: <b> <%= data[i].exp_images%></b></p></div>
 
                     <img class="large-image" src="/uploads/<%= data[i].exp_images %>" />
                 </div>
