@@ -76,7 +76,7 @@ router.post("/:id", function(req, res, next) {
         imageIDval[i] +
         " AND exp_id = " +
         exp_id +
-      " AND user_validate is NULL;",
+        " AND user_validate is NULL;",
 
       function(error, results, fields) {
         console.log("QUERY---", this.sql);
@@ -101,8 +101,11 @@ router.get("/:id", function(req, res, next) {
     console.log(req.params);
 
     db.query(
-      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS created_at, update_at, exp_validate, user_validate FROM prediction_type WHERE exp_id = " + id + ";",
+      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS created_at, update_at, exp_validate, user_validate, pred_percentage FROM prediction_type WHERE exp_id = " +
+        id +
+        " order by created_at desc;",
       function(error, results, fields) {
+        console.log(this.sql);
         if (error) throw error;
 
         res.render("prevprediction", {

@@ -47,10 +47,12 @@
                     <% for (var i = 0; i < data.length; i++) { %>
 
                     <% if (data[i].exp_validate == 1 && data[i].user_validate) { %>
-                    <div class="col-md-3 gap">
+                    <div class="col-md-4 gap">
                         <div class="img-responsive img-thumbnail">
                             <a href="viewExperiment/<%= data[i].exp_id %>"></a>
                             <img class=scaled src="/uploads/<%= data[i].img %>">
+
+                            
                             <% if (data[i].user_validate == "No" && data[i].exp_type == "CONTROL") { %>
                             <p class="actualtop all-p">Actual : <b class="case"> MUTANT</b></p>
                             <% } else if (data[i].user_validate == "No" && data[i].exp_type == "MUTANT") { %>
@@ -59,8 +61,10 @@
                             <p class="actualtop all-p">Actual : <b class="case"> <%= data[i].exp_type %></b></p>
                             <% } %>
                             <p class="all-p">Predicted : <b class="case"> <%= data[i].exp_type %></b></p>
+                            <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
+                            <p class="all-p log-font" >Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
 
-                            <p class="all-p">Prediction On : <b> <%= data[i].created_at %> </b></p>
+                            <p class="all-p log-font" >Prediction On : <b> <%= data[i].created_at %> </b></p>
                             </a>
                         </div>
                     </div>
@@ -85,7 +89,9 @@
                                         <div class="card-body-prevpred">
                                             <h6><a href="#" class="case">Predicted :
                                                     <%= data[i].exp_type %></a></h6>
-                                            <p class="text-muted card-text">Prediction On : <%= data[i].created_at %>
+                                                    <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
+                                                    <p class="all-p log-font">Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
+                                                    <p class="all-p log-font">Prediction On : <%= data[i].created_at %>
                                             </p>
                                         </div>
                                     </div>

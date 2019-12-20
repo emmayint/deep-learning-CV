@@ -81,8 +81,8 @@ router.post("/getImagePrediction", function(req, res) {
 
                   // Everything went right, and we get a response from the Python API
                   let pyResponse = JSON.parse(body);
-                  console.log(body);
-                  console.log(pyResponse);
+                  console.log("python body: ", body);
+                  console.log("pyResponse: ", pyResponse);
 
                   let now = new Date(
                     new Date().toString().split("GMT")[0] + " UTC"
@@ -142,14 +142,19 @@ router.post("/getImagePrediction", function(req, res) {
                   }
 
                   for (let k = 0; k < pyResponse.length; k++) {
+                    let predTypePercentage = JSON.stringify(
+                      pyResponse[k].prediction
+                    );
+                    console.log("stringify: ", predTypePercentage);
                     db.query(
-                      "INSERT INTO prediction_type (exp_img_id, exp_id, exp_type, img, created_at) VALUES (?, ?, ?,?, ?)",
+                      "INSERT INTO prediction_type (exp_img_id, exp_id, exp_type, img, created_at, pred_percentage) VALUES (?, ?, ?, ?, ?, ?)",
                       [
                         pyResponse[k].exp_img_id,
                         exp_id,
                         pyResponse[k].type.toUpperCase(),
                         dataImage[pyResponse[k].exp_img_id],
-                        now
+                        now,
+                        predTypePercentage
                       ]
                     );
                   }
