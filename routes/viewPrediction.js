@@ -182,6 +182,7 @@ router.post("/getImagePrediction", function(req, res) {
 router.get("/view/:id", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
+    let id = req.params.id;
 
     if (req.session.predictionData) {
       let responseData = req.session.predictionData;
@@ -210,7 +211,8 @@ router.get("/view/:id", function(req, res) {
             res.render("viewPrediction", {
               uname: user.user_name,
               data: responseData,
-              dataImg: resultImg
+              dataImg: resultImg,
+              id: id
             });
             console.log("dataImg:------------- ", resultImg);
           }
@@ -256,7 +258,8 @@ router.get("/view/validate/:id", function(req, res) {
             res.render("viewPrediction", {
               uname: user.user_name,
               // data: responseData,
-              dataImg: resultImg
+              dataImg: resultImg,
+              id: id
             });
             console.log("dataImg:------------- ", resultImg);
           }
