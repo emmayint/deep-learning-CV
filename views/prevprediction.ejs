@@ -50,17 +50,16 @@
                     <div class="col-md-4 gap">
                         <div class="img-responsive img-thumbnail">
                             <a href="viewExperiment/<%= data[i].exp_id %>"></a>
-                            <img class=scaled src="/uploads/<%= data[i].img %>">
-
-                            
+                            <img class="scaled" src="/uploads/<%= data[i].img %>">
+                            <p class="fileName all-p"><b > <%= data[i].img %> </b></p>
                             <% if (data[i].user_validate == "No" && data[i].exp_type == "CONTROL") { %>
-                            <p class="actualtop all-p">Actual : <b class="case"> MUTANT</b></p>
+                            <p class="actualtop all-p log-font">Actual : <b class="case"> MUTANT</b></p>
                             <% } else if (data[i].user_validate == "No" && data[i].exp_type == "MUTANT") { %>
-                            <p class="actualtop all-p">Actual : <b class="case"> CONTROL</b></p>
+                            <p class="actualtop all-p log-font">Actual : <b class="case"> CONTROL</b></p>
                             <% } else { %>
-                            <p class="actualtop all-p">Actual : <b class="case"> <%= data[i].exp_type %></b></p>
+                            <p class=" actualtop all-p log-font">Actual : <b class="case"> <%= data[i].exp_type %></b></p>
                             <% } %>
-                            <p class="all-p">Predicted : <b class="case"> <%= data[i].exp_type %></b></p>
+                            <p class="all-p log-font">Predicted : <b class="case"> <%= data[i].exp_type %></b></p>
                             <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
                             <p class="all-p log-font" >Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
 
@@ -80,15 +79,16 @@
                             <div class="row">
                                 <% for (var i = 0; i < data.length; i++) { %>
                                     <% if (data[i].exp_validate == 0 && !data[i].user_validate) { %>
-                                <div class="col-md-3 col-lg-3">
+                                <div class="col-md-4 gap">
                                     <div class="card border-0 transform-on-hover">
                                         <a class="lightbox" href="/prediction/view/validate/<%= data[i].exp_id %>">
                                             <img src="/uploads/<%= data[i].img %>" alt="Card Image"
                                                 class="card-img-top scaled">
                                         </a>
                                         <div class="card-body-prevpred">
-                                            <h6><a href="#" class="case">Predicted :
-                                                    <%= data[i].exp_type %></a></h6>
+                                                <p class="fileName all-p"><b > <%= data[i].img %> </b></p>
+                                            <a href="#" class="all-p log-font">Predicted :
+                                                    <b><%= data[i].exp_type %></b></a>
                                                     <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
                                                     <p class="all-p log-font">Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
                                                     <p class="all-p log-font">Prediction On : <%= data[i].created_at %>

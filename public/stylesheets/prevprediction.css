@@ -73,3 +73,9 @@
 .log-font {
   font-size: 13px;
 }
+.fileName {
+  padding-top: 10px;
+  width: auto;
+  word-break: break-all;
+  word-wrap: break-word;
+}
