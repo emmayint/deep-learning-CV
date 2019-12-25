@@ -36,7 +36,7 @@ build/Release
 node_modules/
 jspm_packages/
 .vscode/
-#uploads/
+uploads/
 
 # TypeScript v1 declaration files
 typings/
@@ -59,7 +59,7 @@ typings/
 # dotenv environment variables file
 #.env
 
-#public/uploads/
+public/uploads/
 
 # next.js build output
 .next
