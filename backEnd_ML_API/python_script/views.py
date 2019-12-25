@@ -37,8 +37,7 @@ class FileUploadView(APIView):
                 imgurl = data[i][id_list[0]][j]['link']
                 req.urlretrieve(imgurl, "./media/" + str(j) + ".jpg""")
 
-                # model = tf.keras.models.load_model("./training_model_file/64x3-CNN.model")
-                model = tf.keras.models.load_model("./training_model_file/vgg16model.h5")
+                model = tf.keras.models.load_model("./model/vgg16model.h5")
                 print("Before Prediction..")
                 # prediction = model.predict([prepareCNN("./media/" + str(j) + ".jpg""")])
                 prediction = model.predict([prepareVGG16("./media/" + str(j) + ".jpg""")])
