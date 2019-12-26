@@ -19,11 +19,13 @@
     <% include partials/prevpred-header %>
     
 <div class="container">
+            <div>
+                <button id="validateModalBtn" class="btn btn-outline-primary example-button" 
+                data-target="#validateModal" data-toggle="modal" type="button" onclick="showtable()">
+                    Validate Results
+                </button>
+            </div>
     <div class="row divtop">
-        <button id="validateModalBtn" class="btn btn-outline-primary example-button" 
-        data-target="#validateModal" data-toggle="modal" type="button" onclick="showtable()">
-            Validate Results
-        </button>
         <div class="row">
             <% for (let i = 0; i < dataImg.length; i++) { %>
             <% if (dataImg[i].exp_images) { %>
