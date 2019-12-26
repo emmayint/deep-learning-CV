@@ -57,7 +57,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-#.env
+.env
 
 public/uploads/
 
@@ -69,4 +69,3 @@ public/uploads/
 .DS_Store 
 package-lock.json
 yarn.lock
-awsConf.json
