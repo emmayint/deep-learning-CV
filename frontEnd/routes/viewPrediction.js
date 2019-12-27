@@ -13,173 +13,182 @@ router.post("/getImagePrediction", function(req, res) {
   try {
     const id = JSON.parse(req.body.id).join(",");
     let data = [];
-
-    // Fetch crop id and location of the cropped images from the experiment_cropped_images table and store in a variable responseJson
-    db.query(
-      "SELECT * FROM experiment_cropped_images WHERE exp_img_id IN (" +
-        id +
-        ");",
-      function(err, result) {
-        let exp_img_id;
-
-        // _.map() -> Underscore function
-        let responseJson = _.map(
-          _.groupBy(result, "exp_img_id"),
-          (value, key) => {
-            // exp_img_id: value[0].exp_img_id;
-
-            return {
-              exp_img_id: value[0].exp_img_id,
-              [value[0].exp_img_id]: _.map(value, value => {
-                return {
-                  link: ImageUrl + value.exp_crop_img,
-                  crop_id: value.exp_img_id
-                };
-              })
-            };
-          }
-        );
-
-        let resultExImag1 = [];
-
-        // Get the original images (images without cropping) and store that data in a variable resultExImag1
-        db.query(
-          "SELECT * FROM experiment_images WHERE id IN (" + id + ");",
-          function(err, resultExImag) {
-            resultExImag1 = resultExImag;
-          }
-        );
-
-        console.log("Python ML Api called");
-        console.log(JSON.stringify(responseJson));
-
-        // Call the python API, passing the responseJson data
-        request(
-          {
-            method: "POST",
-            uri: apiBaseUrl,
-            form: { data: JSON.stringify(responseJson) },
-            rejectUnauthorized: false
-          },
-          function(error, response, body) {
-            if (error) {
-              console.error("upload failed:", error);
-              req.session.predictionDataerror = error;
-              req.session.predictionData = "";
-              res.send(error);
-              console.log(response);
-            } else {
-              let n = body.search("not found");
-
-              if (n > 0) {
-                req.session.predictionDataerror = "Api url not found";
-                req.session.predictionData = "";
-                res.send(error);
-              } else {
-                try {
-                  console.log(body);
-
-                  // Everything went right, and we get a response from the Python API
-                  let pyResponse = JSON.parse(body);
-                  console.log("python body: ", body);
-                  console.log("pyResponse: ", pyResponse);
-
-                  let now = new Date(
-                    new Date().toString().split("GMT")[0] + " UTC"
-                  )
-                    .toISOString()
-                    .split(".")[0]
-                    .replace("T", "-");
-
-                  let dataImage = [];
-
-                  console.log(resultExImag1);
-
-                  let exp_id = "";
-                  let crop_id = "";
-
-                  // Get data from resultExImag1 for each original images selected by the user
-                  for (let i = 0; i < resultExImag1.length; i++) {
-                    dataImage[resultExImag1[i].id] =
-                      resultExImag1[i].exp_images;
-                    exp_id = resultExImag1[i].exp_id;
-                    user_id = resultExImag1[i].user_id;
-                    created_at = resultExImag1[i].created_at;
-                    updated_at = resultExImag1[i].updated_at;
-                  }
-
-                  // Insert the prediction received from the Python API, into the prediction table
-                  for (let k = 0; k < pyResponse.length; k++) {
-                    let type = pyResponse[k].type;
-
-                    db.query(
-                      "SELECT * FROM experiment_cropped_images WHERE exp_img_id in (" +
-                        pyResponse[k].exp_img_id +
-                        ") AND exp_id in (" +
-                        exp_id +
-                        ")",
-                      function(err, results) {
-                        if (results) {
-                          results.forEach(function(result) {
-                            db.query(
-                              "INSERT INTO prediction (user_id, exp_img_id, exp_id, name, img, crop_id, exp_type, created_at, updated_at) VALUES (?, ?, ?,?, ?, ?,?,?,?)",
-                              [
-                                user_id,
-                                result.exp_img_id,
-                                exp_id,
-                                result.exp_label_name,
-                                result.exp_crop_img,
-                                result.id,
-                                type.toUpperCase(),
-                                created_at,
-                                updated_at
-                              ]
-                            );
-                          });
-                        }
-                      }
-                    );
-                  }
-
-                  for (let k = 0; k < pyResponse.length; k++) {
-                    let predTypePercentage = JSON.stringify(
-                      pyResponse[k].prediction
-                    );
-                    console.log("stringify: ", predTypePercentage);
-                    db.query(
-                      "INSERT INTO prediction_type (exp_img_id, exp_id, exp_type, img, created_at, pred_percentage) VALUES (?, ?, ?, ?, ?, ?)",
-                      [
-                        pyResponse[k].exp_img_id,
-                        exp_id,
-                        pyResponse[k].type.toUpperCase(),
-                        dataImage[pyResponse[k].exp_img_id],
-                        now,
-                        predTypePercentage
-                      ]
-                    );
-                  }
-
-                  req.session.predictionData = "";
-                  req.session.predictionData = pyResponse;
-                  // res.redirect("/prediction/view");
-                  res.redirect("/prediction/view/" + exp_id);
-                } catch (e) {
-                  console.log("Error", e);
-                  req.session.predictionDataerror = e;
-                  req.session.predictionData = "";
-                  res.send(error);
-                }
-              }
-            }
-          }
-        );
-      }
-    );
+    pythonApiData(id, req, res);
   } catch (e) {
     console.log("Error", e);
     res.send(e);
   }
 });
+
+function pythonApiData(id, req, res) {
+  let resultExImag1 = [];
+  // Fetch crop id and location of the cropped images from the experiment_cropped_images table and store in a variable responseJson
+  db.query(
+    "SELECT * FROM experiment_cropped_images WHERE exp_img_id IN (" + id + ");",
+    function(err, result) {
+      db.query(
+        "SELECT * FROM experiment_images WHERE id IN (" + id + ");",
+        (err, resultExImag, fields) => {
+          resultExImag1 = resultExImag;
+          let responseJson;
+          if (!result || result.length === 0) {
+            responseJson = _.map(
+              _.groupBy(resultExImag, "id"),
+              (value, key) => {
+                let fullImageData = {
+                  exp_img_id: value[0].id,
+                  [value[0].id]: _.map(value, value => {
+                    return {
+                      link: ImageUrl + value.exp_images,
+                      crop_id: value.id
+                    };
+                  })
+                };
+                console.log("FULL IMAGE DATA: ", fullImageData);
+                return fullImageData;
+              }
+            );
+          } else {
+            // _.map() -> Underscore function
+            responseJson = _.map(
+              _.groupBy(result, "exp_img_id"),
+              (value, key) => {
+                let cropImageData = {
+                  exp_img_id: value[0].exp_img_id,
+                  [value[0].exp_img_id]: _.map(value, value => {
+                    return {
+                      link: ImageUrl + value.exp_crop_img,
+                      crop_id: value.exp_img_id
+                    };
+                  })
+                };
+                console.log("Crop Image Data: ", cropImageData);
+                return cropImageData;
+              }
+            );
+          }
+          callPythonApi(responseJson, resultExImag1, req, res);
+        }
+      );
+    }
+  );
+}
+
+function callPythonApi(responseJson, resultExImag1, req, res) {
+  console.log("Python ML Api called");
+  console.log("STRINGYFY RESPONSE JSON", JSON.stringify(responseJson));
+
+  // Call the python API, passing the responseJson data
+  request(
+    {
+      method: "POST",
+      uri: apiBaseUrl,
+      form: { data: JSON.stringify(responseJson) },
+      rejectUnauthorized: false
+    },
+    function(error, response, body) {
+      if (error) {
+        console.error("upload failed:", error);
+        req.session.predictionDataerror = error;
+        req.session.predictionData = "";
+        res.send(error);
+        console.log(response);
+      } else {
+        let n = body.search("not found");
+
+        if (n > 0) {
+          req.session.predictionDataerror = "Api url not found";
+          req.session.predictionData = "";
+          res.send(error);
+        } else {
+          try {
+            // Everything went right, and we get a response from the Python API
+            let pyResponse = JSON.parse(body);
+            console.log("pyResponse: ", pyResponse);
+
+            let now = new Date(new Date().toString().split("GMT")[0] + " UTC")
+              .toISOString()
+              .split(".")[0]
+              .replace("T", "-");
+
+            let dataImage = [];
+
+            let exp_id = "";
+            let crop_id = "";
+
+            // Get data from resultExImag1 for each original images selected by the user
+            for (let i = 0; i < resultExImag1.length; i++) {
+              dataImage[resultExImag1[i].id] = resultExImag1[i].exp_images;
+              exp_id = resultExImag1[i].exp_id;
+              user_id = resultExImag1[i].user_id;
+              created_at = resultExImag1[i].created_at;
+              updated_at = resultExImag1[i].updated_at;
+            }
+
+            // Insert the prediction received from the Python API, into the prediction table
+            for (let k = 0; k < pyResponse.length; k++) {
+              let type = pyResponse[k].type;
+
+              db.query(
+                "SELECT * FROM experiment_cropped_images WHERE exp_img_id in (" +
+                  pyResponse[k].exp_img_id +
+                  ") AND exp_id in (" +
+                  exp_id +
+                  ")",
+                function(err, results) {
+                  if (results) {
+                    results.forEach(function(result) {
+                      db.query(
+                        "INSERT INTO prediction (user_id, exp_img_id, exp_id, name, img, crop_id, exp_type, created_at, updated_at) VALUES (?, ?, ?,?, ?, ?,?,?,?)",
+                        [
+                          user_id,
+                          result.exp_img_id,
+                          exp_id,
+                          result.exp_label_name,
+                          result.exp_crop_img,
+                          result.id,
+                          type.toUpperCase(),
+                          created_at,
+                          updated_at
+                        ]
+                      );
+                    });
+                  }
+                }
+              );
+            }
+
+            for (let k = 0; k < pyResponse.length; k++) {
+              let predTypePercentage = JSON.stringify(pyResponse[k].prediction);
+              console.log("stringify: ", predTypePercentage);
+              db.query(
+                "INSERT INTO prediction_type (exp_img_id, exp_id, exp_type, img, created_at, pred_percentage) VALUES (?, ?, ?, ?, ?, ?)",
+                [
+                  pyResponse[k].exp_img_id,
+                  exp_id,
+                  pyResponse[k].type.toUpperCase(),
+                  dataImage[pyResponse[k].exp_img_id],
+                  now,
+                  predTypePercentage
+                ]
+              );
+            }
+
+            req.session.predictionData = "";
+            req.session.predictionData = pyResponse;
+            // res.redirect("/prediction/view");
+            res.redirect("/prediction/view/" + exp_id);
+          } catch (e) {
+            console.log("Error", e);
+            req.session.predictionDataerror = e;
+            req.session.predictionData = "";
+            res.send(error);
+          }
+        }
+      }
+    }
+  );
+}
 
 // @route   GET /prediction/view
 // @desc    Display predictions on the web interface

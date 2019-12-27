@@ -258,7 +258,7 @@ function cropImages(e) {
 function viewPredictionPage(e) {
   // Display loading gif when predict button is pressed
   $("#loadingPredict").show();
-  let expID = document.getElementById('expID').value 
+  let expID = document.getElementById("expID").value;
 
   console.log("EXPERIMENT ID________", expID);
   let imageIdArray = Array.from(selectedImageIds);
@@ -270,7 +270,7 @@ function viewPredictionPage(e) {
     success: function(result) {
       console.log("cropped data=======>", result);
       $("#loadingPredict").hide();
-      window.location.replace("/prediction/view/"+expID);
+      window.location.replace("/prediction/view/" + expID);
     },
     error: function(err) {
       console.log(err);
@@ -291,10 +291,10 @@ function checkCrop(e) {
         if ($(".checkboxImageTop").is(":checked")) {
           $("#prediction").prop("disabled", false);
         } else {
-          $("#prediction").prop("disabled", true);
+          // $("#prediction").prop("disabled", true);
         }
       } else {
-        $("#prediction").prop("disabled", true);
+        // $("#prediction").prop("disabled", true);
       }
     },
     error: function(err) {
