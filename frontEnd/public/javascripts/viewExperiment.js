@@ -214,7 +214,7 @@ function updateSelectedItems(clickedCheckBoxId) {
 
 function deleteImages(e) {
   e.preventDefault();
-
+  let expID = document.getElementById("deleteExpID").value;
   let imageIdArray = Array.from(selectedImageIds);
   const data = { foo: imageIdArray };
   $.ajax({
@@ -222,7 +222,8 @@ function deleteImages(e) {
     url: window.location.href + "/deleteImages",
     data: { images: JSON.stringify(imageIdArray) },
     success: function(result) {
-      location.href = "/home";
+      location.href = "/viewExperiment/" + expID;
+      // location.href = "/home";
     },
     error: function(err) {
       console.log(err);

@@ -62,3 +62,8 @@ body {
 .backBtn {
   text-align: right;
 }
+.delAllImages {
+  position: relative;
+  margin: 200px;
+  left: 20%;
+}

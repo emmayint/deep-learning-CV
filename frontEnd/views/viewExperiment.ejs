@@ -19,6 +19,12 @@
 
     <!-- Navigation Bar -->
     <% include partials/prevpred-header %>
+    <% if(data.length == 0){ %>
+        <a href="/Home">
+            <button class="btn btn-primary delAllImages" type="button">
+                Experiment has been removed. Click here to go to homepage
+            </button></a>
+            <% } else { %>
 
     <div class="container">
         <!-- 1st row buttons -->
@@ -191,6 +197,7 @@
                     </div>
 
                     <div class="modal-footer">
+                        <input type="text" id="deleteExpID" style="display: none;" value="<%= data[0].exp_id %>"></input>
                         <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
                         <button class="btn btn-primary" id="deleteBtn" type="submit">Delete Images</button>
                     </div>
@@ -228,6 +235,7 @@
         </div>
 
     </div>
+    <% } %>
     <!-- <% include partials/footer %> -->
     <script src="/javascripts/viewexperiment.js"></script>
     <script src="/javascripts/croppr.js"></script>
