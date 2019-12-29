@@ -3,7 +3,7 @@ os.environ["KERAS_BACKEND"] = "theano"
 import base64
 import numpy as np
 import io
-from PIL import Image # PIL Python Image Lib
+from PIL import Image
 import time
 import matplotlib
 matplotlib.use('Agg')
@@ -20,7 +20,6 @@ from flask import request
 from flask import jsonify
 from flask import Flask
 
-# dependencies for training
 from keras.layers import Activation
 from keras.layers.core import Dense, Flatten
 from keras.optimizers import Adam, SGD
@@ -31,35 +30,20 @@ import itertools
 import matplotlib.pyplot as plt
 print(K.image_data_format())
 # get_ipython().run_line_magic('matplotlib', 'inline')
-
-urls = (
-    '/', 'index',
-    '/favicon.ico', 'icon'
-)
-# Process favicon.ico requests
-class icon:
-    def GET(self): raise web.seeother("/static/favicon.ico")
+from keras.callbacks import CSVLogger
+from flask import Flask, render_template
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '980731@muyan'
+app.config['MYSQL_DB'] = 'csc899'
+mysql = MySQL(app)
+# CREATE TABLE `Logs` (`logpath` varchar(1000), `modelpath` varchar(1000))
+# CREATE TABLE `Models` (`fullpath` varchar(1000), `userid` int(11), `projectName` varchar(30))
 
 
-@app.route("/testFlask", methods=["POST"])
-def testFlask():
-    message = request.get_json(force=True)
-    selectedModel = message['selectedModel']
-    projectName = message['projectName']
-    modelName = message['modelName']
-
-    response = {
-        "response": "hello from flask",
-        "selectedModel": message['selectedModel'],
-        "projectName": message['projectName'],
-        "modelName": message['modelName']
-    }
-    return jsonify(response)
-
-
-## TODO: add output layer####
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
 def train():
     ## get http request and extract values
@@ -71,12 +55,8 @@ def train():
     ## TODO "../allProject/projetName/datasets"; need "req.projetName"
     # __file__ refers to the file settings.py 
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    # train_path = '/allProject/' + projectName + '/datasets/' 
-    # train_path = os.path.join(APP_ROOT, 'train_path')
-    print('app root path ',APP_ROOT)
     train_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'datasets' )
-    print(train_path)
-    # test_path = '/allProjects/' + projectName + '/testData/'
+    print('training on data: ', train_path)
     test_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'testData' )
 
     ## TODO reset classes names and customize batch_size
@@ -121,19 +101,25 @@ def train():
     # ## Train the fine-tuned VGG16 model
     model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
+    # fixed time for model and log names
+    modelName_time = "{}-{}".format(modelName, int(time.time()))
+    models_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/')
+    log_name = "{}{}.txt".format(models_path, modelName_time)
+    csv_logger = CSVLogger(log_name, append=True, separator=';')
     # model.fit_generator(train_batches, steps_per_epoch=18, 
-    #                     validation_data=valid_batches, validation_steps=10, epochs=15, verbose=2) ## TODO split train, valid, test
+    #                     validation_data=valid_batches, validation_steps=10, epochs=15, verbose=2) 
+    # ## split train and valid
     model.fit_generator(
         train_batches,
         steps_per_epoch = train_batches.samples // 10,
         validation_data = valid_batches, 
         validation_steps = valid_batches.samples // 2,
         epochs = 1, 
-        verbose=2)
-    ## TODO log to webpage
-    
+        verbose=2,
+        callbacks=[csv_logger])    
 
-    # ## Predict using fine-tuned VGG16 model
+    # ## test the fine-tuned VGG16 model
+    print('testing model on data: ', test_path)
     test_imgs, test_labels = next(test_batches)
     plots(test_imgs, titles=test_labels)
 
@@ -141,16 +127,23 @@ def train():
     test_labels
 
     # Returns the loss value & metrics values for the model in test mode with !! OUT OF SAMPLE !! data.
-    test_loss, test_acc = model.evaluate_generator(test_batches, steps=test_batches.samples // 5, verbose=0)  # evaluate the out of sample data with model
+    test_loss, test_acc = model.evaluate_generator(test_batches, steps=test_batches.samples // 5, verbose=0, callbacks=[csv_logger])  # evaluate the out of sample data with model
     print("test loss = {}".format(test_loss))  # model's loss (error)
     print("test accuracy = {}".format(test_acc))  # model's accuracy
-
+    
+    with open(log_name, "a") as myfile:
+        myfile.write("test loss = {}; ".format(test_loss))
+        myfile.write("test accuracy = {}.".format(test_acc))
     # ## Save the fine-tuned VGG16 model TODO save to ../allProject/projetName/model as h5? put flask_predict inside webapp-train?
-    # ## rename to request.modelname
-    models_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/')
-    NAME = "{}-{}-acc{}.h5".format(modelName, int(time.time()), test_acc)
-    models_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/', NAME)
-    model.save(models_path)
+    NAME = "{}-test_acc{}.h5".format(modelName_time, test_acc)
+    full_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/', NAME)
+    print('model saved as: ', full_path)
+    # model.save(full_path)
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO Models(fullpath, projectName) VALUES (%s, %s)", (full_path, projectName))
+    cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, full_path))
+    mysql.connection.commit()
+    cur.close()
     response = {
         'model saved': NAME
     }
