@@ -18,11 +18,11 @@ router.get("/", function(req, res, next) {
 router.post(
   "/",
   passport.authenticate("local", {
-    successRedirect: "/home",
+    successRedirect: "/default",
     failureRedirect: "/"
   }),
   function(req, res) {
-    res.redirect("/home");
+    res.redirect("/default");
   }
 );
 
