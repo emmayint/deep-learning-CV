@@ -27,6 +27,14 @@ let viewExperimentRouter = require("./routes/viewExperiment");
 let viewPredictionRouter = require("./routes/viewPrediction");
 let prevPredictionRouter = require("./routes/prevPrediction");
 
+// // Emma's code
+let uploadRouter = require("./routes/upload");
+let selectModelRouter = require("./routes/selectModel");
+let paramsRouter = require("./routes/params");
+let nameModelRouter = require("./routes/nameModel");
+let predictRouter = require("./routes/predict");
+let testFlaskRouter = require("./routes/testFlask");
+
 let app = express();
 
 // View engine setup
@@ -37,7 +45,6 @@ app.use(logger("dev"));
 app.use(processImage("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -86,6 +93,20 @@ app.use("/viewExperiment", viewExperimentRouter);
 app.use("/prediction", viewPredictionRouter);
 app.use("/prevprediction", prevPredictionRouter);
 app.use("/default", defaultRouter);
+
+// // Emma's code
+app.use("/upload", uploadRouter);
+app.use("/selectModel", selectModelRouter);
+app.use("/params", paramsRouter);
+app.use("/nameModel", nameModelRouter);
+// app.use("/predict", predictRouter);
+app.use("/testFlask", testFlaskRouter);
+app.get("/predict", (req, res) => {
+  res.redirect("http://localhost:8000/static/predict-with-visuals.html");
+});
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
