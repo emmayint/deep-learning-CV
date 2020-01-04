@@ -1,0 +1,41 @@
+/* Site Heading */
+.site-heading h3 {
+  font-size: 40px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.border {
+  background: #e8e8e8;
+  height: 1px;
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 45px;
+  float: left;
+}
+
+/* Feature-CSS */
+
+.icon {
+  color: #fff;
+  padding: 15px;
+  background: #323232;
+  font-size: 50px;
+  border-radius: 90px;
+  border: 10px solid #323232;
+}
+.feature-box {
+  text-align: center;
+  padding: 20px;
+  transition: 0.5s;
+  margin-bottom: 30px;
+  border: 1px solid #e8e8e8;
+}
+.feature-box:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.feature-box h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 25px 0 15px;
+}

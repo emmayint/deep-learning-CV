@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to imagePrediction</title>
+    <% include partials/head %>
+    <link href="/stylesheets/default.css" rel="stylesheet" />
+  </head>
+  <body>
+    <br /><br /><br />
+    <!-- Navigation Bar -->
+    <% include partials/home-header %>
+
+    <div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 site-heading ">
+            <h3>Please select an action</h3>
+            <p>You can either select to train or predict</p>
+            <div class="border"></div>
+          </div>
+          <!-- <button>Predict</button></a> -->
+        </div>
+      </div>
+      <div class="row justify-content-md-center">
+        <div class="col-sm-12 col-md-3 ">
+          <div class="col-md-12 feature-box">
+            <span><i class="fas fa-cogs fa-5x"></i></span>
+            <h4>Train a Model</h4>
+            <p>
+              Please select this option if you want to train a model for making
+              predictions
+            </p>
+            <a href="/selectModel"
+              ><button type="button" class="btn btn-primary site-btn">
+                Start Right Now
+              </button></a
+            >
+          </div>
+        </div>
+        <!-- <div class="row"> -->
+        <div class="col-sm-12 col-md-3">
+          <div class="col-md-12 feature-box">
+            <span><i class="fas fa-network-wired fa-5x"></i></span>
+            <h4>Make a prediction</h4>
+            <p>
+              Please select this option if you want to make a predictions
+            </p>
+            <a href="/Home"
+              ><button type="button" class="btn btn-primary site-btn">
+                Start Right Now
+              </button></a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>

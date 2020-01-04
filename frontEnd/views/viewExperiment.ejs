@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>View Experiment</title>
+    <% include partials/head %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="/stylesheets/croppr.css" rel="stylesheet">
+    <link href="/stylesheets/cropper.css" rel="stylesheet">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/stylesheets/viewexperiment.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Display loading gif till the async call does not return a response -->
+    <div id="loadingPredict" style="display: none"></div>
+
+    <!-- Navigation Bar -->
+    <% include partials/prevpred-header %>
+    <% if(data.length == 0){ %>
+        <a href="/Home">
+            <button class="btn btn-primary delAllImages" type="button">
+                Experiment has been removed. Click here to go to homepage
+            </button></a>
+            <% } else { %>
+
+    <div class="container">
+        <!-- 1st row buttons -->
+        <div class="row topmargin">
+            <button class="btn btn-primary btnStyle" data-target="#addImageModal" data-toggle="modal" type="button">Add
+                Images
+            </button>
+
+            <button class="btn btn-primary btnStyle" class="del_img_view" data-target="#deleteImageModal"
+                data-toggle="modal" type="button">Delete Images
+            </button>
+
+            <!-- <a href="/Prevprediction/<%=id%>">
+                    <button class="btn btn-primary btnStyle" id="previous_prediction " type="button">
+                        Previous Prediction
+                    </button>
+                </a> -->
+
+            <button class="btn btn-primary btnStyle" id="btnUnselectAll" type="button">
+                Unselect All
+            </button>
+
+            <button class="btn btn-primary btnStyle" id="btnSelectAll" type="button">Select All
+            </button>
+
+            <button class="btn btn-primary btnStyle" id="btnDisableCrop" type="button">Disable Selected Crop
+            </button>
+
+            <button class="btn btn-primary btnStyle" id="btnEnableCrop" type="button">Enable Selected Crop
+            </button>
+
+            <button class="btn btn-primary btnStyle" id="prediction" type="button">
+                Predict
+            </button>
+
+        </div>
+
+        <!-- Display images -->
+        <div class="row">
+
+            <!-- Fetch images from the database -->
+            <% for (let i = 0; i < data.length; i++) { %>
+
+            <!-- If images are already cropped, highlight the cropped portion -->
+            <% if (data[i].rect) { %>
+
+            <div class="col-md-3" style="margin: 30px 0 10px 0;">
+
+                <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>" />
+                <p style="float:right">
+                    <label class="switch">
+                        <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                            id="cbToggle<%= data[i].id %>" />
+                        <span class="slider round"></span>
+                    </label>
+                    <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                        type='button' value='Crop' />
+                </p><br><br>
+                <div class="img-thumbnail">
+                    <!-- <p style="float:right">
+                        <label class="switch">
+                            <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                                id="cbToggle<%= data[i].id %>" />
+                            <span class="slider round"></span>
+                        </label>
+                        <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                            type='button' value='Crop' />
+                    </p> -->
+                    <div class="fileName"><p>Name: <b> <%= data[i].exp_images%></b></p></div>
+                    <div class="croppr-container object-fit_cover">
+                        <div class="croppr ">
+
+                            <img alt="null" class="large-image story-smallcroppr-image"
+                                src="/uploads/<%= data[i].exp_images %>" style="width: 279px; height: 223px;">
+
+                            <% for (let j = 0; j < data[i].rectArr.length; j++) { %>
+
+                            <img ; alt="null" class="croppr-imageClipped " src="/uploads/<%= data[i].exp_images %>"
+                                style="clip: <%= data[i].rectArr[j] %>;">
+                            <% } %>
+
+                            <div class="croppr-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% } else { %>
+
+            <div class="col-md-3" style="margin: 30px 0 10px 0;">
+                <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>" />
+                <p style="float:right">
+                    <label class="switch">
+                        <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                            id="cbToggle<%= data[i].id %>" />
+                        <span class="slider round"></span>
+                    </label>
+                    <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                        type='button' value='Crop' />
+                </p><br><br>
+                <div class="img-thumbnail">
+                    <!-- <p style="float:right">
+                        <label class="switch">
+                            <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                                id="cbToggle<%= data[i].id %>" />
+                            <span class="slider round"></span>
+                        </label>
+                        <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                            type='button' value='Crop' />
+                    </p> -->
+                    <div class="fileName"><p>Name: <b> <%= data[i].exp_images%></b></p></div>
+
+                    <img class="large-image" src="/uploads/<%= data[i].exp_images %>" />
+                </div>
+            </div>
+
+            <% } %>
+            <% } %>
+        </div>
+        <!-- <br>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <br> -->
+
+        <!-- Add Image Modal -->
+
+        <div aria-hidden="true" aria-labelledby="addImageModal" class="modal" id="addImageModal" role="dialog"
+            role="dialog" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add More Images</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form" method="POST" action="<%= data[0].exp_id %>" enctype="multipart/form-data">
+                            <input type="text" id="expID" style="display: none;" value="<%= data[0].exp_id %>"></input>
+                            <label for="expImage">Experiment Image</label>
+                            <input accept="image/*" autofocus multiple name="expImage" required type="file" />
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                        <button class="btn btn-primary" type="submit">Add Images</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Delete Image Modal -->
+        <div aria-hidden="true" aria-labelledby="deleteImageModal" class="modal fade row divtop" id="deleteImageModal"
+            role="dialog" tabindex="-1">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Images</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p id="demo">
+                            No Image Selected
+                        </p>
+                        <p id="demo1"></p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="text" id="deleteExpID" style="display: none;" value="<%= data[0].exp_id %>"></input>
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                        <button class="btn btn-primary" id="deleteBtn" type="submit">Delete Images</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attach Label Feature -- not using currently -->
+        <div aria-hidden="true" aria-labelledby="cropPromtBoxModal" class="modal fade row divtop" id="cropPromtBox"
+            role="dialog" tabindex="-1">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Add Label Name</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" class="form" enctype="multipart/form-data" method="POST">
+                            <div>
+                                <label for="labelName">
+                                    Label Name
+                                </label><br>
+                                <input class="form-control" id="labelName" name="labelName" type="text" value="">
+                            </div>
+                            <br><br>
+                            <button class="btn btn-primary btn-block promtSubmit" type="submit">
+                                Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <% } %>
+    <!-- <% include partials/footer %> -->
+    <script src="/javascripts/viewexperiment.js"></script>
+    <script src="/javascripts/croppr.js"></script>
+    <script src="/javascripts/cropper.js"></script>
+</body>
+
+</html>

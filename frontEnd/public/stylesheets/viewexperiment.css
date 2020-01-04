@@ -1,0 +1,69 @@
+.home {
+  padding-left: 10%;
+}
+.logout {
+  padding-right: 150px;
+}
+body {
+  color: #999;
+  background: #f5f5f5;
+  font-family: "Roboto", sans-serif;
+}
+
+.imgmetadata {
+  font-size: 16px;
+  font-weight: bold;
+  color: #636363;
+  text-align: left;
+  font-style: normal;
+  font: caption;
+}
+
+.btnStyle {
+  margin-left: 5px;
+  float: right;
+}
+.example-button {
+  color: white;
+  font: 14px "Open Sans", sans-serif;
+  background: #636363;
+  margin-top: 90px;
+}
+
+.imgid {
+  color: #636363;
+}
+.cropBtn {
+  background: #179b81;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.topmargin {
+  margin-top: 80px;
+}
+
+.fileName {
+  padding: 3px;
+  width: auto;
+  height: auto;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+#loadingPredict {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  /* background: rgb(255, 255, 255, 0.5) url('/images/loading.gif') no-repeat center center; */
+  background: #ffffff url("/images/loading.gif") no-repeat center center;
+  z-index: 9999;
+}
+.backBtn {
+  text-align: right;
+}
+.delAllImages {
+  position: relative;
+  margin: 200px;
+  left: 20%;
+}

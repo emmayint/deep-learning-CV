@@ -1,0 +1,24 @@
+.desc {
+  padding-bottom: 20px;
+}
+.addexp {
+  padding-top: 10px;
+}
+.dblinputs{
+margin: 20px 0 0 0;
+}
+.modal-footer {
+    border-top: 0 none;
+}
+.msg{
+  display: none;
+}
+.modal{
+  width: 80%; /* respsonsive width */
+  margin-left:-40%; /* width/2) */ 
+}
+.plus{
+  margin: 60px;
+}
+
+

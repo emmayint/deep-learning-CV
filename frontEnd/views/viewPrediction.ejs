@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+    <title>View Prediction</title>
+    <% include partials/head %>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/croppr.css">
+    <link rel="stylesheet" href="/stylesheets/cropper.css">
+    <link rel="stylesheet" href="/stylesheets/viewexperiment.css">
+    <link rel="stylesheet" href="/stylesheets/viewPrediction.css">
+    <link rel="stylesheet" href="/stylesheets/table.css">
+    <script src="/javascripts/croppr.js"></script>
+    <script src="/javascripts/cropper.js"></script>
+    
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <% include partials/prevpred-header %>
+    
+<div class="container">
+            <div>
+                <button id="validateModalBtn" class="btn btn-outline-primary example-button" 
+                data-target="#validateModal" data-toggle="modal" type="button" onclick="showtable()">
+                    Validate Results
+                </button>
+            </div>
+    <div class="row divtop">
+        <div class="row">
+            <% for (let i = 0; i < dataImg.length; i++) { %>
+            <% if (dataImg[i].exp_images) { %>
+            <!-- Display predictions -->
+            <div class="col-md-3" style="margin: 30px 0 10px 0;">
+                <div class="img-responsive img-thumbnail">
+                        <div class='fileName'>
+                            <p>Name: <b> <%= dataImg[i].exp_images%></b></p>
+                        </div>
+                        <% if (dataImg[i].exp_type) { %>
+                            <p>Prediction : <b> <%= dataImg[i].exp_type %></b></p>
+                        <% } else { %>
+                    <p>Prediction : <b> <%= JSON.stringify(data[0]['type']).split('"').join("") %></b></p>
+                    <% } %>
+                    <div class="btn-group btn-group-toggle yesno" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-primary active">
+                            <input type="radio" name="options_<%= i %>" id="option1" checked value="Yes" onchange="validate('options_<%= i %>', '<%= i %>')"> Yes
+                        </label>
+                        <label class="btn btn-sm btn-outline-primary">
+                            <input type="radio" name="options_<%= i %>" id="option2" value="No" onchange="validate('options_<%= i %>','<%= i %>');"> No
+                        </label>
+                    </div>
+                    <p><img class=scaled style="height: 100%" src="/uploads/<%= dataImg[i].exp_images %>">
+                    </p>
+
+                </div>
+
+            </div>
+            <% } else { %>
+            <div class="col-md-4" style="margin: 10px 0 10px 0;">
+                <div class="img-responsive img-thumbnail">
+                    <p><img class=scaled style="height: 100%" src="/uploads/<%= dataImg[i].exp_images %>">
+                    </p>
+                </div>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+    </div>
+
+</div>
+
+
+<form class="form" id="form" method="POST" action="/prevprediction/<%= dataImg[0].exp_id %>" >
+<div aria-hidden="true" aria-labelledby="validateModal" class="modal" id="validateModal" role="dialog" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Validate predicted results</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                   <p> Do you confirm the predicted results?<br> 
+                    If No, please go back and make an appropriate choice.</p>
+                <table>
+                    <tr>
+                        <th>Image</th>
+                        <th>Modal Prediction</th>
+                        <th>Accept</th>
+                    </tr>
+                    <% for (let i = 0; i < dataImg.length; i++) { %>
+                        <% if (dataImg[i].exp_images) { %>
+                    <tr>
+                        <td class="hideimageid">
+                                <input type="text" value="<%= dataImg[i].id %>" name="imageID_<%= i %>"></td>
+                        <td><b> <%= dataImg[i].exp_images%></b>
+                        </td>
+                        <% if (dataImg[i].exp_type) { %>
+                        <td><b> <%= dataImg[i].exp_type %></b></td>
+                        <% } else { %>
+                        <td><b> <%= JSON.stringify(data[0]['type']).split('"').join("") %></b></td>
+                        <% } %>
+                        
+                        <td class="random">       
+                        </td>
+                        <td class = "random1 hideimageid" >
+                        </td>
+                    </tr>
+                <% } %>
+            <% } %>
+
+        </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Validate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</form>
+<% include partials/footer %>
+<script>
+        var values=[];
+        values=Array($(".random").length).fill('Yes');
+        function validate(yesnoval, i){
+            value = $('input[name='+yesnoval+']:checked').val();
+            values[i]=value;
+        }
+        
+        function showtable(){
+            $(".random").each(function(index){
+                $(".random")[index].innerText=values[index] ;
+                $(".random1")[index].innerHTML = " <input class=\"hideimageid\" type=\"text\" value = "+ values[index] + " name=\"isChecked_"+ index + '">';
+                
+            });
+        }
+        </script>
+        
+</body>
+</html>
