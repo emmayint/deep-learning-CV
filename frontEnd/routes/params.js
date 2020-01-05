@@ -4,6 +4,8 @@ let router = express.Router();
 global.epoch = 9;
 global.batch_size = 4;
 global.steps_per_epoch = 10;
+global.optimizer = "Adam";
+global.learningRate = 0.0001;
 
 router.get("/", function(req, res) {
   if (req.isAuthenticated()) {

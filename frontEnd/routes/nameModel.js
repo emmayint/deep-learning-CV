@@ -14,17 +14,26 @@ router.get("/", function(req, res) {
 
 router.post("/", function(req, res) {
   let user = req.user;
+  let userid = user.user_id;
+  // console.log("user: ", user);
   modelName = req.body.modelName;
   console.log(modelName);
   console.log("reaching flask");
   const body = {
     selectedModel: selectedModel,
     projectName: projectName,
-    modelName: modelName
+    modelName: modelName,
+    userid: userid
   };
-  console.log("global variables: ", selectedModel, projectName, modelName);
+  console.log(
+    "flask req body: ",
+    selectedModel,
+    projectName,
+    modelName,
+    userid
+  );
   axios
-    .post("http://localhost:8000/train", body)
+    .post("http://localhost:5000/train", body)
     .then(res => {
       console.log("flask response: ", res.data);
     })

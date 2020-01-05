@@ -33,16 +33,14 @@ print(K.image_data_format())
 from keras.callbacks import CSVLogger
 from flask import Flask, render_template
 from flask_mysqldb import MySQL
+from glob import glob
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = process.env.DB_HOST
-app.config['MYSQL_USER'] = process.env.DB_USERNAME
-app.config['MYSQL_PASSWORD'] = process.env.DB_PASSWORD
-app.config['MYSQL_DB'] = process.env.DB_NAME
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '980731@muyan'
+app.config['MYSQL_DB'] = 'csc899'
 mysql = MySQL(app)
-# CREATE TABLE `Logs` (`logpath` varchar(1000), `modelpath` varchar(1000))
-# CREATE TABLE `Models` (`fullpath` varchar(1000), `userid` int(11), `projectName` varchar(30))
-
 
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
 def train():
@@ -51,6 +49,8 @@ def train():
     selectedModel = message['selectedModel']
     projectName = message['projectName']
     modelName = message['modelName']
+    userid = message['userid']
+    print(message)
 
     ## TODO "../allProject/projetName/datasets"; need "req.projetName"
     # __file__ refers to the file settings.py 
@@ -59,13 +59,37 @@ def train():
     print('training on data: ', train_path)
     test_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'testData' )
 
-    ## TODO reset classes names and customize batch_size
-    train_datagen = ImageDataGenerator(validation_split=0.2) # set validation split
-    train_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size=10, subset='training')
-    valid_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 2, subset='validation')
-    test_batches = ImageDataGenerator().flow_from_directory(test_path, target_size=(224,224), classes=['control', 'mutant'], batch_size=5)
+    trainSize = sum([len(files) for r, d, files in os.walk(train_path)])
+    print("trainSize", trainSize)
+    testSize = sum([len(files) for r, d, files in os.walk(test_path)])
+    print("testSize", testSize)
+    # train_batch_size = sqrt(trainSize)
+    CLASSES = next(os.walk(train_path))[1]
+    CLASSNUM= len(next(os.walk(train_path))[1])
+    print("number of classes: ", CLASSNUM)
+    print("classes: ", CLASSES)
 
-    # plots images with labels within jupyter notebook
+    ## TODO reset classes names and customize batch_size
+    train_datagen = ImageDataGenerator(validation_split=0.25) # set validation split
+    train_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 20, subset='training')
+    valid_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 5, subset='validation')
+    test_batches = ImageDataGenerator().flow_from_directory(test_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 10)
+    label_map = (train_batches.class_indices) # label_map:  {'control': 0, 'mutant': 1}
+    print("label_map: ",label_map) # TODO use label_map instead of hard set classes
+    inv_label_map = {v: k for k, v in label_map.items()}
+    for k, v in inv_label_map.items():
+        print (k, v)
+    
+    # fixed time for model and log names
+    modelName_time = "{}-{}-{}".format(modelName, selectedModel, int(time.time()))
+    models_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/')
+    log_name = "{}{}.txt".format(models_path, modelName_time)
+    csv_logger = CSVLogger(log_name, append=True, separator=';')
+    classes_record = "{}{}classes.py".format(models_path, modelName_time)
+    with open(classes_record, "a") as classesfile:
+        classesfile.write("classesDict = {}".format(inv_label_map))
+
+    # plots images with labels
     def plots(ims, figsize=(12,6), rows=1, interp=False, titles=None):
         if type(ims[0]) is np.ndarray:
             ims = np.array(ims).astype(np.uint8)
@@ -101,19 +125,14 @@ def train():
     # ## Train the fine-tuned VGG16 model
     model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
-    # fixed time for model and log names
-    modelName_time = "{}-{}".format(modelName, int(time.time()))
-    models_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/')
-    log_name = "{}{}.txt".format(models_path, modelName_time)
-    csv_logger = CSVLogger(log_name, append=True, separator=';')
     # model.fit_generator(train_batches, steps_per_epoch=18, 
     #                     validation_data=valid_batches, validation_steps=10, epochs=15, verbose=2) 
     # ## split train and valid
     model.fit_generator(
         train_batches,
-        steps_per_epoch = train_batches.samples // 10,
+        steps_per_epoch = train_batches.samples // 20,
         validation_data = valid_batches, 
-        validation_steps = valid_batches.samples // 2,
+        validation_steps = valid_batches.samples // 5,
         epochs = 1, 
         verbose=2,
         callbacks=[csv_logger])    
@@ -127,7 +146,7 @@ def train():
     test_labels
 
     # Returns the loss value & metrics values for the model in test mode with !! OUT OF SAMPLE !! data.
-    test_loss, test_acc = model.evaluate_generator(test_batches, steps=test_batches.samples // 5, verbose=0, callbacks=[csv_logger])  # evaluate the out of sample data with model
+    test_loss, test_acc = model.evaluate_generator(test_batches, steps=test_batches.samples // 10, verbose=0)  # evaluate the out of sample data with model
     print("test loss = {}".format(test_loss))  # model's loss (error)
     print("test accuracy = {}".format(test_acc))  # model's accuracy
     
@@ -135,13 +154,15 @@ def train():
         myfile.write("test loss = {}; ".format(test_loss))
         myfile.write("test accuracy = {}.".format(test_acc))
     # ## Save the fine-tuned VGG16 model TODO save to ../allProject/projetName/model as h5? put flask_predict inside webapp-train?
-    NAME = "{}-test_acc{}.h5".format(modelName_time, test_acc)
+    # TODO shorter accuracy float point
+    NAME = "{}-test_acc{}.h5".format(modelName_time, "%.3f" % test_acc)
     full_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/', NAME)
     print('model saved as: ', full_path)
+    defaultEpoch = 9
     # model.save(full_path)
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO Models(fullpath, projectName) VALUES (%s, %s)", (full_path, projectName))
-    cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, full_path))
+    cur.execute("INSERT INTO Models(fullpath, userid, projectName, logpath, classes, epoch) VALUES (%s, %s, %s, %s, %s, %s)", (full_path, userid, projectName, log_name, classes_record, defaultEpoch))
+    # cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, full_path))
     mysql.connection.commit()
     cur.close()
     response = {
@@ -153,11 +174,11 @@ def train():
 # predict logic
 def get_model():
     global model
-    APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    models_path =os.path.join(APP_ROOT, 'allProjects', 'p4','models/') # TODO projectName/models
-    vgg16_path = os.path.join(models_path, 'vgg16model.h5')
-    model = load_model(vgg16_path)
-    # model = load_model('vgg16model.h5')
+    # APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
+    # models_path =os.path.join(APP_ROOT, 'allProjects', 'p4','models/') # TODO projectName/models
+    # vgg16_path = os.path.join(models_path, 'vgg16model.h5')
+    # model = load_model(vgg16_path)
+    model = load_model('vgg16model.h5')
     print(" * Model loaded!")
 
 def preprocess_image(image, target_size):
@@ -183,7 +204,7 @@ def predict():
     # with graph.as_default(): ##
     #     prediction = model.predict(processed_image).tolist()
     prediction = model.predict(processed_image).tolist() # numpy array into python list
-
+    print("prediction: ", prediction)
     response = {
         'prediction': {
             'control': prediction[0][0],

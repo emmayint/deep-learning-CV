@@ -89,3 +89,13 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE `Models` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `fullpath` varchar(1000), 
+    `userid` int(11), 
+    `projectName` varchar(30),
+    `classes` varchar(1000), 
+    `logpath` varchar(1000), 
+    `epoch` int(4),
+    PRIMARY KEY (`id`)
+)
