@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Welcome to imagePrediction</title>
+    <title>Customize Inputs</title>
     <% include partials/head %>
     <link
       href="/stylesheets/selectModel.css"
@@ -59,10 +59,28 @@
             max="100" value= <%= steps_per_epoch%>>
             <br />
             <br />
+            <button type="button" id="advanced-input-button">
+              advanced inputs
+            </button>
+            <br />
+            <br />
+            <div id="advanced-input-container" style="display:none">
+              optimizer:
+              <select>
+                <option value="Adam">Adam</option>
+                <option value="SDG">SDG</option>
+              </select>
+              <br />
+              <br />
+              learning rate: <input type="number" name="" min="0.00001"
+              max="0.01" value= <%= learningRate%>>
+            </div>
+            <br />
             <button class="params-submit-button btn btn-block" type="submit">
               Submit
             </button>
           </form>
+          <!-- <button id="advanced-input-button">advanced inputs</button> -->
         </div>
         <!-- <br>
             <a href="/upload">Go back to upload data</a>
@@ -82,5 +100,17 @@
         </div>
       </div>
     </div>
+    <script>
+      document
+        .getElementById("advanced-input-button")
+        .addEventListener("click", function() {
+          var element = document.getElementById("advanced-input-container");
+          if (window.getComputedStyle(element).display === "block") {
+            element.style.display = "none";
+          } else {
+            element.style.display = "block";
+          }
+        });
+    </script>
   </body>
 </html>

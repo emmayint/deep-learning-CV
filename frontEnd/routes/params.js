@@ -11,7 +11,12 @@ router.get("/", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
     //   res.render("selectModel", {});
-    res.render("params", { epoch: epoch, uname: user.user_name });
+    res.render("params", {
+      epoch: epoch,
+      uname: user.user_name,
+      optimizer: optimizer,
+      learningRate: learningRate
+    });
   } else {
     res.redirect("/");
   }
