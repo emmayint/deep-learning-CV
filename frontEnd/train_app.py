@@ -38,10 +38,10 @@ import datetime
 import json 
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'csc899'
+app.config['MYSQL_HOST'] = process.env.DB_HOST,
+app.config['MYSQL_USER'] = process.env.DB_USERNAME,
+app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
+app.config['MYSQL_DB'] = process.env.DB_NAME
 mysql = MySQL(app)
 
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
