@@ -84,3 +84,6 @@ body {
   .login-container{
     padding-top: 50px;
   }
+  .successmsg{
+	  display: none;
+  }

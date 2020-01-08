@@ -103,7 +103,6 @@
               document.getElementById("password").onchange = validatePassword;
               document.getElementById("passwordMatch").onchange = validatePassword;
           }
-      ​
           function validatePassword() {
               var pass2 = document.getElementById("passwordMatch").value;
               var pass1 = document.getElementById("password").value;
@@ -111,9 +110,7 @@
                   document.getElementById("passwordMatch").setCustomValidity("Passwords Don't Match");
               else
                   document.getElementById("passwordMatch").setCustomValidity('');
-          }
-      ​
-          function signUpSuccessMsg(){
+          }function signUpSuccessMsg(){
               document.getElementById("signup").style.display  = "block";
           }
     </script>
