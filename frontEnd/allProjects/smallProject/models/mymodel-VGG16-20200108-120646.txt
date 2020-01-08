@@ -1,4 +1,0 @@
-2020/01/08-12:06:46
-{"selectedModel": "VGG16", "projectName": "smallProject", "modelName": "mymodel", "userid": 41, "epoch": 1, "optimizer": "Adam", "learningRate": 0.0001, "train_batch_size": 8, "test_batch_size": 4}
-0;0.51785713;1.0542721578053065;0.699999988079071;0.10864564776420593
-test loss = 1.6590137481689453; test accuracy = 0.5.

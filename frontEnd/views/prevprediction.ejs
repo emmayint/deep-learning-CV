@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/stylesheets/cropper.css">
     <link rel="stylesheet" href="/stylesheets/prevprediction.css">
     <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 </head>
 
 <body>
@@ -37,17 +39,22 @@
                         <i class="fas fa-angle-double-left"></i></a>
                 </li>
             </ul>
-
         </div>
+        <div class="rowmargintop">
+                Filter Results By Date: <input type="date" id="txtDate" class="all-p" onchange="filterByDateFunc()">
+            </div>
+            <p class="count-rst" id="count-result"></p>
         <div class="tab-content" id="myTabContent">
             <!-- Validated Predictions Content -->
             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="row rowmargin">
-
+                        <p class="show-msg" id="show-message">No result found.</p>
+                    <% var j = -1; %>
                     <% for (var i = 0; i < data.length; i++) { %>
 
                     <% if (data[i].exp_validate == 1 && data[i].user_validate) { %>
-                    <div class="col-md-4 gap">
+                        <% j += 1; %>
+                    <div class="col-md-4 gap" id = "filter-div-<%= j %>">
                         <div class="img-responsive img-thumbnail">
                             <a href="viewExperiment/<%= data[i].exp_id %>"></a>
                             <img class="scaled" src="/uploads/<%= data[i].img %>">
@@ -63,7 +70,7 @@
                             <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
                             <p class="all-p log-font" >Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
 
-                            <p class="all-p log-font" >Prediction On : <b> <%= data[i].created_at %> </b></p>
+                            <p class="all-p log-font" id="search-container-<%= j %>">Prediction On : <b> <%= data[i].created_at %> </b></p>
                             </a>
                         </div>
                     </div>
@@ -91,7 +98,7 @@
                                                     <b><%= data[i].exp_type %></b></a>
                                                     <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
                                                     <p class="all-p log-font">Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
-                                                    <p class="all-p log-font">Prediction On : <%= data[i].created_at %>
+                                                    <p class="all-p log-font">Prediction On : <b> <%= data[i].created_at %></b>
                                             </p>
                                         </div>
                                     </div>
@@ -109,10 +116,57 @@
     <script src="/javascripts/prevprediction.js"></script>
     <script src="/javascripts/croppr.js"></script>
     <script src="/javascripts/cropper.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
+        
+        $(function(){
+    var dtToday = new Date();
+    
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    
+    var maxDate = year + '-' + month + '-' + day;
+    $('#txtDate').attr('max', maxDate);
+});
+function filterByDateFunc() {
+        var input = document.getElementById("txtDate");
+        // filter = input.value.replace(/-/gi,"/");
+        var filter = input.value;
+        var showflag = false;
+        var countResult = 0
+        var initial = filter.split("-");
+        filter = [ initial[1], initial[2], initial[0] ].join('/');
+        for (var k = 0; k < $(".img-responsive").length; k++) {
+          //   var searchableDiv = document.getElementById("searchable-container-" + i);
+          var searchableDiv = document
+            .getElementById("search-container-" + k).innerText.trim();
+          if (searchableDiv.indexOf(filter) <= -1) {
+            $("#filter-div-" + k).css("display", "none");
+          } else{
+            $("#filter-div-" + k).css("display", "");
+            showflag = true;
+            countResult += 1;
+            document.getElementById("count-result").innerHTML = "Found " + countResult + " results.";
+          }
+        }
+        if(showflag == false){
+            $("#count-result").css("display", "none");
+            $(".show-msg").css("display", "block");
+
+        }else{
+            $("#count-result").css("display", "block");
+            $(".show-msg").css("display", "none");
+        }
+      }
     </script>
 </body>
 

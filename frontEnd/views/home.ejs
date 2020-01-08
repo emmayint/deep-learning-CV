@@ -41,7 +41,7 @@
                 value=""
                 class="form-control border-success"
                 placeholder="Search Experiment by Title"
-                onkeyup="myFunction()"
+                onkeyup="searchExperimentFunc()"
               />
               <!-- </div> -->
             </div>
@@ -96,7 +96,7 @@
     </script>
 
     <script>
-      function myFunction() {
+      function searchExperimentFunc() {
         var input = document.getElementById("container-search");
         filter = input.value.toLowerCase();
         for (i = 0; i < $(".card").length; i++) {

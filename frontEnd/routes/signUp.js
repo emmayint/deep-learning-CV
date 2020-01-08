@@ -56,7 +56,9 @@ router.post("/", function(req, res, next) {
               console.log("UserId" + user_id);
               req.logIn(user_id, function(err) {
                 // if success
-                res.redirect("/signUp");
+                setTimeout(function(){ 
+                    res.redirect('/'); 
+                }, 3000);
               });
             });
             console.log("result:" + JSON.stringify(results));
