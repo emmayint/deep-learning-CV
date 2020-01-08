@@ -3,9 +3,15 @@ let router = express.Router();
 let multer = require("multer");
 let path = require("path");
 var fs = require("fs");
+var countFiles = require("count-files");
+
 // const db = require('../database/db');
 
 global.projectName;
+global.trainSize = 0;
+global.testSize = 0;
+global.train_batch_size = 10;
+global.test_batch_size = 4;
 var projectName;
 var selectedCategory = "";
 var selectedDir = "";
@@ -26,7 +32,18 @@ let uploadTrain = multer({
 });
 
 router.post("/createFile", uploadTrain.array("file", 40), function(req, res) {
+  var traindir = "./allProjects/" + projectName + "/datasets";
+  var testdir = "./allProjects/" + projectName + "/testData";
+  countFiles(traindir, function(err, results) {
+    trainSize = results.files;
+  });
+  train_batch_size = Math.sqrt(trainSize).toFixed(0);
+  countFiles(testdir, function(err, results) {
+    testSize = results.files;
+  });
+  test_batch_size = Math.sqrt(testSize).toFixed(0);
   res.redirect("/upload");
+  // res.send("uploaded file");
 });
 
 // TODO Add middleware to the route
@@ -165,7 +182,16 @@ router.post("/selectProject", function(req, res) {
   console.log("post /selectProject with body:", req.body);
   projectName = req.body.projectName;
   global.projectName = projectName;
-
+  var traindir = "./allProjects/" + projectName + "/datasets";
+  var testdir = "./allProjects/" + projectName + "/testData";
+  countFiles(traindir, function(err, results) {
+    trainSize = results.files;
+  });
+  train_batch_size = Math.sqrt(trainSize).toFixed(0);
+  countFiles(testdir, function(err, results) {
+    testSize = results.files;
+  });
+  test_batch_size = Math.sqrt(testSize).toFixed(0);
   // TODO check and set value for hasTestDir
   res.redirect("/upload");
 });
@@ -212,6 +238,9 @@ router.get("/", authenticationMiddleware(), function(req, res) {
   res.render("upload");
 });
 
+// router.post("/setBatchSize", function(req, res) {
+// });
+
 // Auth middleware
 function authenticationMiddleware() {
   return (req, res, next) => {
@@ -221,3 +250,4 @@ function authenticationMiddleware() {
 }
 
 module.exports = router;
+// module.exports.projectName = projectName;

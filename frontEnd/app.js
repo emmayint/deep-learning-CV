@@ -66,7 +66,7 @@ app.use(function(req, res, next) {
 let options = {
   host: "localhost",
   user: "root",
-  password: "980731@muyan",
+  password: "",
   database: "csc899"
 };
 

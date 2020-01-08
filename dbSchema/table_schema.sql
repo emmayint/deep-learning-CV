@@ -91,11 +91,20 @@ CREATE TABLE `sessions` (
 
 CREATE TABLE `Models` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `fullpath` varchar(1000), 
-    `userid` int(11), 
-    `projectName` varchar(30),
-    `classes` varchar(1000), 
-    `logpath` varchar(1000), 
-    `epoch` int(4),
+    `model_path` varchar(1000), 
+    `user_id` int(11), 
+    `project_name` varchar(100),
+    `classes_file` varchar(1000), 
+    `classes` varchar(100),
+    `log_path` varchar(1000), 
+    `epoch` int(11),
+    `selected_model` varchar(100),
+    `optimizer` varchar(100),
+    `learning_rate` varchar(10),
+    `test_accuracy` varchar(100),
+    `test_loss` varchar(100),
+    `timestamp` varchar(100),
+    `train_batch_size` int(11),
+    `model_fullname` varchar(1000),
     PRIMARY KEY (`id`)
 )

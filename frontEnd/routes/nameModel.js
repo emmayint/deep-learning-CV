@@ -23,14 +23,20 @@ router.post("/", function(req, res) {
     selectedModel: selectedModel,
     projectName: projectName,
     modelName: modelName,
-    userid: userid
+    userid: userid,
+    epoch: parseInt(epoch),
+    optimizer: optimizer,
+    learningRate: parseFloat(learningRate),
+    train_batch_size: parseInt(train_batch_size),
+    test_batch_size: parseInt(test_batch_size)
   };
   console.log(
     "flask req body: ",
     selectedModel,
     projectName,
     modelName,
-    userid
+    userid,
+    epoch
   );
   axios
     .post("http://localhost:5000/train", body)
