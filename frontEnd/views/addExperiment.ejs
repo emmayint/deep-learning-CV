@@ -24,7 +24,7 @@
                         required type="text">
                     <label class="addexp" for="expBirthDate">Experiment Date
                     </label>
-                    <input autofocus class="form-control" name="expBirthDate" required type="date">
+                    <input autofocus class="form-control" name="expBirthDate" required type="date" id="txtDate">
                     <label for="expImage" class="addexp">Experiment Image</label>
                     <input accept="image/*" autofocus multiple name="expImage" required type="file" />
                     <br>
@@ -93,6 +93,20 @@
           });
         });
       });
+      $(function(){
+    var dtToday = new Date();
+    
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    
+    var maxDate = year + '-' + month + '-' + day;
+    $('#txtDate').attr('max', maxDate);
+});
     </script>
   </body>
 </html>

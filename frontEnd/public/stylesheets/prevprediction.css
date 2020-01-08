@@ -54,8 +54,11 @@
   margin-right: 500px;
   margin-top: 10px;
 }
-.rowmargin {
+.rowmargintop {
   margin-top: 30px;
+}
+.rowmargin {
+  margin-top: 10px;
 }
 .case {
   text-transform: uppercase;
@@ -78,4 +81,13 @@
   width: auto;
   word-break: break-all;
   word-wrap: break-word;
+}
+.show-msg {
+  display: none;
+  padding-left: 14px;
+  font-style: italic;
+}
+.count-rst {
+  margin-top: 15px;
+  font-style: italic;
 }
