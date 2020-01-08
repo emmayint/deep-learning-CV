@@ -91,3 +91,11 @@
   margin-top: 15px;
   font-style: italic;
 }
+.date-filter {
+  padding-top: 10px;
+}
+
+.date-filter input {
+  margin-left: 50px;
+  margin-bottom: 2px;
+}
