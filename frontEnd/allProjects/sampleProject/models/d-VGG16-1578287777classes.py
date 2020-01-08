@@ -1,1 +1,0 @@
-classesDict = {0: 'control', 1: 'mutant'}
