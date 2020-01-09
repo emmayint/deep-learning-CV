@@ -39,24 +39,34 @@
         <h1 class="step-title">3. Customize model inputs (optional)</h1>
         <div class="step-container params-content">
           <h4 class="step-directions">
-            Customize model inputs below (optional)
+            Set model inputs below (optional)
           </h4>
           <a
             onclick="window.open('https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9', '_blank', 'top=100 left=300,width=800,height=500');"
             href="/params"
             >what are these hyperparameters?</a
           >
-          <form class="params-form" method="POST" action="/params">
-            epoch: <input type="number" name="epoch" min="1" max="20" value= <%=
-            epoch%>>
+          <p>
+            projectName=<%= projectName%> trainSize=<%= trainSize%> testSize=<%=
+            testSize%>
+          </p>
+
+          <form
+            class="params-form"
+            id="params-form"
+            method="POST"
+            action="/params"
+          >
+            epoch: <input type="number" name="epoch" min="1" max="20" value=
+            <%=epoch%>>
             <br />
             <br />
-            batch_size: <input type="number" name="batch_size" min="1" max="100"
-            value= <%= batch_size%>>
+            train_batch_size: <input type="number" name="train_batch_size"
+            min="1" max=<%= trainSize%> value= <%= train_batch_size%>>
             <br />
             <br />
-            steps_per_epoch: <input type="number" name="steps_per_epoch" min="1"
-            max="100" value= <%= steps_per_epoch%>>
+            test_batch_size: <input type="number" name="test_batch_size" min="1"
+            max=<%=testSize%> value= <%= test_batch_size%>>
             <br />
             <br />
             <button type="button" id="advanced-input-button">
@@ -66,20 +76,21 @@
             <br />
             <div id="advanced-input-container" style="display:none">
               optimizer:
-              <select>
-                <option value="Adam">Adam</option>
-                <option value="SDG">SDG</option>
+              <select name="optimizer" value= <%= optimizer%>> form="params-form">
+                <option value="Adam" <%= optimizer == "Adam"? "selected" : "" %>>Adam</option>
+                <option value="SGD" <%= optimizer == "SGD" ? 'selected' : '' %>>SGD</option>
               </select>
               <br />
               <br />
-              learning rate: <input type="number" name="" min="0.00001"
-              max="0.01" value= <%= learningRate%>>
+              learning rate: <input type="number" name="learningRate"
+              min="0.00001" max="0.01" step="any" value= <%= learningRate%>>
             </div>
             <br />
             <button class="params-submit-button btn btn-block" type="submit">
               Submit
             </button>
           </form>
+
           <!-- <button id="advanced-input-button">advanced inputs</button> -->
         </div>
         <!-- <br>
@@ -112,5 +123,6 @@
           }
         });
     </script>
+    <% include partials/footer %>
   </body>
 </html>
