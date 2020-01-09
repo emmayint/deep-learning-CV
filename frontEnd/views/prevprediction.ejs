@@ -199,6 +199,8 @@
 
         function searchPrevExpFunc() {
             var input = document.getElementById("container-search");
+            var showMonthFlag = false;
+            var countMonthResult = 0;
             filter = input.value.toLowerCase();
             for (var k = 0; k < $(".img-responsive").length; k++) {
                 var searchableDiv = document
@@ -209,8 +211,19 @@
                     $("#filter-div-" + k).css("display", "none");
                 } else {
                     $("#filter-div-" + k).css("display", "");
+                    showMonthFlag = true;
+                    countMonthResult += 1;
+                    document.getElementById("count-result").innerHTML = "Found " + countMonthResult + " results";
                 }
             }
+            if (showMonthFlag == false) {
+                $("#count-result").css("display", "none");
+                $(".show-msg").css("display", "block");
+
+            } else {
+                $("#count-result").css("display", "block");
+                $(".show-msg").css("display", "none");
+            }   
         }
 
         function filterByMonthFunc() {
