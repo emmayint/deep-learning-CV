@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="/stylesheets/prevprediction.css">
     <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -41,17 +40,19 @@
             </ul>
         </div>
         <div class="rowmargintop">
-            <div class="row">
-            Filter Results By Keyword: <input
+            <div class="row"><input
                 type="search"
                 id="container-search"
                 value=""
-                class="form-control"
-                placeholder="Search Experiment by Title/Model/Accuracy"
+                class="form-control border-success"
+                placeholder="Enter Keyword to Search"
                 onkeyup="searchPrevExpFunc()"
-              />    </div>
+              /></div>
+              <div class="row">Filter Results By: </div>
               <div class="row date-filter">
-            Filter Results By Date: <input type="date" id="txtDate" onchange="filterByDateFunc()">
+             Date: <input type="date" id="txtDate" onchange="filterByDateFunc()">
+             Month: <input type="text" name="date" id="startDate" class="date-picker" onchange="filterByMonthFunc()"/>
+             <input type="reset" value="Reset" onClick="window.location.reload()">
         </div>
             </div>
             <p class="count-rst" id="count-result"></p>
@@ -87,7 +88,7 @@
                             <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
                             <p class="all-p log-font" >Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
 
-                            <p class="all-p log-font" id="search-container-<%= j %>">Prediction On : <b> <%= data[i].created_at %> </b></p>
+                            <p class="all-p log-font" id="search-container-<%= j %>">Prediction On : <b> <%= data[i].create_at %> </b></p>
                             </a>
                     </div>
                     </div>
@@ -115,7 +116,7 @@
                                                     <b><%= data[i].exp_type %></b></a>
                                                     <p class="all-p log-font">Training Algorithm : <b class="case"> VGG-16</b></p>
                                                     <p class="all-p log-font">Probabilities : <b > <%= data[i].pred_percentage %> </b></p>
-                                                    <p class="all-p log-font">Prediction On : <b> <%= data[i].created_at %></b>
+                                                    <p class="all-p log-font">Prediction On : <b> <%= data[i].create_at %></b>
                                             </p>
                                         </div>
                                     </div>
@@ -201,6 +202,73 @@ function filterByDateFunc() {
           }
         }
       }
+
+      function filterByMonthFunc() {
+        var input = document.getElementById("startDate");
+        var filterMonth = input.value;
+        var showMonthFlag = false;
+        var countMonthResult = 0
+        for (var k = 0; k < $(".img-responsive").length; k++) {
+          var searchableDiv = document.getElementById("search-container-" + k).innerText.trim();
+          var fMonth =  searchableDiv.replace(/ /gi,"").substring(13, 23).split("/");
+          var getFinalMonth = ([fMonth[0],fMonth[2]]).join("/");
+          if (filterMonth.indexOf(getFinalMonth) <= -1) {
+            $("#filter-div-" + k).css("display", "none");
+          } else{
+            $("#filter-div-" + k).css("display", "");
+            showMonthFlag = true;
+            countMonthResult += 1;
+            document.getElementById("count-result").innerHTML = "Found " + countMonthResult + " results.";
+          }
+        }
+        if(showMonthFlag == false){
+            $("#count-result").css("display", "none");
+            $(".show-msg").css("display", "block");
+
+        }else{
+            $("#count-result").css("display", "block");
+            $(".show-msg").css("display", "none");
+        }
+      }
+
+
+      $(function() {
+     $('.date-picker').datepicker(
+                    {
+                        dateFormat: "mm/yy",
+                        changeMonth: true,
+                        changeYear: true,
+                        showButtonPanel: true,
+                        onClose: function(dateText, inst) {
+
+
+                            function isDonePressed(){
+                                return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
+                            }
+
+                            if (isDonePressed()){
+                                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                                $(this).datepicker('setDate', new Date(year, month, 1)).trigger('change');
+                                
+                                 $('.date-picker').focusout()//Added to remove focus from datepicker input box on selecting date
+                            }
+                        },
+                        beforeShow : function(input, inst) {
+
+                            inst.dpDiv.addClass('month_year_datepicker')
+
+                            if ((datestr = $(this).val()).length > 0) {
+                                year = datestr.substring(datestr.length-4, datestr.length);
+                                month = datestr.substring(0, 2);
+                                $(this).datepicker('option', 'defaultDate', new Date(year, month-1, 1));
+                                $(this).datepicker('setDate', new Date(year, month-1, 1));
+                                $(".ui-datepicker-calendar").hide();
+                            }
+                        }
+                    })
+});
+
     </script>
 </body>
 
