@@ -139,3 +139,7 @@
 .img-responsive:hover .middle {
   opacity: 1;
 }
+
+.ui-datepicker-calendar {
+  display: none;
+  }
