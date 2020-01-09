@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/stylesheets/prevprediction.css">
     <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -46,7 +46,7 @@
                 type="search"
                 id="container-search"
                 value=""
-                class="form-control border-success"
+                class="form-control"
                 placeholder="Search Experiment by Title/Model/Accuracy"
                 onkeyup="searchPrevExpFunc()"
               />    </div>
@@ -65,10 +65,16 @@
 
                     <% if (data[i].exp_validate == 1 && data[i].user_validate) { %>
                         <% j += 1; %>
-                    <div class="col-md-4 gap" id = "filter-div-<%= j %>">
-                        <div class="img-responsive img-thumbnail">
-                            <a href="viewExperiment/<%= data[i].exp_id %>"></a>
-                            <img class="scaled" src="/uploads/<%= data[i].img %>">
+                    <div class="col-md-4 gap" id = "filter-div-<%= j %>">      
+                            <div class="img-responsive img-thumbnail">
+                                <img class="scaled image" src="/uploads/<%= data[i].img %>">
+                                <div class="middle">
+                                        <% if (data[i].user_validate == "No") { %>
+                                            <div class="text-cross"><i class="fa fa-times"></i></div>
+                                        <% } else { %>
+                                            <div class="text-check"><i class="fa fa-check"></i></div>
+                                            <% } %>
+                                </div>
                             <p class="fileName all-p"><b > <%= data[i].img %> </b></p>
                             <% if (data[i].user_validate == "No" && data[i].exp_type == "CONTROL") { %>
                             <p class="actualtop all-p log-font">Actual : <b class="case"> MUTANT</b></p>
@@ -83,7 +89,7 @@
 
                             <p class="all-p log-font" id="search-container-<%= j %>">Prediction On : <b> <%= data[i].created_at %> </b></p>
                             </a>
-                        </div>
+                    </div>
                     </div>
                     <% } %>
                     <% } %>
