@@ -41,7 +41,18 @@
             </ul>
         </div>
         <div class="rowmargintop">
-                Filter Results By Date: <input type="date" id="txtDate" class="all-p" onchange="filterByDateFunc()">
+            <div class="row">
+            Filter Results By Keyword: <input
+                type="search"
+                id="container-search"
+                value=""
+                class="form-control border-success"
+                placeholder="Search Experiment by Title/Model/Accuracy"
+                onkeyup="searchPrevExpFunc()"
+              />    </div>
+              <div class="row date-filter">
+            Filter Results By Date: <input type="date" id="txtDate" onchange="filterByDateFunc()">
+        </div>
             </div>
             <p class="count-rst" id="count-result"></p>
         <div class="tab-content" id="myTabContent">
@@ -165,6 +176,23 @@ function filterByDateFunc() {
         }else{
             $("#count-result").css("display", "block");
             $(".show-msg").css("display", "none");
+        }
+      }
+
+      function searchPrevExpFunc() {
+        var input = document.getElementById("container-search");
+        filter = input.value.toLowerCase();
+        for (var k = 0; k < $(".img-responsive").length; k++)  {
+          //   var searchableDiv = document.getElementById("searchable-container-" + i);
+          var searchableDiv = document
+            .getElementById("filter-div-" + k)
+            .children[0].innerText.toLowerCase()
+            .trim();
+          if (searchableDiv.indexOf(filter) <= -1) {
+            $("#filter-div-" + k).css("display", "none");
+          } else {
+            $("#filter-div-" + k).css("display", "");
+          }
         }
       }
     </script>

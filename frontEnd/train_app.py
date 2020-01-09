@@ -34,30 +34,37 @@ from keras.callbacks import CSVLogger
 from flask import Flask, render_template
 from flask_mysqldb import MySQL
 from glob import glob
+import datetime
+import json 
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '980731@muyan'
-app.config['MYSQL_DB'] = 'csc899'
+app.config['MYSQL_HOST'] = process.env.DB_HOST,
+app.config['MYSQL_USER'] = process.env.DB_USERNAME,
+app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
+app.config['MYSQL_DB'] = process.env.DB_NAME
 mysql = MySQL(app)
 
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
 def train():
     ## get http request and extract values
     message = request.get_json(force=True)
-    selectedModel = message['selectedModel']
-    projectName = message['projectName']
-    modelName = message['modelName']
-    userid = message['userid']
+    SELECTED_MODEL = message['selectedModel']
+    PROJECT_NAME = message['projectName']
+    MODELNAME = message['modelName']
+    USERID = message['userid']
+    EPOCH = message['epoch']
+    OPTIMIZER = message['optimizer']
+    LEARNING_RATE = message['learningRate']
+    train_batch_size = message['train_batch_size']
+    test_batch_size = message['test_batch_size']
     print(message)
 
     ## TODO "../allProject/projetName/datasets"; need "req.projetName"
     # __file__ refers to the file settings.py 
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    train_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'datasets' )
+    train_path =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'datasets' )
     print('training on data: ', train_path)
-    test_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'testData' )
+    test_path =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'testData' )
 
     trainSize = sum([len(files) for r, d, files in os.walk(train_path)])
     print("trainSize", trainSize)
@@ -71,9 +78,9 @@ def train():
 
     ## TODO reset classes names and customize batch_size
     train_datagen = ImageDataGenerator(validation_split=0.25) # set validation split
-    train_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 20, subset='training')
-    valid_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 5, subset='validation')
-    test_batches = ImageDataGenerator().flow_from_directory(test_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= 10)
+    train_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= train_batch_size, subset='training')
+    valid_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= train_batch_size//4, subset='validation')
+    test_batches = ImageDataGenerator().flow_from_directory(test_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= test_batch_size)
     label_map = (train_batches.class_indices) # label_map:  {'control': 0, 'mutant': 1}
     print("label_map: ",label_map) # TODO use label_map instead of hard set classes
     inv_label_map = {v: k for k, v in label_map.items()}
@@ -81,11 +88,18 @@ def train():
         print (k, v)
     
     # fixed time for model and log names
-    modelName_time = "{}-{}-{}".format(modelName, selectedModel, int(time.time()))
-    models_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/')
-    log_name = "{}{}.txt".format(models_path, modelName_time)
+    now = datetime.datetime.now()
+    TIME_F = now.strftime("%Y/%m/%d-%H:%M:%S")
+    TIME = now.strftime("%Y%m%d-%H%M%S")
+    modelName_time = "{}-{}-{}".format(MODELNAME, SELECTED_MODEL, TIME)
+    MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'models/')
+    log_name = "{}{}.txt".format(MODEL_DIR, modelName_time)
     csv_logger = CSVLogger(log_name, append=True, separator=';')
-    classes_record = "{}{}classes.py".format(models_path, modelName_time)
+    print("date time: ", TIME_F)
+    with open(log_name, "a") as myfile:
+        myfile.write(TIME_F+"\n")
+        myfile.write(json.dumps(message)+"\n")
+    classes_record = "{}{}classes.py".format(MODEL_DIR, modelName_time)
     with open(classes_record, "a") as classesfile:
         classesfile.write("classesDict = {}".format(inv_label_map))
 
@@ -109,7 +123,7 @@ def train():
     plots(imgs, titles=labels)
 
     # ## Build Fine-tuned VGG16 model
-    if (selectedModel == 'VGG16'):
+    if (SELECTED_MODEL == 'VGG16'):
         vgg16_model = keras.applications.vgg16.VGG16()
 
     model = Sequential()
@@ -123,17 +137,21 @@ def train():
     # model.summary()
 
     # ## Train the fine-tuned VGG16 model
-    model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
+    if (OPTIMIZER == "Adam"):
+        model.compile(Adam(lr=LEARNING_RATE), loss='categorical_crossentropy', metrics=['accuracy'])
+    
+    if (OPTIMIZER == "SGD"):
+        model.compile(SGD(lr=LEARNING_RATE), loss='categorical_crossentropy', metrics=['accuracy'])
 
     # model.fit_generator(train_batches, steps_per_epoch=18, 
     #                     validation_data=valid_batches, validation_steps=10, epochs=15, verbose=2) 
     # ## split train and valid
     model.fit_generator(
         train_batches,
-        steps_per_epoch = train_batches.samples // 20,
+        steps_per_epoch = train_batches.samples // train_batch_size,
         validation_data = valid_batches, 
-        validation_steps = valid_batches.samples // 5,
-        epochs = 1, 
+        validation_steps = valid_batches.samples // test_batch_size,
+        epochs = EPOCH, 
         verbose=2,
         callbacks=[csv_logger])    
 
@@ -156,13 +174,16 @@ def train():
     # ## Save the fine-tuned VGG16 model TODO save to ../allProject/projetName/model as h5? put flask_predict inside webapp-train?
     # TODO shorter accuracy float point
     NAME = "{}-test_acc{}.h5".format(modelName_time, "%.3f" % test_acc)
-    full_path =os.path.join(APP_ROOT, 'allProjects', projectName, 'models/', NAME)
-    print('model saved as: ', full_path)
+    MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'models/')
+    model_path =os.path.join(MODEL_DIR, NAME)
+    print('model saved as: ', model_path)
     defaultEpoch = 9
-    # model.save(full_path)
+    # model.save(model_path)
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO Models(fullpath, userid, projectName, logpath, classes, epoch) VALUES (%s, %s, %s, %s, %s, %s)", (full_path, userid, projectName, log_name, classes_record, defaultEpoch))
-    # cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, full_path))
+    cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, classes_file, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes) \
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
+        (model_path, USERID, PROJECT_NAME, log_name, classes_record, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, test_acc, test_loss, TIME_F, train_batch_size, NAME, json.dumps(inv_label_map)))
+    # cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, model_path))
     mysql.connection.commit()
     cur.close()
     response = {
@@ -175,8 +196,8 @@ def train():
 def get_model():
     global model
     # APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    # models_path =os.path.join(APP_ROOT, 'allProjects', 'p4','models/') # TODO projectName/models
-    # vgg16_path = os.path.join(models_path, 'vgg16model.h5')
+    # MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', 'p4','models/') # TODO projectName/models
+    # vgg16_path = os.path.join(MODEL_DIR, 'vgg16model.h5')
     # model = load_model(vgg16_path)
     model = load_model('vgg16model.h5')
     print(" * Model loaded!")

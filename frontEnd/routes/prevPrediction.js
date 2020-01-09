@@ -95,8 +95,8 @@ router.get("/:id", function(req, res, next) {
     let user = req.user;
     let id = req.params.id;
     console.log(id);
-    const labelNameewrew = req.params.prevdate;
-    console.log("Datepicke1111: " + labelNameewrew);
+    // const labelNameewrew = req.params.prevdate;
+    // console.log("Datepicke1111: " + labelNameewrew);
 
     console.log(req.params);
 
