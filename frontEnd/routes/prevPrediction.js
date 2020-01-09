@@ -101,7 +101,7 @@ router.get("/:id", function(req, res, next) {
     console.log(req.params);
 
     db.query(
-      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS created_at, update_at, exp_validate, user_validate, pred_percentage FROM prediction_type WHERE exp_id = " +
+      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS create_at, update_at, exp_validate, user_validate, pred_percentage FROM prediction_type WHERE exp_id = " +
         id +
         " order by created_at desc;",
       function(error, results, fields) {
