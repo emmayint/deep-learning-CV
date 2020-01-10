@@ -95,13 +95,13 @@ router.get("/:id", function(req, res, next) {
     let user = req.user;
     let id = req.params.id;
     console.log(id);
-    const labelNameewrew = req.params.prevdate;
-    console.log("Datepicke1111: " + labelNameewrew);
+    // const labelNameewrew = req.params.prevdate;
+    // console.log("Datepicke1111: " + labelNameewrew);
 
     console.log(req.params);
 
     db.query(
-      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS created_at, update_at, exp_validate, user_validate, pred_percentage FROM prediction_type WHERE exp_id = " +
+      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS create_at, update_at, exp_validate, user_validate, pred_percentage FROM prediction_type WHERE exp_id = " +
         id +
         " order by created_at desc;",
       function(error, results, fields) {
