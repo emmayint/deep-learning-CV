@@ -78,9 +78,9 @@
                             <img class="scaled image" src="/uploads/<%= data[i].img %>">
                             <div class="middle">
                                 <% if (data[i].user_validate == "No") { %>
-                                <div class="text-cross"><i class="fa fa-times"></i></div>
+                                <div class="text-cross"><i class="fa fa-times fa-2x"></i><br>Wrong Prediction</div>
                                 <% } else { %>
-                                <div class="text-check"><i class="fa fa-check"></i></div>
+                                <div class="text-check"><i class="fa fa-check fa-2x"></i><br>Correct Prediction</div>
                                 <% } %>
                             </div>
                             <p class="fileName all-p"><b> <%= data[i].img %> </b></p>
