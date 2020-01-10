@@ -36,7 +36,9 @@
             <span class="step-text">Name+train</span>
           </div>
         </div>
-        <h1 class="step-title">training your model "<%= modelName%>"...</h1>
+        <h1 class="step-title">
+          Your model "<%= modelName%>" is trained successfully
+        </h1>
         <div class="step-container">
           <style>
             .loader {
@@ -68,7 +70,7 @@
             }
           </style>
 
-          <p>
+          <!-- <p>
             Train on 396 samples, validate on 171 samples 2019-10-21
             19:07:23.986221:
           </p>
@@ -89,8 +91,15 @@
             Epoch 4/9 396/396 [==============> ] - 29s 74ms/sample - loss:
             0.2460 - acc: 0.9167 - val_loss: 0.3342 - val_acc: 0.8713
           </p>
-          <p>.................</p>
+          <p>.................</p> -->
+          <h2>the log of your model:</h2>
+          <% response.toString().split('\n').forEach(function(ln) {%> <%= ln
+          %><br />
+          <% }) %>
+          <!-- <p><%= response %></p> -->
+          <%if(isLoading){%>
           <div class="loader"></div>
+          <%}%>
         </div>
       </div>
     </div>

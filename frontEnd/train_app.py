@@ -38,10 +38,10 @@ import datetime
 import json 
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'csc899'
+app.config['MYSQL_HOST'] = process.env.DB_HOST,
+app.config['MYSQL_USER'] = process.env.DB_USERNAME,
+app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
+app.config['MYSQL_DB'] = process.env.DB_NAME
 mysql = MySQL(app)
 
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
@@ -97,8 +97,11 @@ def train():
     csv_logger = CSVLogger(log_name, append=True, separator=';')
     print("date time: ", TIME_F)
     with open(log_name, "a") as myfile:
-        myfile.write(TIME_F+"\n")
-        myfile.write(json.dumps(message)+"\n")
+        myfile.write("Model is trained at "+TIME_F+";\n\n")
+        myfile.write("parameters: "+json.dumps(message)+";\n\n")
+        myfile.write("Class indices: "+json.dumps(inv_label_map)+";\n\n")
+        myfile.write("epoch; loss; accuracy; validation_loss; validation_accuracy:\n")
+
     classes_record = "{}{}classes.py".format(MODEL_DIR, modelName_time)
     with open(classes_record, "a") as classesfile:
         classesfile.write("classesDict = {}".format(inv_label_map))
@@ -169,8 +172,8 @@ def train():
     print("test accuracy = {}".format(test_acc))  # model's accuracy
     
     with open(log_name, "a") as myfile:
-        myfile.write("test loss = {}; ".format(test_loss))
-        myfile.write("test accuracy = {}.".format(test_acc))
+        myfile.write("\ntest loss = {}; ".format(test_loss))
+        myfile.write("\ntest accuracy = {}.".format(test_acc))
     # ## Save the fine-tuned VGG16 model TODO save to ../allProject/projetName/model as h5? put flask_predict inside webapp-train?
     # TODO shorter accuracy float point
     NAME = "{}-test_acc{}.h5".format(modelName_time, "%.3f" % test_acc)
@@ -180,14 +183,15 @@ def train():
     defaultEpoch = 9
     # model.save(model_path)
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, classes_file, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes) \
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
-        (model_path, USERID, PROJECT_NAME, log_name, classes_record, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, test_acc, test_loss, TIME_F, train_batch_size, NAME, json.dumps(inv_label_map)))
+    cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, classes_file, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, favorite) \
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
+        (model_path, USERID, PROJECT_NAME, log_name, classes_record, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, test_acc, test_loss, TIME_F, train_batch_size, NAME, json.dumps(inv_label_map), "0"))
     # cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, model_path))
     mysql.connection.commit()
     cur.close()
     response = {
-        'model saved': NAME
+        'log' : log_name,
+        'model': NAME
     }
     return jsonify(response)
 
