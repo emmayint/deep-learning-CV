@@ -150,14 +150,16 @@
   background-color: #4caf50;
   color: white;
   font-size: 16px;
-  padding: 16px 32px;
+  padding: 12px 23px 0;
+  margin-bottom: 17px;
 }
 
 .text-cross {
   background-color: red;
   color: white;
   font-size: 16px;
-  padding: 16px 32px;
+  padding: 12px 23px 0;
+  margin-bottom: 17px;
 }
 
 .img-responsive:hover .image {
