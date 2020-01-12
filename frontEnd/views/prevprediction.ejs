@@ -75,12 +75,15 @@
                     <% j += 1; %>
                     <div class="col-md-4 gap" id="filter-div-<%= j %>">
                         <div class="img-responsive img-thumbnail">
-                            <img class="scaled image" src="/uploads/<%= data[i].img %>">
+                            <a href="#" class="pop">
+                                <img class="scaled image" src="/uploads/<%= data[i].img %>">
+                            </a>
                             <div class="middle">
                                 <% if (data[i].user_validate == "No") { %>
                                 <div class="text-cross"><i class="fa fa-times fa-2x"></i><br>Wrong Prediction</div>
                                 <% } else { %>
-                                <div class="text-check"><i class="fa fa-check fa-2x"></i><br>Correct Prediction</div>
+                                <div class="text-check"><i class="fa fa-check fa-2x"></i><br>Correct Prediction
+                                </div>
                                 <% } %>
                             </div>
                             <p class="fileName all-p"><b> <%= data[i].img %> </b></p>
@@ -89,7 +92,8 @@
                             <% } else if (data[i].user_validate == "No" && data[i].exp_type == "MUTANT") { %>
                             <p class="actualtop all-p log-font">Actual : <b class="case"> CONTROL</b></p>
                             <% } else { %>
-                            <p class=" actualtop all-p log-font">Actual : <b class="case"> <%= data[i].exp_type %></b>
+                            <p class=" actualtop all-p log-font">Actual : <b class="case">
+                                    <%= data[i].exp_type %></b>
                             </p>
                             <% } %>
                             <p class="all-p log-font">Predicted : <b class="case"> <%= data[i].exp_type %></b></p>
@@ -98,7 +102,21 @@
 
                             <p class="all-p log-font" id="search-container-<%= j %>">Prediction On : <b>
                                     <%= data[i].create_at %> </b></p>
-                            </a>
+
+                            <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <button type="button" class="close" data-dismiss="modal"><span
+                                                    aria-hidden="true">&times;</span><span
+                                                    class="sr-only">Close</span></button><br>
+                                            <p class="modalFileName all-p"></p>
+                                            <img src="" class="imagepreview" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <% } %>
@@ -140,13 +158,22 @@
             </div>
         </div>
     </div>
-    <% include partials/footer %>
-    <script src="/javascripts/viewexperiment.js"></script>
-    <script src="/javascripts/prevprediction.js"></script>
+    <!-- <% include partials/footer %> -->
+    <!-- <script src="/javascripts/viewexperiment.js"></script> -->
+    <!-- <script src="/javascripts/prevprediction.js"></script> -->
     <script src="/javascripts/croppr.js"></script>
     <script src="/javascripts/cropper.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
@@ -223,7 +250,7 @@
             } else {
                 $("#count-result").css("display", "block");
                 $(".show-msg").css("display", "none");
-            }   
+            }
         }
 
         function filterByMonthFunc() {
@@ -316,8 +343,18 @@
                 $("#count-result").css("display", "block");
             } else {
                 $("#count-result").css("display", "none");
-             }
+            }
         }
+
+        $(function () {
+            $('.pop').on('click', function () {
+                $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+                var imgName = $(this).find('img').attr('src').replace('/uploads/', '');
+                $('.modalFileName').css("display", "block");
+                $(".modalFileName").text(imgName);
+                $('#imagemodal').modal('show');
+            });
+        });
     </script>
 </body>
 

@@ -101,6 +101,12 @@
   word-wrap: break-word;
 }
 
+.modalFileName {
+  word-break: break-all;
+  display: none;
+  font-weight: bold;
+}
+
 .show-msg {
   display: none;
   padding-left: 14px;
@@ -151,7 +157,7 @@
   color: white;
   font-size: 16px;
   padding: 12px 23px 0;
-  margin-bottom: 17px;
+  margin-bottom: 50px;
 }
 
 .text-cross {
@@ -159,7 +165,7 @@
   color: white;
   font-size: 16px;
   padding: 12px 23px 0;
-  margin-bottom: 17px;
+  margin-bottom: 50px;
 }
 
 .img-responsive:hover .image {
@@ -192,4 +198,13 @@
 
 .filters {
   display: none;
+}
+
+.imagepreview {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-content {
+  width: 70%;
 }
