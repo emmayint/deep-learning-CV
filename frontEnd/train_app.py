@@ -36,6 +36,8 @@ from flask_mysqldb import MySQL
 from glob import glob
 import datetime
 import json 
+from flask_mail import Mail, Message
+
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = process.env.DB_HOST,
@@ -43,6 +45,18 @@ app.config['MYSQL_USER'] = process.env.DB_USERNAME,
 app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
 app.config['MYSQL_DB'] = process.env.DB_NAME
 mysql = MySQL(app)
+
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": 'dlimageclassification',
+    "MAIL_PASSWORD": 'sfsucsc899'
+}
+
+app.config.update(mail_settings)
+mail = Mail(app)
 
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
 def train():
@@ -57,14 +71,19 @@ def train():
     LEARNING_RATE = message['learningRate']
     train_batch_size = message['train_batch_size']
     test_batch_size = message['test_batch_size']
+    USER_EMAIL = message['useremail']
     print(message)
+
+    # with open("/Users/mac/Desktop/899/csc899_masterProject/frontEnd/allProjects/41/smallProject/models/logpath-VGG16-20200111-202420.txt", 'r') as content_file:
+    #     content = content_file.read()
+    
 
     ## TODO "../allProject/projetName/datasets"; need "req.projetName"
     # __file__ refers to the file settings.py 
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    train_path =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'datasets' )
+    train_path =os.path.join(APP_ROOT, 'allProjects', str(USERID), PROJECT_NAME, 'datasets' )
     print('training on data: ', train_path)
-    test_path =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'testData' )
+    test_path =os.path.join(APP_ROOT, 'allProjects', str(USERID),  PROJECT_NAME, 'testData' )
 
     trainSize = sum([len(files) for r, d, files in os.walk(train_path)])
     print("trainSize", trainSize)
@@ -92,13 +111,13 @@ def train():
     TIME_F = now.strftime("%Y/%m/%d-%H:%M:%S")
     TIME = now.strftime("%Y%m%d-%H%M%S")
     modelName_time = "{}-{}-{}".format(MODELNAME, SELECTED_MODEL, TIME)
-    MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'models/')
+    MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', str(USERID),  PROJECT_NAME, 'models/')
     log_name = "{}{}.txt".format(MODEL_DIR, modelName_time)
     csv_logger = CSVLogger(log_name, append=True, separator=';')
     print("date time: ", TIME_F)
     with open(log_name, "a") as myfile:
-        myfile.write("Model is trained at "+TIME_F+";\n\n")
-        myfile.write("parameters: "+json.dumps(message)+";\n\n")
+        myfile.write("Model" + MODELNAME + "is trained at "+TIME_F+";\n\n")
+        myfile.write("User inputs: "+json.dumps(message)+";\n\n")
         myfile.write("Class indices: "+json.dumps(inv_label_map)+";\n\n")
         myfile.write("epoch; loss; accuracy; validation_loss; validation_accuracy:\n")
 
@@ -177,7 +196,6 @@ def train():
     # ## Save the fine-tuned VGG16 model TODO save to ../allProject/projetName/model as h5? put flask_predict inside webapp-train?
     # TODO shorter accuracy float point
     NAME = "{}-test_acc{}.h5".format(modelName_time, "%.3f" % test_acc)
-    MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', PROJECT_NAME, 'models/')
     model_path =os.path.join(MODEL_DIR, NAME)
     print('model saved as: ', model_path)
     defaultEpoch = 9
@@ -189,18 +207,36 @@ def train():
     # cur.execute("INSERT INTO Logs(logpath, modelpath) VALUES (%s, %s)", (log_name, model_path))
     mysql.connection.commit()
     cur.close()
+
+    with open(log_name, 'r') as fp:
+        line = fp.readline()
+        content = ""
+        while line:
+            content = content+line +'<br>'
+            line = fp.readline()
+    with open("/Users/mac/Desktop/899/csc899_masterProject/frontEnd/templates/email-html.html", 'r') as content_file:
+        htmlcontent = content_file.read()    
+
+    with app.app_context():
+        msg = Message(subject="your model is complete",
+                      sender=app.config.get("MAIL_USERNAME"),
+                      recipients=[USER_EMAIL], # replace with your email for testing
+                    #   body= content,
+                      html= content + "<br>" + htmlcontent)
+                    #   html= "HTML: " + content)
+        mail.send(msg)
+
     response = {
         'log' : log_name,
         'model': NAME
     }
     return jsonify(response)
 
-
 # predict logic
 def get_model():
     global model
     # APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    # MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', 'p4','models/') # TODO projectName/models
+    # MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', USERID,  'p4','models/') # TODO projectName/models
     # vgg16_path = os.path.join(MODEL_DIR, 'vgg16model.h5')
     # model = load_model(vgg16_path)
     model = load_model('vgg16model.h5')

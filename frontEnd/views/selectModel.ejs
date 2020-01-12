@@ -44,9 +44,9 @@
                         <div class="model-type-button-container">
                             <!-- <label for="VGG16">VGG16</label><br> -->
                             <%if(selectedModel==="VGG16"){%> 
-                                <button class="model-type-button model-type-button-selected" type="submit" name="selectedModel" value="VGG16">
+                                <button id="vgg16-button" class="model-type-button model-type-button-selected" type="submit" name="selectedModel" value="VGG16">
                             <%}else{%> 
-                                <button class="model-type-button" type="submit" name="selectedModel" value="VGG16">
+                                <button id="vgg16-button" class="model-type-button" type="submit" name="selectedModel" value="VGG16">
                             <%}%>
                                 <p class="model-type-button-name">
                                     VGG16
@@ -58,9 +58,9 @@
                             <br>
                             <!-- <label for="CNN">CNN</label><br> -->
                             <%if(selectedModel==="other-CNN"){%> 
-                                <button class="model-type-button model-type-button-selected" type="submit" name="selectedModel" value="other-CNN">
+                                <button id="other-cnn-button" class="model-type-button model-type-button-selected" type="submit" name="selectedModel" value="other-CNN">
                             <%}else{%> 
-                                <button class="model-type-button" type="submit" name="selectedModel" value="other-CNN">
+                                <button id="other-cnn-button" class="model-type-button" type="submit" name="selectedModel" value="other-CNN">
                             <%}%>
                                 <p class="model-type-button-name">
                                     other CNN
@@ -91,6 +91,25 @@
                 </a>
             </div>
         </div>
+        <script>
+            // document.getElementById("vgg16-button").addEventListener("click", function(event){
+            //     event.preventDefault();
+            //     //form submission logic for vgg16 goes here
+            //     // alert("checkpoint1");
+
+            //     //redirect to next page
+            //     window.location.href = "/upload";
+            // });
+
+            // document.getElementById("other-cnn-button").addEventListener("click", function(event){
+            //     event.preventDefault();
+            //     //form submission logic for other-cnn button goes here
+            //     alert("checkpoint2");
+
+            //     //redirect to next page
+            //     window.location.href = "/upload";
+            // });
+        </script>
         <% include partials/footer %>
     </body>
 </html>

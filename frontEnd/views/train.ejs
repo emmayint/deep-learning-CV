@@ -37,7 +37,7 @@
           </div>
         </div>
         <h1 class="step-title">
-          Your model "<%= modelName%>" is trained successfully
+          Your model "<%= modelName%>" is submitted for training.
         </h1>
         <div class="step-container">
           <style>
@@ -70,38 +70,34 @@
             }
           </style>
 
-          <!-- <p>
-            Train on 396 samples, validate on 171 samples 2019-10-21
-            19:07:23.986221:
-          </p>
           <p>
-            Profiler session started. 396/396 [==============================] -
-            30s 77ms/sample - loss: 0.6553 - acc: 0.5833 - val_loss: 0.5686 -
-            val_acc: 0.7251
+            You will receive an email to <%= useremail%> with the details of
+            your model once the training is complete. <br />This could take a
+            while.
           </p>
-          <p>
-            Epoch 2/9 396/396 [==============================] - 29s 74ms/sample
-            - loss: 0.4655 - acc: 0.7929 - val_loss: 0.4708 - val_acc: 0.8304
-          </p>
-          <p>
-            Epoch 3/9 396/396 [==============================] - 30s 77ms/sample
-            - loss: 0.3649 - acc: 0.8409 - val_loss: 0.3863 - val_acc: 0.8363
-          </p>
-          <p>
-            Epoch 4/9 396/396 [==============> ] - 29s 74ms/sample - loss:
-            0.2460 - acc: 0.9167 - val_loss: 0.3342 - val_acc: 0.8713
-          </p>
-          <p>.................</p> -->
-          <h2>the log of your model:</h2>
-          <% response.toString().split('\n').forEach(function(ln) {%> <%= ln
-          %><br />
-          <% }) %>
-          <!-- <p><%= response %></p> -->
-          <%if(isLoading){%>
-          <div class="loader"></div>
-          <%}%>
+          <!-- <p>ejs response.toString().split('\n').forEach(function(ln) ejs </p> -->
+          <!-- <p>ejs= ln ejs </p>-->
+          <!-- <br /> -->
+          <!-- <p>ejs })ejs </p> -->
         </div>
       </div>
+      <!-- <div class="footer-nav">
+        <a href="/">
+          <button class="nav-button">
+            Discard model
+          </button>
+        </a>
+        <a href="/">
+          <button class="nav-button next-button">
+            Save model
+          </button>
+        </a>
+        <a href="/">
+          <button class="nav-button next-button">
+            Mark as favorite
+          </button>
+        </a>
+      </div> -->
     </div>
     <!-- <br>
     <a href="/params">Go back to customize input</a> -->

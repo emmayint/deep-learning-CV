@@ -1,0 +1,11 @@
+Modelcontentis trained at 2020/01/12-11:09:57;
+
+parameters: {"selectedModel": "VGG16", "projectName": "smallProject", "modelName": "content", "userid": 43, "epoch": 1, "optimizer": "Adam", "learningRate": 0.0001, "train_batch_size": 9, "test_batch_size": 5, "useremail": "tyin1@mail.sfsu.edu"};
+
+Class indices: {"0": "control", "1": "mutant"};
+
+epoch; loss; accuracy; validation_loss; validation_accuracy:
+0;0.49019608;0.9444639577585108;0.625;0.9805997610092163
+
+test loss = 0.9637447595596313; 
+test accuracy = 0.6666666865348816.

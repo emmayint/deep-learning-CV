@@ -1,12 +1,18 @@
 let express = require("express");
 let router = express.Router();
+const fs = require("fs");
 
 global.selectedModel = "";
-
+global.userid = 0;
 router.get("/", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
-    console.log("User in selectModle: ", user);
+    userid = user.user_id;
+    if (!fs.existsSync("./allProjects/" + userid)) {
+      fs.mkdirSync("./allProjects/" + userid, {
+        recursive: true
+      });
+    }
     res.render("selectModel", {
       selectedModel: selectedModel,
       uname: user.user_name

@@ -32,8 +32,8 @@ let uploadTrain = multer({
 });
 
 router.post("/createFile", uploadTrain.array("file", 40), function(req, res) {
-  var traindir = "./allProjects/" + projectName + "/datasets";
-  var testdir = "./allProjects/" + projectName + "/testData";
+  var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
+  var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
   countFiles(traindir, function(err, results) {
     trainSize = results.files;
   });
@@ -50,7 +50,7 @@ router.post("/createFile", uploadTrain.array("file", 40), function(req, res) {
 router.get("/", function(req, res) {
   // display all categories in current project
   if (req.isAuthenticated()) {
-    let allProjectBuf = Buffer.from("./allProjects");
+    let allProjectBuf = Buffer.from("./allProjects/" + userid);
     let user = req.user;
     fs.readdir(allProjectBuf, (err, projects) => {
       // get all exixting projects
@@ -59,7 +59,9 @@ router.get("/", function(req, res) {
       } else {
         if (projectName) {
           // when a project is selected
-          let projectBuf = Buffer.from("./allProjects/" + projectName);
+          let projectBuf = Buffer.from(
+            "./allProjects/" + userid + "/" + projectName
+          );
           fs.readdir(projectBuf, (err, files) => {
             if (err) {
               console.log(err.message);
@@ -73,7 +75,7 @@ router.get("/", function(req, res) {
           });
           // if a project is created or selected, show all categories under its datasets
           let dirBuf = Buffer.from(
-            "./allProjects/" + projectName + "/datasets"
+            "./allProjects/" + userid + "/" + projectName + "/datasets"
           );
           fs.readdir(dirBuf, (err, files) => {
             if (err) {
@@ -112,18 +114,24 @@ router.post("/nameProject", function(req, res) {
 
   console.log("projectName: ", projectName);
 
-  if (!fs.existsSync("./allProjects/" + projectName + "/datasets")) {
-    fs.mkdirSync("./allProjects/" + projectName + "/datasets", {
+  if (
+    !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/datasets")
+  ) {
+    fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/datasets", {
       recursive: true
     });
   }
-  if (!fs.existsSync("./allProjects/" + projectName + "/testData")) {
-    fs.mkdirSync("./allProjects/" + projectName + "/testData", {
+  if (
+    !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/testData")
+  ) {
+    fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/testData", {
       recursive: true
     });
   }
-  if (!fs.existsSync("./allProjects/" + projectName + "/models")) {
-    fs.mkdirSync("./allProjects/" + projectName + "/models", {
+  if (
+    !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/models")
+  ) {
+    fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/models", {
       recursive: true
     });
   }
@@ -137,22 +145,32 @@ router.post("/createDir", function(req, res) {
   category = req.body.category;
   console.log(
     "creating dir: ",
-    "./allProjects/" + projectName + "/datasets/" + category
+    "./allProjects/" + userid + "/" + projectName + "/datasets/" + category
   );
 
   if (
-    !fs.existsSync("./allProjects/" + projectName + "/datasets/" + category)
+    !fs.existsSync(
+      "./allProjects/" + userid + "/" + projectName + "/datasets/" + category
+    )
   ) {
-    fs.mkdirSync("./allProjects/" + projectName + "/datasets/" + category, {
-      recursive: true
-    });
+    fs.mkdirSync(
+      "./allProjects/" + userid + "/" + projectName + "/datasets/" + category,
+      {
+        recursive: true
+      }
+    );
   }
   if (
-    !fs.existsSync("./allProjects/" + projectName + "/testData/" + category)
+    !fs.existsSync(
+      "./allProjects/" + userid + "/" + projectName + "/testData/" + category
+    )
   ) {
-    fs.mkdirSync("./allProjects/" + projectName + "/testData/" + category, {
-      recursive: true
-    });
+    fs.mkdirSync(
+      "./allProjects/" + userid + "/" + projectName + "/testData/" + category,
+      {
+        recursive: true
+      }
+    );
   }
   res.redirect("/upload");
 });
@@ -163,7 +181,12 @@ router.post("/selectDir", function(req, res) {
   console.log("post /selectDir, ", "body:", req.body);
   selectedCategory = req.body.category;
   selectedDir =
-    "./allProjects/" + projectName + "/datasets/" + selectedCategory;
+    "./allProjects/" +
+    userid +
+    "/" +
+    projectName +
+    "/datasets/" +
+    selectedCategory;
   console.log("selected ", selectedDir);
   res.redirect("/upload");
 });
@@ -172,7 +195,12 @@ router.post("/selectTestDir", function(req, res) {
   console.log("post /selectTestDir, ", "body:", req.body);
   selectedCategory = req.body.category;
   selectedDir =
-    "./allProjects/" + projectName + "/testData/" + selectedCategory;
+    "./allProjects/" +
+    userid +
+    "/" +
+    projectName +
+    "/testData/" +
+    selectedCategory;
   console.log("selected ", selectedDir);
   res.redirect("/upload");
 });
@@ -182,8 +210,8 @@ router.post("/selectProject", function(req, res) {
   console.log("post /selectProject with body:", req.body);
   projectName = req.body.projectName;
   global.projectName = projectName;
-  var traindir = "./allProjects/" + projectName + "/datasets";
-  var testdir = "./allProjects/" + projectName + "/testData";
+  var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
+  var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
   countFiles(traindir, function(err, results) {
     trainSize = results.files;
   });
@@ -204,16 +232,16 @@ router.post("/selectProject", function(req, res) {
 
 // router.post("/createTestDir", function(req, res) {
 //   console.log("post /createTestDir, ", "body:", req.body);
-//   console.log("creating dir: ", "./allProjects/" + projectName + "/testData");
+//   console.log("creating dir: ", "./allProjects/" + userid + "/" + projectName + "/testData");
 
-//   if (!fs.existsSync("./allProjects/" + projectName + "/testData")) {
-//     fs.mkdirSync("./allProjects/" + projectName + "/testData", {
+//   if (!fs.existsSync("./allProjects/" + userid + "/" + projectName + "/testData")) {
+//     fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/testData", {
 //       recursive: true
 //     });
 //   }
 //   hasTestDir = true;
 
-//   let dirBuf = Buffer.from("./allProjects/" + projectName + "/datasets");
+//   let dirBuf = Buffer.from("./allProjects/" + userid + "/" + projectName + "/datasets");
 //   fs.readdir(dirBuf, (err, files) => {
 //     if (err) {
 //       console.log(err.message);
@@ -221,9 +249,9 @@ router.post("/selectProject", function(req, res) {
 //       // propagate all categories in datasets(train) to testData
 //       files.forEach(function(file) {
 //         if (
-//           !fs.existsSync("./allProjects/" + projectName + "/testData/" + file)
+//           !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/testData/" + file)
 //         ) {
-//           fs.mkdirSync("./allProjects/" + projectName + "/testData/" + file, {
+//           fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/testData/" + file, {
 //             recursive: true
 //           });
 //         }
