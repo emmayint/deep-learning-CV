@@ -9,12 +9,13 @@ router.get('/', function (req, res, next) {
     if (req.isAuthenticated()) {
         let user = req.user;
 
-db.query('SELECT experiment_images.exp_id, experiment_images.user_id, DATE_FORMAT(experiments.exp_birth_date,"%d/%m/%Y") AS exp_birth_date, experiments.exp_title, MIN(experiment_images.exp_images) AS exp_images '
+db.query('SELECT experiment_images.exp_id, experiment_images.user_id, DATE_FORMAT(experiments.exp_birth_date,"%m/%d/%Y") AS exp_birth_date, experiments.exp_title, MIN(experiment_images.exp_images) AS exp_images '
             + 'FROM experiments, experiment_images '
             + 'WHERE experiments.users_id = experiment_images.user_id AND experiments.exp_id = experiment_images.exp_id AND experiments.users_id = ' + user.user_id + ' '
-            + 'GROUP BY experiment_images.exp_id, experiments.exp_title;', function (error, results, fields) {
+            + 'GROUP BY experiment_images.exp_id, experiments.exp_title ORDER BY exp_id desc;', function (error, results, fields) {
             if (error) throw error;
         console.log('user authenticated');
+        console.log(this.sql);
             res.render('home', {uname: user.user_name, data: results});
         });
     } else {
