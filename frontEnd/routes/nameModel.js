@@ -2,9 +2,10 @@ let express = require("express");
 let router = express.Router();
 const axios = require("axios");
 const fs = require("fs");
+// var selectedModel = require("./selectModel").selectedModel;
 
-global.modelName = "";
 router.get("/", function(req, res) {
+  var modelName = "";
   if (req.isAuthenticated()) {
     let user = req.user;
     res.render("nameModel", { modelName: modelName, uname: user.user_name });
@@ -15,6 +16,7 @@ router.get("/", function(req, res) {
 
 // router.post("/", async function(req, res) {
 router.post("/", function(req, res) {
+  var modelName = "";
   let isLoading = true;
   let user = req.user;
   console.log(user);
@@ -22,16 +24,17 @@ router.post("/", function(req, res) {
   let useremail = user.user_email;
   // console.log("user: ", user);
   modelName = req.body.modelName;
+  module.exports.modelName = modelName;
   const body = {
-    selectedModel: selectedModel,
-    projectName: projectName,
+    selectedModel: require("./selectModel").selectedModel,
+    projectName: require("./upload").projectName,
     modelName: modelName,
     userid: userid,
-    epoch: parseInt(epoch),
-    optimizer: optimizer,
-    learningRate: parseFloat(learningRate),
-    train_batch_size: parseInt(train_batch_size),
-    test_batch_size: parseInt(test_batch_size),
+    epoch: parseInt(require("./params").epoch),
+    optimizer: require("./params").optimizer,
+    learningRate: parseFloat(require("./params").learningRate),
+    train_batch_size: parseInt(require("./params").train_batch_size),
+    test_batch_size: parseInt(require("./params").test_batch_size),
     useremail: useremail
   };
   console.log(useremail);
@@ -50,7 +53,6 @@ router.post("/", function(req, res) {
     modelName: modelName,
     uname: user.user_name,
     useremail: useremail
-    // isLoading: false
     // response: data
   });
   // } catch (err) {
@@ -71,4 +73,4 @@ function authenticationMiddleware() {
   };
 }
 
-module.exports = router;
+module.exports.router = router;

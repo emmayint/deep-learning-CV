@@ -2,9 +2,8 @@ let express = require("express");
 let router = express.Router();
 const fs = require("fs");
 
-global.selectedModel = "";
-global.userid = 0;
 router.get("/", function(req, res) {
+  var selectedModel = "";
   if (req.isAuthenticated()) {
     let user = req.user;
     userid = user.user_id;
@@ -23,9 +22,11 @@ router.get("/", function(req, res) {
 });
 
 router.post("/", function(req, res) {
+  var selectedModel = "";
   let user = req.user;
   console.log("post /selectModel with body:", req.body);
   selectedModel = req.body.selectedModel;
+  module.exports.selectedModel = selectedModel;
   res.render("selectModel", {
     selectedModel: selectedModel,
     uname: user.user_name
@@ -45,4 +46,4 @@ function authenticationMiddleware() {
   };
 }
 
-module.exports = router;
+module.exports.router = router;

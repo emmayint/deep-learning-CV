@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Training</title>
+    <% include partials/head %>
+    <link
+      href="/stylesheets/selectModel.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <br /><br /><br />
+    <% include partials/home-header %>
+    <div class="container">
+      <div class="content-container">
+        <!-- progress bar -->
+        <div class="progress-container">
+          <div class="progress-track-finished"></div>
+          <div class="progress-track-completed step4"></div>
+          <div class="complete-bullet-completed"></div>
+          <div class="complete-text">
+            <span class="step-text">Complete</span>
+          </div>
+          <div id="step1" class="progress-step-complete">
+            <span class="step-text">Choose model</span>
+          </div>
+          <div id="step2" class="progress-step-complete">
+            <span class="step-text">Select data</span>
+          </div>
+          <div id="step3" class="progress-step-complete">
+            <span class="step-text">Customize inputs</span>
+          </div>
+          <div id="step4" class="progress-step-complete">
+            <span class="step-text">Name+train</span>
+          </div>
+        </div>
+        <h1 class="step-title">
+          Your model successfully trained.
+        </h1>
+        <div class="step-container">
+          <style>
+            .loader {
+              border: 16px solid #f3f3f3;
+              border-radius: 50%;
+              border-top: 16px solid #3498db;
+              width: 60px;
+              height: 60px;
+              -webkit-animation: spin 2s linear infinite; /* Safari */
+              animation: spin 2s linear infinite;
+              margin: 20px auto;
+            }
+            /* Safari */
+            @-webkit-keyframes spin {
+              0% {
+                -webkit-transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+              }
+            }
+            @keyframes spin {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          </style>
+
+          <% response.toString().split('\n').forEach(function(ln){%>
+          <p><%= ln%></p>
+          <% })%>
+        </div>
+      </div>
+      <div class="footer-nav">
+        <button class="nav-button">
+          Discard model
+        </button>
+
+        <button class="nav-button next-button">
+          Save model
+        </button>
+        <button class="nav-button next-button">
+          Mark as favorite
+        </button>
+      </div>
+    </div>
+    <!-- <br>
+    <a href="/params">Go back to customize input</a> -->
+    <% include partials/footer %>
+  </body>
+</html>

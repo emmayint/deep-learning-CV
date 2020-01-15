@@ -5,14 +5,14 @@ let path = require("path");
 var fs = require("fs");
 var countFiles = require("count-files");
 
+var selectedModel = require("./selectModel").selectedModel;
+console.log("selectedModel imported ", selectedModel);
 // const db = require('../database/db');
 
-global.projectName;
-global.trainSize = 0;
-global.testSize = 0;
-global.train_batch_size = 10;
-global.test_batch_size = 4;
 var projectName;
+var trainSize = 0;
+var testSize = 0;
+
 var selectedCategory = "";
 var selectedDir = "";
 // var hasTestDir = false;
@@ -31,17 +31,19 @@ let uploadTrain = multer({
   })
 });
 
-router.post("/createFile", uploadTrain.array("file", 40), function(req, res) {
+router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
   var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
   var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
   countFiles(traindir, function(err, results) {
     trainSize = results.files;
+    module.exports.trainSize = trainSize;
   });
-  train_batch_size = Math.sqrt(trainSize).toFixed(0);
+  // train_batch_size = Math.sqrt(trainSize).toFixed(0);
   countFiles(testdir, function(err, results) {
     testSize = results.files;
+    module.exports.testSize = testSize;
   });
-  test_batch_size = Math.sqrt(testSize).toFixed(0);
+  // test_batch_size = Math.sqrt(testSize).toFixed(0);
   res.redirect("/upload");
   // res.send("uploaded file");
 });
@@ -110,7 +112,8 @@ router.get("/", function(req, res) {
 router.post("/nameProject", function(req, res) {
   console.log("post /nameProject with body:", req.body);
   projectName = req.body.projectName;
-  global.projectName = projectName;
+  module.exports.projectName = projectName;
+  // global.projectName = projectName;
 
   console.log("projectName: ", projectName);
 
@@ -135,6 +138,18 @@ router.post("/nameProject", function(req, res) {
       recursive: true
     });
   }
+
+  var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
+  var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
+  countFiles(traindir, function(err, results) {
+    trainSize = results.files;
+    module.exports.trainSize = trainSize;
+  });
+  // train_batch_size = Math.sqrt(trainSize).toFixed(0);
+  countFiles(testdir, function(err, results) {
+    testSize = results.files;
+    module.exports.testSize = testSize;
+  });
 
   res.redirect("/upload");
 });
@@ -209,17 +224,26 @@ router.post("/selectTestDir", function(req, res) {
 router.post("/selectProject", function(req, res) {
   console.log("post /selectProject with body:", req.body);
   projectName = req.body.projectName;
-  global.projectName = projectName;
+  module.exports.projectName = projectName;
+  // global.projectName = projectName;
   var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
   var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
+  // fs.readdir(traindir, (error, files) => {
+  //   trainSize = files.length; // return the number of files
+  //   module.exports.trainSize = trainSize;
+  // });
+  // fs.readdir(testdir, (error, files) => {
+  //   testSize = files.length; // return the number of files
+  //   module.exports.testSize = testSize;
+  // });
   countFiles(traindir, function(err, results) {
     trainSize = results.files;
+    module.exports.trainSize = trainSize;
   });
-  train_batch_size = Math.sqrt(trainSize).toFixed(0);
   countFiles(testdir, function(err, results) {
     testSize = results.files;
+    module.exports.testSize = testSize;
   });
-  test_batch_size = Math.sqrt(testSize).toFixed(0);
   // TODO check and set value for hasTestDir
   res.redirect("/upload");
 });
@@ -277,5 +301,4 @@ function authenticationMiddleware() {
   };
 }
 
-module.exports = router;
-// module.exports.projectName = projectName;
+module.exports.router = router;

@@ -38,12 +38,13 @@ import datetime
 import json 
 from flask_mail import Mail, Message
 
-
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = process.env.DB_HOST,
 app.config['MYSQL_USER'] = process.env.DB_USERNAME,
 app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
 app.config['MYSQL_DB'] = process.env.DB_NAME
+
+
 mysql = MySQL(app)
 
 mail_settings = {
@@ -73,14 +74,8 @@ def train():
     test_batch_size = message['test_batch_size']
     USER_EMAIL = message['useremail']
     print(message)
-
-    # with open("/Users/mac/Desktop/899/csc899_masterProject/frontEnd/allProjects/41/smallProject/models/logpath-VGG16-20200111-202420.txt", 'r') as content_file:
-    #     content = content_file.read()
-    
-
-    ## TODO "../allProject/projetName/datasets"; need "req.projetName"
-    # __file__ refers to the file settings.py 
-    APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
+   
+    APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top; __file__ refers to the file settings.py 
     train_path =os.path.join(APP_ROOT, 'allProjects', str(USERID), PROJECT_NAME, 'datasets' )
     print('training on data: ', train_path)
     test_path =os.path.join(APP_ROOT, 'allProjects', str(USERID),  PROJECT_NAME, 'testData' )
@@ -97,9 +92,9 @@ def train():
 
     ## TODO reset classes names and customize batch_size
     train_datagen = ImageDataGenerator(validation_split=0.25) # set validation split
-    train_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= train_batch_size, subset='training')
-    valid_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= train_batch_size//4, subset='validation')
-    test_batches = ImageDataGenerator().flow_from_directory(test_path, target_size=(224,224), classes=['control', 'mutant'], batch_size= test_batch_size)
+    train_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224),  batch_size= train_batch_size, subset='training')
+    valid_batches = train_datagen.flow_from_directory(train_path, target_size=(224,224),  batch_size= train_batch_size//2, subset='validation')
+    test_batches = ImageDataGenerator().flow_from_directory(test_path, target_size=(224,224), batch_size= test_batch_size)
     label_map = (train_batches.class_indices) # label_map:  {'control': 0, 'mutant': 1}
     print("label_map: ",label_map) # TODO use label_map instead of hard set classes
     inv_label_map = {v: k for k, v in label_map.items()}
@@ -114,9 +109,9 @@ def train():
     MODEL_DIR =os.path.join(APP_ROOT, 'allProjects', str(USERID),  PROJECT_NAME, 'models/')
     log_name = "{}{}.txt".format(MODEL_DIR, modelName_time)
     csv_logger = CSVLogger(log_name, append=True, separator=';')
-    print("date time: ", TIME_F)
+    print("date & time: ", TIME_F)
     with open(log_name, "a") as myfile:
-        myfile.write("Model" + MODELNAME + "is trained at "+TIME_F+";\n\n")
+        myfile.write("Your model \"" + MODELNAME + "\" is trained at "+TIME_F+";\n\n")
         myfile.write("User inputs: "+json.dumps(message)+";\n\n")
         myfile.write("Class indices: "+json.dumps(inv_label_map)+";\n\n")
         myfile.write("epoch; loss; accuracy; validation_loss; validation_accuracy:\n")
@@ -124,25 +119,6 @@ def train():
     classes_record = "{}{}classes.py".format(MODEL_DIR, modelName_time)
     with open(classes_record, "a") as classesfile:
         classesfile.write("classesDict = {}".format(inv_label_map))
-
-    # plots images with labels
-    def plots(ims, figsize=(12,6), rows=1, interp=False, titles=None):
-        if type(ims[0]) is np.ndarray:
-            ims = np.array(ims).astype(np.uint8)
-            if (ims.shape[-1] != 3):
-                ims = ims.transpose((0,2,3,1))
-        f = plt.figure(figsize=figsize)
-        cols = len(ims)//rows if len(ims) % 2 == 0 else len(ims)//rows + 1
-        for i in range(len(ims)):
-            sp = f.add_subplot(rows, cols, i+1)
-            sp.axis('Off')
-            if titles is not None:
-                sp.set_title(titles[i], fontsize=16)
-            plt.imshow(ims[i], interpolation=None if interp else 'none')
-
-    imgs, labels = next(train_batches)
-
-    plots(imgs, titles=labels)
 
     # ## Build Fine-tuned VGG16 model
     if (SELECTED_MODEL == 'VGG16'):
@@ -155,7 +131,7 @@ def train():
     for layer in model.layers:
         layer.trainable = False # freeze layer weight
 
-    model.add(Dense(2, activation='softmax')) ## TODO customize layer size 2 -> # of categories
+    model.add(Dense(CLASSNUM, activation='softmax')) ## TODO customize layer size 2 -> # of categories
     # model.summary()
 
     # ## Train the fine-tuned VGG16 model
@@ -180,7 +156,7 @@ def train():
     # ## test the fine-tuned VGG16 model
     print('testing model on data: ', test_path)
     test_imgs, test_labels = next(test_batches)
-    plots(test_imgs, titles=test_labels)
+    # plots(test_imgs, titles=test_labels)
 
     test_labels = test_labels[:,0]
     test_labels
@@ -199,7 +175,7 @@ def train():
     model_path =os.path.join(MODEL_DIR, NAME)
     print('model saved as: ', model_path)
     defaultEpoch = 9
-    # model.save(model_path)
+    model.save(model_path)
     cur = mysql.connection.cursor()
     cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, classes_file, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, favorite) \
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
@@ -214,8 +190,12 @@ def train():
         while line:
             content = content+line +'<br>'
             line = fp.readline()
-    with open("/Users/mac/Desktop/899/csc899_masterProject/frontEnd/templates/email-html.html", 'r') as content_file:
-        htmlcontent = content_file.read()    
+
+    # with open("/Users/mac/Desktop/899/csc899_masterProject/frontEnd/templates/email-html.html", 'r') as content_file:
+    #     htmlcontent = content_file.read()    
+    htmlcontent = "<a href=\"http://localhost:5001/logger?path="+ log_name +"\">More actions about this model</a>"
+    print("link: ", "http://localhost:5001/logger?path=", log_name)
+    # htmlcontent = "http://localhost:5001/logger?path="+ log_name +"\"><button>More actions about this model</button></a>"
 
     with app.app_context():
         msg = Message(subject="your model is complete",
