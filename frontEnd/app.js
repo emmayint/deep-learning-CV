@@ -1,41 +1,42 @@
-let createError = require("http-errors");
-let express = require("express");
-let path = require("path");
-let bodyParser = require("body-parser");
-let cookieParser = require("cookie-parser");
-let logger = require("morgan");
-let multer = require("multer");
-let dotenv = require("dotenv");
-let cors = require("cors");
-let processImage = require("express-processimage");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const multer = require("multer");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const processImage = require("express-processimage");
 
 dotenv.config();
 
 // Auth packages
-let session = require("express-session");
-let passport = require("passport");
-let LocalStrategy = require("passport-local").Strategy;
-let MySQLStore = require("express-mysql-session")(session);
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const MySQLStore = require("express-mysql-session")(session);
 
-let signUpRouter = require("./routes/signUp");
-let signInRouter = require("./routes/signIn");
-let homeRouter = require("./routes/home");
-let defaultRouter = require("./routes/default");
-let logoutRouter = require("./routes/logout");
-let addExperimentRouter = require("./routes/addExperiment");
-let viewExperimentRouter = require("./routes/viewExperiment");
-let viewPredictionRouter = require("./routes/viewPrediction");
-let prevPredictionRouter = require("./routes/prevPrediction");
+const signUpRouter = require("./routes/signUp");
+const signInRouter = require("./routes/signIn");
+const homeRouter = require("./routes/home");
+const defaultRouter = require("./routes/default");
+const logoutRouter = require("./routes/logout");
+const addExperimentRouter = require("./routes/addExperiment");
+const viewExperimentRouter = require("./routes/viewExperiment");
+const viewPredictionRouter = require("./routes/viewPrediction");
+const prevPredictionRouter = require("./routes/prevPrediction");
 
 // // Emma's code
-let uploadRouter = require("./routes/upload");
-let selectModelRouter = require("./routes/selectModel");
-let paramsRouter = require("./routes/params");
-let nameModelRouter = require("./routes/nameModel");
-let predictRouter = require("./routes/predict");
-let testFlaskRouter = require("./routes/testFlask");
+const uploadRouter = require("./routes/upload").router;
+const selectModelRouter = require("./routes/selectModel").router;
+const paramsRouter = require("./routes/params").router;
+const nameModelRouter = require("./routes/nameModel").router;
+const loggerRouter = require("./routes/logger");
+// const predictRouter = require("./routes/predict").router;
+// const testFlaskRouter = require("./routes/testFlask").router;
 
-let app = express();
+const app = express();
 
 // View engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -99,8 +100,9 @@ app.use("/upload", uploadRouter);
 app.use("/selectModel", selectModelRouter);
 app.use("/params", paramsRouter);
 app.use("/nameModel", nameModelRouter);
+app.use("/logger", loggerRouter);
 // app.use("/predict", predictRouter);
-app.use("/testFlask", testFlaskRouter);
+// app.use("/testFlask", testFlaskRouter);
 app.get("/predict", (req, res) => {
   res.redirect("http://localhost:8000/static/predict-with-visuals.html");
 });

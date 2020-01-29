@@ -1,12 +1,17 @@
 let express = require("express");
 let router = express.Router();
-
-global.selectedModel = "";
+const fs = require("fs");
 
 router.get("/", function(req, res) {
+  var selectedModel = "";
   if (req.isAuthenticated()) {
     let user = req.user;
-    console.log("User in selectModle: ", user);
+    userid = user.user_id;
+    if (!fs.existsSync("./allProjects/" + userid)) {
+      fs.mkdirSync("./allProjects/" + userid, {
+        recursive: true
+      });
+    }
     res.render("selectModel", {
       selectedModel: selectedModel,
       uname: user.user_name
@@ -17,9 +22,11 @@ router.get("/", function(req, res) {
 });
 
 router.post("/", function(req, res) {
+  var selectedModel = "";
   let user = req.user;
   console.log("post /selectModel with body:", req.body);
   selectedModel = req.body.selectedModel;
+  module.exports.selectedModel = selectedModel;
   res.render("selectModel", {
     selectedModel: selectedModel,
     uname: user.user_name
@@ -39,4 +46,4 @@ function authenticationMiddleware() {
   };
 }
 
-module.exports = router;
+module.exports.router = router;

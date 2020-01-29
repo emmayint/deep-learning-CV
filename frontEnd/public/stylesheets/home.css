@@ -4,3 +4,7 @@
 .cursor {
   cursor: pointer;
 }
+
+.title-align{
+  text-align: left;
+}

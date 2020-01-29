@@ -3,35 +3,21 @@ let router = express.Router();
 const fs = require("fs");
 var countFiles = require("count-files");
 
-global.epoch = 9;
-// global.batch_size = 4;
-// global.steps_per_epoch = 10;
-global.optimizer = "Adam";
-global.learningRate = 0.0001;
-
-// function setBatches(req, res, next) {
-//   var traindir = "./allProjects/" + projectName + "/datasets";
-//   var testdir = "./allProjects/" + projectName + "/testData";
-//   countFiles(traindir, function(err, results) {
-//     trainSize = results.files - 1;
-//   });
-//   countFiles(testdir, function(err, results) {
-//     testSize = results.files - 1;
-//   });
-//   train_batch_size = Math.sqrt(trainSize).toFixed(0);
-//   test_batch_size = Math.sqrt(testSize).toFixed(0);
-//   next();
-// }
-
 router.get("/", function(req, res) {
-  train_batch_size = Math.sqrt(trainSize).toFixed(0);
-  test_batch_size = Math.sqrt(testSize).toFixed(0);
+  var epoch = 9;
+  var optimizer = "Adam";
+  var learningRate = 0.0001;
+  var train_batch_size = 0;
+  var test_batch_size = 0;
+  train_batch_size = Math.sqrt(require("./upload").trainSize * 0.75).toFixed(0);
+  test_batch_size = Math.sqrt(require("./upload").testSize).toFixed(0);
 
   if (req.isAuthenticated()) {
     let user = req.user;
     res.render("params", {
-      trainSize: trainSize,
-      testSize: testSize,
+      projectName: require("./upload").projectName,
+      trainSize: require("./upload").trainSize,
+      testSize: require("./upload").testSize,
       epoch: epoch,
       uname: user.user_name,
       train_batch_size: train_batch_size,
@@ -45,16 +31,27 @@ router.get("/", function(req, res) {
 });
 
 router.post("/", function(req, res) {
+  var epoch = 9;
+  var optimizer = "Adam";
+  var learningRate = 0.0001;
+  var train_batch_size = 0;
+  var test_batch_size = 0;
   //   res.render("selectModel", {});
   let user = req.user;
   epoch = req.body.epoch;
+  module.exports.epoch = epoch;
   train_batch_size = req.body.train_batch_size;
+  module.exports.train_batch_size = train_batch_size;
   test_batch_size = req.body.test_batch_size;
+  module.exports.test_batch_size = test_batch_size;
   optimizer = req.body.optimizer;
+  module.exports.optimizer = optimizer;
   learningRate = req.body.learningRate;
+  module.exports.learningRate = learningRate;
   res.render("params", {
-    trainSize: trainSize,
-    testSize: testSize,
+    projectName: require("./upload").projectName,
+    trainSize: require("./upload").trainSize,
+    testSize: require("./upload").testSize,
     epoch: epoch,
     uname: user.user_name,
     train_batch_size: train_batch_size,
@@ -77,4 +74,4 @@ function authenticationMiddleware() {
   };
 }
 
-module.exports = router;
+module.exports.router = router;

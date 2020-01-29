@@ -54,7 +54,8 @@ passport.use(
         if (response === true) {
           return done(null, {
             user_id: results[0].id,
-            user_name: results[0].username
+            user_name: results[0].username,
+            user_email: results[0].email
           });
         } else {
           return done(null, false);

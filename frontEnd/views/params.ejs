@@ -47,8 +47,7 @@
             >what are these hyperparameters?</a
           >
           <p>
-            projectName=<%= projectName%> trainSize=<%= trainSize%> testSize=<%=
-            testSize%>
+            (training data size = <%= trainSize*0.75%>; testing data size=<%=testSize%>)
           </p>
 
           <form
@@ -104,7 +103,7 @@
             </button>
           </a>
           <a href="/nameModel">
-            <button class="nav-button next-button">
+            <button id="next-button" class="nav-button next-button">
               Next
             </button>
           </a>
@@ -121,6 +120,15 @@
           } else {
             element.style.display = "block";
           }
+        });
+      
+      document.getElementById("next-button").addEventListener("click", function(event){
+            event.preventDefault();
+            //form submission logic goes here
+            document.forms["params-form"].submit();
+
+            //redirect to next page
+            window.location.href = "/nameModel";
         });
     </script>
     <% include partials/footer %>
