@@ -23,12 +23,16 @@
             <!-- Tabbed Interface -->
             <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
                 <li class="nav-item">
+                    <a class="nav-link  tab-a" id="summary-tab" data-toggle="tab" href="#" role="tab"
+                        aria-controls="summary" aria-selected="true" onclick="hideSearch()">Summary</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link active tab-a" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                         aria-controls="profile" aria-selected="false" onclick="showSearch()">Validated Predictions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  tab-a" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                        aria-controls="home" aria-selected="true" onclick="hideSearch()">Predictions to be validated</a>
+                    <a class="nav-link  tab-a" id="home-tab" data-toggle="tab" href="#" role="tab" aria-controls="home"
+                        aria-selected="true" onclick="hideSearch()">Predictions to be validated</a>
                 </li>
                 <li>
                     <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom"
