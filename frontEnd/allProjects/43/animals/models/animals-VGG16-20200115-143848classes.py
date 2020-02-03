@@ -1,1 +1,0 @@
-classesDict = {0: 'cats', 1: 'dogs', 2: 'pandas'}
