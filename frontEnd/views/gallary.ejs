@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Home</title>
+  <% include partials/head %>
+  <link href="/stylesheets/style.css" rel="stylesheet" />
+  <link href="/stylesheets/home.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
+  <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <% include partials/home-header %>
+  <div class="container">
+    <div class="row div">
+      <div class="col-md-12 btn-group-toggle topmargin">
+        <div class="heading">
+          <h2>
+            EXPERIMENTS GALLARY
+            <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Go Back to Home page"
+              class="custombtn btn-primary btn-lg" href="/home" role="button">
+              <i class="fas fa-arrow-left"></i>
+            </a>
+          </h2>
+          <div class=" row-padding">
+            <!-- <div class="col-lg-4 col-lg-offset-4"> -->
+            <input type="search" id="container-search" value="" class="form-control border-success"
+              placeholder="Search Experiment by Title" onkeyup="searchExperimentFunc()" />
+            <!-- </div> -->
+          </div>
+          <hr class="mt-2 mb-5" />
+        </div>
+      </div>
+      <section class="gallery-block cards-gallery">
+        <div class="container">
+          <div class="row">
+            <% for (var i = 0; i < data.length; i++) { %>
+            <div class="col-md-3 col-lg-3 cursor" id="searchable-container-<%= i %>">
+              <div class="card border-0 transform-on-hover" id="searchable-div">
+                <a class="lightbox" href="viewExperiment/<%= data[i].exp_id %>">
+                  <img src="/uploads/<%= data[i].exp_images %>" alt="Card Image" class="card-img-top scaled" />
+                </a>
+                <div class="card-body title-align">
+                  <h6><a href="#"><%= data[i].exp_title %></a></h6>
+                  <p class="text-muted card-text">
+                    Exp Date: <%= data[i].exp_birth_date %>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- <% include partials/footer %> -->
+  <script src="/javascripts/croppr.js"></script>
+  <script src="/javascripts/cropper.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+
+
+  <script>
+    baguetteBox.run(".cards-gallery", {
+      animation: "slideIn"
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+
+  <script>
+
+    function searchExperimentFunc() {
+      var input = document.getElementById("container-search");
+      filter = input.value.toLowerCase();
+      for (i = 0; i < $(".card").length; i++) {
+        //   var searchableDiv = document.getElementById("searchable-container-" + i);
+        var searchableDiv = document
+          .getElementById("searchable-container-" + i)
+          .children[0].innerText.toLowerCase()
+          .trim();
+        if (searchableDiv.indexOf(filter) <= -1) {
+          $("#searchable-container-" + i).css("display", "none");
+        } else {
+          $("#searchable-container-" + i).css("display", "");
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

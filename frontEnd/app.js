@@ -20,6 +20,8 @@ const MySQLStore = require("express-mysql-session")(session);
 const signUpRouter = require("./routes/signUp");
 const signInRouter = require("./routes/signIn");
 const homeRouter = require("./routes/home");
+const homeGallaryRouter = require("./routes/gallary")
+const homeSummaryRouter = require("./routes/summary")
 const defaultRouter = require("./routes/default");
 const logoutRouter = require("./routes/logout");
 const addExperimentRouter = require("./routes/addExperiment");
@@ -88,6 +90,8 @@ app.use(passport.session());
 app.use("/", signInRouter);
 app.use("/signUp", signUpRouter);
 app.use("/home", homeRouter);
+app.use("/gallary", homeGallaryRouter);
+app.use("/summary", homeSummaryRouter);
 app.use("/logout", logoutRouter);
 app.use("/addExperiment", addExperimentRouter);
 app.use("/viewExperiment", viewExperimentRouter);
