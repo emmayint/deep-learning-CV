@@ -4,22 +4,36 @@
     <title>Add Experiment</title>
     <% include partials/head %>
     <link href="/stylesheets/style.css" rel="stylesheet" />
+    <link href="/stylesheets/home.css" rel="stylesheet" />
     <link href="/stylesheets/viewexperiment.css" rel="stylesheet" />
     <link href="/stylesheets/addExperiments.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
   </head>
 
   <body>
     <!-- Navigation Bar -->
     <% include partials/home-header %>
 
-    <div class="container"><br>
-        <div class="row justify-content-center">
+    <div class="container">
+      <div class="row div">
+      <div class="col-md-12 btn-group-toggle topmargin">
+      <div class="heading">
+        <h2>
+          Add New Experiment
+          <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Go Back to Home page"
+                class="custombtn btn-primary btn-lg bckbtn" href="/home" role="button">
+                <i class="fas fa-arrow-left"></i>
+              </a>
+        </h2>
+        <hr class="mt-2 mb-5" />
+      </div>
+        <div class="row justify-content-center topMargin">
             <div class="col-md-6 border border-light p-0 card plus">
 
                 <form action="/addExperiment" class="form" enctype="multipart/form-data" method="POST">
-                    <h4 class="text-center login-title" style="padding-top:0">
+                    <!-- <h4 class="text-center login-title" style="padding-top:0">
                         Add Experiment
-                    </h4>
+                    </h4> -->
                     <input autofocus class="form-control dblinputs" name="expTitle" placeholder="Experiment Title *"
                         required type="text">
                     <label class="addexp" for="expBirthDate">Experiment Date
@@ -57,6 +71,7 @@
         </div>
       </div>
     </div>
+  </div>
     <% include partials/footer %>
     <script type="text/javascript">
       $(document).ready(function() {

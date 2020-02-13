@@ -46,7 +46,7 @@
             <tr>
                 <td><input type="checkbox" name=""></td>
                 <td><%= dataSummary[i].prediction_date %></td>
-                <td><%= dataSummary[i].exp_title %></td>
+                <td><a href="viewExperiment/<%= dataSummary[i].exp_id %>"><%= dataSummary[i].exp_title %></a></td>
                 <td><%= dataSummary[i].model_name %></td>
                 <td><%= dataSummary[i].total_images %></td>
                 <td><%= dataSummary[i].control_count %></td>
@@ -67,14 +67,13 @@
         </tfoot>
       </table>
     </div>
-    <!-- </div> -->
   </div>
   </div>
   </div>
 
   <!-- <% include partials/footer %> -->
-  <script src="/javascripts/croppr.js"></script>
-  <script src="/javascripts/cropper.js"></script>
+  <!-- <script src="/javascripts/croppr.js"></script>
+  <script src="/javascripts/cropper.js"></script> -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
   </script>
@@ -88,14 +87,14 @@
   </script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js">
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script> -->
 
 
-  <script>
+  <!-- <script>
     baguetteBox.run(".cards-gallery", {
       animation: "slideIn"
     });
-  </script>
+  </script> -->
 
   <script>
     $(document).ready(function () {
@@ -105,14 +104,14 @@
           [5, 10, 25, -1],
           [5, 10, 25, "All"]
         ],
-        "iDisplayLength": 5,
-        "columns": [{
-            "width": "40%"
-          },
-          {
-            "width": "60%"
-          }
-        ]
+        "iDisplayLength": 5
+        // "columns": [{
+        //     "width": "40%"
+        //   },
+        //   {
+        //     "width": "60%"
+        //   }
+        // ]
       });
     });
   </script>
