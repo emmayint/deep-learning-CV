@@ -23,12 +23,12 @@
             <!-- Tabbed Interface -->
             <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link tab-a <%= is_validated === 'YES' ? 'active' : '' %>" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                    <a class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'YES' ? 'active' : '') : 'active' %>" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                         aria-controls="profile" aria-selected="false" onclick="showSearch()">Validated Predictions</a>
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link tab-a <%= is_validated === 'NO' ? 'active' : '' %>" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                    <a class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active' : ''): '' %>" id="home-tab" data-toggle="tab" href="#home" role="tab"
                         aria-controls="home" aria-selected="true" onclick="hideSearch()">Predictions to be validated</a>
                 </li>
                 <li>
@@ -66,7 +66,7 @@
         <p class="count-rst" id="count-result"></p>
         <div class="tab-content" id="myTabContent">
             <!-- Validated Predictions Content -->
-            <div class="tab-pane fade <%= is_validated === 'YES' ? 'active show' : '' %>" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="tab-pane fade <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'YES' ? 'active show' : '') : 'show active' %>" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="row rowmargin">
                     <p class="show-msg" id="show-message">No result found</p>
                     <% var j = -1; %>
@@ -124,7 +124,7 @@
                     <% } %>
                 </div>
             </div>
-            <div class="tab-pane fade <%= is_validated === 'NO' ? 'active show' : '' %>" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active show' : '') : '' %>" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <!-- Predictions to be Validated Content -->
                 <div class="row rowmargin">
                     <section class="gallery-block cards-gallery">
