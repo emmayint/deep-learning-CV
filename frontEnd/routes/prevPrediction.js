@@ -120,6 +120,50 @@ router.get("/:id", function(req, res, next) {
   }
 });
 
+
+// @route   GET /:id
+// @desc    Get previous prediction of the selected images from Summary page
+// @access  Private
+router.get("/:id/:create_at/:is_validated", function(req, res, next) {
+  if (req.isAuthenticated()) {
+    let user = req.user;
+    let create_at = req.params.create_at;
+
+    let is_validated = req.params.is_validated;
+    console.log("************ is_validated ***********: " ,is_validated);
+    let id = req.params.id;
+    console.log(id);
+    // const labelNameewrew = req.params.prevdate;
+    // console.log("Datepicke1111: " + labelNameewrew);
+
+    console.log(req.params);
+
+    db.query(
+      "SELECT id, exp_id, exp_img_id, img, exp_type, DATE_FORMAT(created_at,'%m/%d/%Y %T') AS create_at, update_at, exp_validate, user_validate, pred_percentage FROM prediction_type WHERE exp_id = " +
+        id +
+        " and DATE_FORMAT(created_at,'%Y-%m-%d %T') = '" + 
+        create_at + 
+        "' order by created_at desc;",
+      function(error, results, fields) {
+        console.log(this.sql);
+        if (error) throw error;
+
+        res.render("prevprediction", {
+          uname: user.user_name,
+          data: results,
+          id: id,
+          is_validated: is_validated
+        });
+      }
+    );
+  } else {
+    res.redirect("/");
+  }
+});
+
+
+
+
 // Add mideleware to the route
 router.get("/:id", authenticationMiddleware(), function(req, res) {
   res.render("prevprediction");
