@@ -6,6 +6,7 @@
   <% include partials/head %>
   <link href="/stylesheets/style.css" rel="stylesheet" />
   <link href="/stylesheets/home.css" rel="stylesheet" />
+  <link href="/stylesheets/viewexperiment.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
   <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -50,7 +51,7 @@
                 <td><input type="checkbox" name=""></td>
                 <td><%= dataSummary[i].prediction_date %></td>
                 <!-- <td><a href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>"><%= dataSummary[i].exp_title %></a></td> -->
-                <td><a id="redirectPrevPred" href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>/<%= dataSummary[i].is_validated %>" onclick="check();"><%= dataSummary[i].exp_title %></a></td>
+                <td><a id="redirectPrevPred" href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>/<%= dataSummary[i].is_validated %>" onclick="check();" style="color:black;"><%= dataSummary[i].exp_title %></a></td>
                 <td><%= dataSummary[i].model_name %></td>
                 <td><%= dataSummary[i].total_images %></td>
                 <td><%= dataSummary[i].control_count %></td>
