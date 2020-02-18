@@ -1,75 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Home</title>
+	<title>Home</title>
   <% include partials/head %>
   <link href="/stylesheets/style.css" rel="stylesheet" />
   <link href="/stylesheets/home.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
   <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 </head>
 
 <body>
-  <!-- Navigation Bar -->
-  <% include partials/home-header %>
-  <div class="social-box">
-    <div class="container">
-     	<div class="row">
-			 
-			    <div class="col-lg-4 col-xs-12 text-center">
-					<div class="box">
-                        <i class="fa fa-list-alt fa-3x" aria-hidden="true"></i>
-						<div class="box-title">
-							<h3>Experiment Summary</h3>
-						</div>
-						<div class="box-text">
-							<span>Exhaustive summary of all previous experiments that includes important information like prediction date, model name and prediction types</span>
-						</div>
-						<div class="box-btn">
-						    <a href="/summary">Click Here</a>
-						</div>
-					 </div>
-				</div>	 
-				
-				 <div class="col-lg-4 col-xs-12  text-center">
-					<div class="box">
-					    <i class="fa fa-image fa-3x" aria-hidden="true"></i>
-						<div class="box-title">
-							<h3>Experiments Gallary</h3>
-						</div>
-						<div class="box-text">
-              <span>Gallary like list view <br> of all the experiments <br>performed having images<br> and more information</span>
-						</div>
-						<div class="box-btn">
-						    <a href="/gallary">Click Here</a>
-						</div>
-					 </div>
-				</div>	 
-				
-				 <div class="col-lg-4 col-xs-12 text-center">
-					<div class="box">
-                        <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
-						<div class="box-title">
-							<h3>Add New Experiment</h3>
-						</div>
-						<div class="box-text">
-							<span>Create a new experiment<br> by adding one or more<br> images for performing <br>model predictions </span>
-						</div>
-						<div class="box-btn">
-						    <a href="/addExperiment">Click Here</a>
-						</div>
-					 </div>
-        </div>
-        </div>
-        </div>
-  </div>
-  <!-- -->
+	<div class="container"><br><br><br><br>
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link" id="tab1" data-target="#home" aria-controls="home" data-toggle="tab"
+					href="/summary">Summary</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-target="#menu1" data-toggle="tab" aria-controls="menu1" href="/gallary">Gallary</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-target="#menu2" data-toggle="tab" aria-controls="menu2" href="/addExperiment">Add Experiment</a>
+			</li>
+			
+		</ul>
 
-  <% include partials/footer %>
-
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div id="home" class="container tab-pane" role="tabpanel"><br>
+			</div>
+			<div id="menu1" class="container tab-pane fade"><br>
+			</div>
+			<div id="menu2" class="container tab-pane fade"><br>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+	<script type="text/javascript">
+		$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+			var url = $(this).attr("href"); // the remote url for content
+			var target = $(this).data("target"); // the target pane
+			var tab = $(this); // this tab
+			// ajax load from data-url
+			$(target).load(url, function (result) {
+				tab.tab('show');
+			});
+		});
+		// initially activate the first tab..
+		$('#tab1').tab('show');
+	</script>
 </body>
 
 </html>
