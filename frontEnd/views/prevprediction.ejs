@@ -17,7 +17,7 @@
     <div id="loadingPredict" style="display: none"></div>
 
     <!-- Navigation Bar -->
-    <% include partials/home-header %>
+    <% include partials/viewexp-header %>
     <div class="container">
         <div class="row div">
             <!-- Tabbed Interface -->
@@ -31,13 +31,13 @@
                     <a class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active' : ''): '' %>" id="home-tab" data-toggle="tab" href="#home" role="tab"
                         aria-controls="home" aria-selected="true" onclick="hideSearch()">Predictions to be validated</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom"
                         title="Go Back to View Experiments" class="custombtn btn-primary btn-lg"
                         href="/viewExperiment/<%= id %>" role="button" style="
                 margin-left: 76px;">
                         <i class="fas fa-angle-double-left"></i></a>
-                </li>
+                </li> -->
             </ul>
         </div>
         <div class="rowmargintop">
