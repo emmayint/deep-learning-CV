@@ -28,8 +28,23 @@ label {
   padding-top: 80px; 
   margin-left:280px;
 }
+
+.home-top-margin{
+  margin-top:6%;
+}
+
+.gallary-top-margin{
+  margin-top:2%;
+}
+
+.addExp-top-margin{
+  margin-top:5%;
+}
+
 .tbrow{
-  margin-left: 0px;
+  margin-top: 3%;
+    margin-left: -2%;
+    width: 95%;
 }
 /* Style the tab */
 .tab {
@@ -109,7 +124,7 @@ h3{
 .social-box .box .box-btn a{
     text-decoration: none;
     color: #4183D7;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .fa{

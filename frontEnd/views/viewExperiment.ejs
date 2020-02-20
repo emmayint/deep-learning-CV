@@ -28,7 +28,39 @@
 
     <div class="container">
         <!-- 1st row buttons -->
-        <div class="row topmargin">
+        <div class="row viewexp-topmargin" style="border: solid">
+            <button class="btn btn-primary btnStyle" data-target="#addImageModal" data-toggle="modal" type="button">Add
+                Images
+            </button>
+
+            
+
+            
+
+            <button class="btn btn-primary btnStyle" id="btnSelectAll" type="button">Select All
+            </button>
+
+            
+
+            <button class="btn btn-primary btnStyle" id="btnEnableCrop" type="button">Enable Selected Crop
+            </button>
+
+            <button class="btn btn-primary btnStyle" id="prediction" type="button">
+                Predict
+            </button>
+
+        </div>
+        <div class="row" style="border: solid">
+            <button class="btn btn-primary btnStyle" class="del_img_view" data-target="#deleteImageModal"
+                data-toggle="modal" type="button">Delete Images
+            </button>
+            <button class="btn btn-primary btnStyle" id="btnUnselectAll" type="button">
+                Unselect All
+            </button>
+            <button class="btn btn-primary btnStyle" id="btnDisableCrop" type="button">Disable Selected Crop
+            </button>
+        </div>
+        <!-- <div class="row viewexp-topmargin" style="border: solid">
             <button class="btn btn-primary btnStyle" data-target="#addImageModal" data-toggle="modal" type="button">Add
                 Images
             </button>
@@ -36,12 +68,6 @@
             <button class="btn btn-primary btnStyle" class="del_img_view" data-target="#deleteImageModal"
                 data-toggle="modal" type="button">Delete Images
             </button>
-
-            <!-- <a href="/Prevprediction/<%=id%>">
-                    <button class="btn btn-primary btnStyle" id="previous_prediction " type="button">
-                        Previous Prediction
-                    </button>
-                </a> -->
 
             <button class="btn btn-primary btnStyle" id="btnUnselectAll" type="button">
                 Unselect All
@@ -60,7 +86,7 @@
                 Predict
             </button>
 
-        </div>
+        </div> -->
 
         <!-- Display images -->
         <div class="row">

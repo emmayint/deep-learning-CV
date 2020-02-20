@@ -11,7 +11,7 @@ body {
 }
 
 .imgmetadata {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   color: #636363;
   text-align: left;
@@ -35,12 +35,12 @@ body {
 }
 .cropBtn {
   background: #179b81;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
 }
 
-.topmargin {
-  margin-top: 80px;
+.viewexp-topmargin {
+  margin-top: 100px;
 }
 
 .fileName {

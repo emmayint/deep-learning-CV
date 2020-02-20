@@ -1,80 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Add Experiment</title>
-    <% include partials/head %>
-    <link href="/stylesheets/style.css" rel="stylesheet" />
-    <link href="/stylesheets/home.css" rel="stylesheet" />
-    <link href="/stylesheets/viewexperiment.css" rel="stylesheet" />
-    <link href="/stylesheets/addExperiments.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
-  </head>
 
-  <body>
-    <!-- Navigation Bar -->
-    <% include partials/home-header %>
+<head>
+  <title>Add Experiment</title>
+  <% include partials/head %>
+  <link href="/stylesheets/style.css" rel="stylesheet" />
+  <link href="/stylesheets/home.css" rel="stylesheet" />
+  <link href="/stylesheets/viewexperiment.css" rel="stylesheet" />
+  <link href="/stylesheets/addExperiments.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
+</head>
 
-    <div class="container">
-      <div class="row div">
-      <div class="col-md-12 btn-group-toggle topmargin">
-      <div class="heading">
-        <h2>
-          Add New Experiment
-          <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Go Back to Home page"
-                class="custombtn btn-primary btn-lg bckbtn" href="/home" role="button">
-                <i class="fas fa-arrow-left"></i>
-              </a>
-        </h2>
-        <hr class="mt-2 mb-5" />
-      </div>
-        <div class="row justify-content-center topMargin">
-            <div class="col-md-6 border border-light p-0 card plus">
+<body>
+  <!-- Navigation Bar -->
+  <% include partials/home-header %>
 
-                <form action="/addExperiment" class="form" enctype="multipart/form-data" method="POST">
-                    <!-- <h4 class="text-center login-title" style="padding-top:0">
-                        Add Experiment
-                    </h4> -->
-                    <input autofocus class="form-control dblinputs" name="expTitle" placeholder="Experiment Title *"
-                        required type="text">
-                    <label class="addexp" for="expBirthDate">Experiment Date
-                    </label>
-                    <input autofocus class="form-control" name="expBirthDate" required type="date" id="txtDate">
-                    <label for="expImage" class="addexp">Experiment Image</label>
-                    <input accept="image/*" autofocus multiple name="expImage" required type="file" />
-                    <br>
-                    <div id="field">
-                        <div id="field0">
-                    <!-- Text input-->
-                    <div class="form-group">
-                        <label class="addexp" for="action_id">Label Name</label>
-                            <input id="action_id" name="action_id" type="text" placeholder="" class="form-control input-md">
-                    <!-- Text input-->
-                        <label class="addexp" for="action_name">Label Value</label>
-                            <input id="action_name" name="action_name" type="text" placeholder="" class="form-control input-md">
-                    </div></div>
-                    </div>
-<div class="form-group addexp">
-        <button id="add-more" name="add-more" class="custombtn btn-primary btn-sm">Add More</button>
-</div>
-<div class="form-group addexp">
-    <button type="submit" class="custombtn btn-primary btn-block btn-lg">Add Experiment</button>
-</div>
-                </form>
+  <div class="container addExp-top-margin">
+    <div class="col-md-12">
+      <div class="row justify-content-center topMargin">
+        <div class="col-md-6 p-0 card plus" style="border: 0.5px solid rgba(0, 0, 0, 0.356);">
 
+          <form action="/addExperiment" class="form" enctype="multipart/form-data" method="POST">
+            <div>
+              <h4>
+                Add New Experiment
+              </h4>
+              <hr class="mt-2 mb-5" />
             </div>
-            <!-- <div class="form-group addexp">
-              <button type="submit" class="btn btn-primary btn-block btn-lg">
-                Add Experiment
-              </button>
-            </div> -->
+            <input autofocus class="form-control dblinputs" name="expTitle" placeholder="Experiment Title *" required
+              type="text">
+            <label class="addexp" for="expBirthDate">Experiment Date
+            </label>
+            <input autofocus class="form-control" name="expBirthDate" required type="date" id="txtDate">
+            <label for="expImage" class="addexp">Experiment Image</label>
+            <input accept="image/*" autofocus multiple name="expImage" required type="file" />
+            <br>
+            <div id="field">
+              <div id="field0">
+                <!-- Text input-->
+                <div class="form-group">
+                  <label class="addexp" for="action_id">Label Name</label>
+                  <input id="action_id" name="action_id" type="text" placeholder="" class="form-control input-md">
+                  <!-- Text input-->
+                  <label class="addexp" for="action_name">Label Value</label>
+                  <input id="action_name" name="action_name" type="text" placeholder="" class="form-control input-md">
+                </div>
+              </div>
+            </div>
+            <div class="form-group addexp">
+              <button id="add-more" name="add-more" class="custombtn btn-primary btn-sm">Add More</button>
+            </div>
+            <div class="form-group addexp">
+              <button type="submit" class="custombtn btn-primary btn-block btn-lg">Add Experiment</button>
+            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-    <!-- <% include partials/footer %> -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-	integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  <!-- <% include partials/footer %> -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
   </script>
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -85,59 +71,60 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
   </script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js">
-	</script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
 
-    <script type="text/javascript">
-      $(document).ready(function() {
-        //dynamic childs
-        var next = 0;
-        $("#add-more").click(function(e) {
+  <script type="text/javascript">
+    $(document).ready(function () {
+      //dynamic childs
+      var next = 0;
+      $("#add-more").click(function (e) {
+        e.preventDefault();
+        var addto = "#field" + next;
+        var addRemove = "#field" + next;
+        next = next + 1;
+        var newIn =
+          ' <div id="field' +
+          next +
+          '" name="field' +
+          next +
+          '"><!-- Text input--><div class="form-group" ><label class="addexp" for="action_id">Label Name</label><input id="action_id" name="action_id" type="text" placeholder="" class="form-control input-md"><!-- Text input--><label class="addexp" for="action_name">Label Value</label><input id="action_name" name="action_name" type="text" placeholder="" class="form-control input-md"></div></div>';
+        var newInput = $(newIn);
+        var removeBtn =
+          '<button id="remove' +
+          (next - 1) +
+          '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="field">';
+        var removeButton = $(removeBtn);
+        $(addto).after(newInput);
+        $(addRemove).after(removeButton);
+        $("#field" + next).attr("data-source", $(addto).attr("data-source"));
+        $("#count").val(next);
+
+        $(".remove-me").click(function (e) {
           e.preventDefault();
-          var addto = "#field" + next;
-          var addRemove = "#field" + next;
-          next = next + 1;
-          var newIn =
-            ' <div id="field' +
-            next +
-            '" name="field' +
-            next +
-            '"><!-- Text input--><div class="form-group" ><label class="addexp" for="action_id">Label Name</label><input id="action_id" name="action_id" type="text" placeholder="" class="form-control input-md"><!-- Text input--><label class="addexp" for="action_name">Label Value</label><input id="action_name" name="action_name" type="text" placeholder="" class="form-control input-md"></div></div>';
-          var newInput = $(newIn);
-          var removeBtn =
-            '<button id="remove' +
-            (next - 1) +
-            '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="field">';
-          var removeButton = $(removeBtn);
-          $(addto).after(newInput);
-          $(addRemove).after(removeButton);
-          $("#field" + next).attr("data-source", $(addto).attr("data-source"));
-          $("#count").val(next);
-
-          $(".remove-me").click(function(e) {
-            e.preventDefault();
-            var fieldNum = this.id.charAt(this.id.length - 1);
-            var fieldID = "#field" + fieldNum;
-            $(this).remove();
-            $(fieldID).remove();
-          });
+          var fieldNum = this.id.charAt(this.id.length - 1);
+          var fieldID = "#field" + fieldNum;
+          $(this).remove();
+          $(fieldID).remove();
         });
       });
-      $(function(){
-    var dtToday = new Date();
-    
-    var month = dtToday.getMonth() + 1;
-    var day = dtToday.getDate();
-    var year = dtToday.getFullYear();
-    if(month < 10)
+    });
+    $(function () {
+      var dtToday = new Date();
+
+      var month = dtToday.getMonth() + 1;
+      var day = dtToday.getDate();
+      var year = dtToday.getFullYear();
+      if (month < 10)
         month = '0' + month.toString();
-    if(day < 10)
+      if (day < 10)
         day = '0' + day.toString();
-    
-    var maxDate = year + '-' + month + '-' + day;
-    $('#txtDate').attr('max', maxDate);
-});
-    </script>
-  </body>
+
+      var maxDate = year + '-' + month + '-' + day;
+      $('#txtDate').attr('max', maxDate);
+    });
+  </script>
+</body>
+
 </html>
