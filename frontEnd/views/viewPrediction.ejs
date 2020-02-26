@@ -42,7 +42,7 @@
                     <% } %>
                     <div class="btn-group btn-group-toggle yesno" data-toggle="buttons">
                         <label class="btn btn-sm btn-outline-primary active">
-                            <input type="radio" name="options_<%= i %>" id="option1" checked value="Yes" onchange="validate('options_<%= i %>', '<%= i %>')"> Yes
+                            <input type="radio" name="options_<%= i %>" id="option1" value="Yes" onchange="validate('options_<%= i %>', '<%= i %>')"> Yes
                         </label>
                         <label class="btn btn-sm btn-outline-primary">
                             <input type="radio" name="options_<%= i %>" id="option2" value="No" onchange="validate('options_<%= i %>','<%= i %>');"> No
@@ -123,10 +123,12 @@
 <% include partials/footer %>
 <script>
         var values=[];
-        values=Array($(".random").length).fill('Yes');
+        values=Array($(".random").length).fill('Not-Validated');
         function validate(yesnoval, i){
             value = $('input[name='+yesnoval+']:checked').val();
-            values[i]=value;
+            if (value != 'undefined'){
+                values[i]=value;
+            }
         }
         
         function showtable(){
