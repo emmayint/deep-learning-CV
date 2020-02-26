@@ -69,6 +69,7 @@ router.post("/:id", function(req, res, next) {
   });
 
   for (let i = 0; i < bodyLength / 2; i++) {
+    if(isCheckedval[i] !== 'Not-Validated'){
     db.query(
       'UPDATE prediction_type SET user_validate ="' +
         isCheckedval[i] +
@@ -83,6 +84,7 @@ router.post("/:id", function(req, res, next) {
         if (error) throw error;
       }
     );
+  }
   }
   res.redirect("/Prevprediction/" + exp_id + "");
 });
