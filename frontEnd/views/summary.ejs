@@ -49,7 +49,7 @@
               <% var create_at = dataSummary[i].prediction_date.split('/').join('-') %>
             <tr>
                 <!-- <td><input type="checkbox" name=""></td> -->
-                <td><%= dataSummary[i].prediction_date %></td>
+                <td data-sort><%= dataSummary[i].prediction_date %></td>
                 <!-- <td><a href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>"><%= dataSummary[i].exp_title %></a></td> -->
                 <td><a id="redirectPrevPred" href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>/<%= dataSummary[i].is_validated %>" onclick="check();" style="color:black;"><%= dataSummary[i].exp_title %></a></td>
                 <td><%= dataSummary[i].model_name %></td>

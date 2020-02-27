@@ -25,9 +25,13 @@ body {
 }
 .example-button {
   color: white;
-  font: 14px "Open Sans", sans-serif;
-  background: #636363;
-  margin-top: 90px;
+  /* font: 15px "Roboto", sans-serif; */
+  font-size: 15px;
+  font-weight: bold;
+  background: #19aa8d;
+  margin-top: 9%;
+  border:none;
+  margin-right: 1%;
 }
 
 .imgid {
