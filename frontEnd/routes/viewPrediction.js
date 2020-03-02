@@ -245,20 +245,19 @@ router.get("/view/validate/:id", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
     let id = req.params.id;
+    // if (req.session.predictionData) {
+    //   let responseData = req.session.predictionData;
+    //   console.log("Response Data: ", responseData);
+    //   setTimeout(function() {
+    //     req.session.predictionData = "";
+    //   }, 2000);
 
-    if (req.session.predictionData) {
-      let responseData = req.session.predictionData;
-      console.log("Response Data: ", responseData);
-      setTimeout(function() {
-        req.session.predictionData = "";
-      }, 2000);
+    //   let smallArr = [];
 
-      let smallArr = [];
-
-      for (let i = 0; i < responseData.length; i++) {
-        let image_id = responseData[i].exp_img_id;
-        smallArr.push(image_id);
-      }
+    //   for (let i = 0; i < responseData.length; i++) {
+    //     let image_id = responseData[i].exp_img_id;
+    //     smallArr.push(image_id);
+    //   }
 
       // Get prediction to be displayed on the web interface
       db.query(
@@ -279,9 +278,9 @@ router.get("/view/validate/:id", function(req, res) {
           }
         }
       );
-    } else {
-      res.redirect("back");
-    }
+    // } else {
+    //   res.redirect("back");
+    // }
   }
 });
 

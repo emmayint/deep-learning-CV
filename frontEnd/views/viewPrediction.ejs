@@ -34,8 +34,8 @@
                 </button>
 
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item clearfix" href="#">Select-All YES</a></li>
-                    <li><a class="dropdown-item" href="javascript:;">Select-All NO</a></li>
+                    <li><a class="dropdown-item clearfix" href="#" onclick="selectAllYes();">Select-All YES</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="selectAllNo();">Select-All NO</a></li>
                 </ul>
             </div>
         </div>
@@ -58,11 +58,11 @@
                         <% var j = 0; %>
                         <div class="btn-group btn-group-toggle yesno" data-toggle="buttons">
                             <label class="btn btn-sm btn-outline-primary">
-                                <input type="checkbox" name="options_<%= i %>" id="option<%= i %>" value="Yes"
+                                <input type="radio" name="options_<%= i %>" id="option<%= i %>" value="Yes"
                                     onchange="validate('options_<%= i %>', '<%= i %>')"> Yes
                             </label>
                             <label class="btn btn-sm btn-outline-primary">
-                                <input type="checkbox" name="options_<%= i %>" id="option<%= i %>" value="No"
+                                <input type="radio" name="options_<%= i %>" id="option<%= i %>" value="No"
                                     onchange="validate('options_<%= i %>','<%= i %>');"> No
                             </label>
                         </div>
@@ -177,15 +177,28 @@
                 $(this).children('.dropdown-toggle').first().click();
             }
         });
-        // function selectAllYes() {
-            
-        //     for (var i = 0; i < $(".random").length; i++) {
-        //         value = $('input[id="option"+'+i+]':checked').val();
-        //         console.log("VALUEEE->",value);
-        //         $("#label_"+i).addClass("active");
-        //         $(".option_"+i).prop("checked", true);
-        //     }
-        // }
+        function selectAllYes() {
+            $(".yesno label:nth-child(odd)").addClass('active')
+            $(".yesno label input[value='Yes']").attr('checked', true)
+            $(".yesno label:nth-child(even)").removeClass('active')
+            $(".yesno label input[value='No']").attr('checked', false)
+            values = Array($(".random").length).fill('Yes');
+            $('.col-md-3 .img-responsive').css("background", "beige");
+            // for (var i = 0; i < $(".random").length; i++) {
+            //     value = $('input[id="option"+'+i+]':checked').val();
+            //     console.log("VALUEEE->",value);
+            //     $("#label_"+i).addClass("active");
+            //     $(".option_"+i).prop("checked", true);
+            // }
+        }
+        function selectAllNo() {
+            $(".yesno label:nth-child(even)").addClass('active')
+            $(".yesno label input[value='No']").attr('checked', true)
+            $(".yesno label:nth-child(odd)").removeClass('active')
+            $(".yesno label input[value='Yes']").attr('checked', false)
+            values = Array($(".random").length).fill('No');
+            $('.col-md-3 .img-responsive').css("background", "beige");
+        }
     </script>
 
 </body>
