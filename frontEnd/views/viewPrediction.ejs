@@ -34,7 +34,7 @@
                 </button>
 
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item clearfix" href="#" onclick="selectAllYes();">Select-All YES</a></li>
+                    <li><a class="dropdown-item clearfix" href="#">Select-All YES</a></li>
                     <li><a class="dropdown-item" href="javascript:;">Select-All NO</a></li>
                 </ul>
             </div>
@@ -45,7 +45,7 @@
                 <% for (let i = 0; i < dataImg.length; i++) { %>
                 <% if (dataImg[i].exp_images) { %>
                 <!-- Display predictions -->
-                <div class="col-md-3" style="margin: 30px 0 10px 0;" id="img_<%= i %>">
+                <div class="col-md-3" style="margin: 30px 0 10px 0;">
                     <div class="img-responsive img-thumbnail" id="div_<%= i %>">
                         <div class='fileName'>
                             <p>Name: <b> <%= dataImg[i].exp_images%></b></p>
@@ -57,11 +57,11 @@
                         <% } %>
                         <% var j = 0; %>
                         <div class="btn-group btn-group-toggle yesno" data-toggle="buttons">
-                            <label class="btn btn-sm btn-outline-primary" id="label_<%= i %>">
+                            <label class="btn btn-sm btn-outline-primary">
                                 <input type="checkbox" name="options_<%= i %>" id="option<%= i %>" value="Yes"
                                     onchange="validate('options_<%= i %>', '<%= i %>')"> Yes
                             </label>
-                            <label class="btn btn-sm btn-outline-primary" id="label_<%= i %>">
+                            <label class="btn btn-sm btn-outline-primary">
                                 <input type="checkbox" name="options_<%= i %>" id="option<%= i %>" value="No"
                                     onchange="validate('options_<%= i %>','<%= i %>');"> No
                             </label>
@@ -146,9 +146,13 @@
 
         function validate(yesnoval, i) {
             value = $('input[name=' + yesnoval + ']:checked').val();
-            if (value != 'undefined') {
+            if (typeof value !== 'undefined') {
                 values[i] = value;
                 $("#div_" + i).css("background", "beige");
+            }
+            else{
+                values[i] = 'Not-Validated';
+                $("#div_" + i).css("background", "white");
             }
         }
 
@@ -173,15 +177,15 @@
                 $(this).children('.dropdown-toggle').first().click();
             }
         });
-        function selectAllYes() {
+        // function selectAllYes() {
             
-            for (var i = 0; i < $(".random").length; i++) {
-                value = $('input[id="option"+'+i+]':checked').val();
-                console.log("VALUEEE->",value);
-                $("#label_"+i).addClass("active");
-                $(".option_"+i).prop("checked", true);
-            }
-        }
+        //     for (var i = 0; i < $(".random").length; i++) {
+        //         value = $('input[id="option"+'+i+]':checked').val();
+        //         console.log("VALUEEE->",value);
+        //         $("#label_"+i).addClass("active");
+        //         $(".option_"+i).prop("checked", true);
+        //     }
+        // }
     </script>
 
 </body>
