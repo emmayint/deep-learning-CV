@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>View models</title>
+    <% include partials/head %>
+    <link
+      href="/stylesheets/selectModel.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- head for cm -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"
+    ></script>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"/> copied to /stylesheets/selectModel.css-->
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <br /><br /><br />
+    <% include partials/home-header %>
+    <div class="container">
+      <div class="content-container">
+        <!-- progress bar -->
+
+        <h1 class="step-title">
+          Your models for project <%= json[0].project_name %>.
+        </h1>
+        <div class="step-container">
+          <style>
+            .loader {
+              border: 16px solid #f3f3f3;
+              border-radius: 50%;
+              border-top: 16px solid #3498db;
+              width: 60px;
+              height: 60px;
+              -webkit-animation: spin 2s linear infinite; /* Safari */
+              animation: spin 2s linear infinite;
+              margin: 20px auto;
+            }
+            /* Safari */
+            @-webkit-keyframes spin {
+              0% {
+                -webkit-transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+              }
+            }
+            @keyframes spin {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          </style>
+
+          <!-- <div id="dataView"></div> -->
+          <div style="display:inline-block; float:left" id="container"></div>
+          <div style="display:inline-block; float:left" id="legend"></div>
+          <div>
+            <!-- string<br />
+            <%= string%> <br />
+            JSON.parse(string)<br />
+            <%= JSON.parse(string)[0].model_fullname %><br /> -->
+            <!-- json<br />
+            project_name, model_fullname, test_accuracy, epoch, optimizer,
+            learning_rate, timestamp -->
+            <table>
+              <tr>
+                <th>Model</th>
+                <th>test_acc</th>
+                <th>training data size</th>
+                <th>epoch</th>
+                <th>optimizer</th>
+                <th>learning rate</th>
+                <!-- <th>timestamp</th> -->
+                <th>actions</th>
+              </tr>
+              <% for(var i=0; i < json.length; i++) { %>
+              <tr>
+                <!-- <td><%= json[i].project_name %></td> -->
+                <td>
+                  <%var link = "http://localhost:5001/logger?modelName="+json[i].model_fullname %>
+                  <a target="_blank" rel="noopener noreferrer"
+                    href=<%= link%>
+                    > <%= json[i].model_fullname %>
+                  </a>
+                </td>
+                <td><%= json[i].test_accuracy %></td>
+                <td><%= json[i].train_size %></td>
+                <td><%= json[i].epoch %></td>
+                <td><%= json[i].optimizer %></td>
+                <td><%= json[i].learning_rate %></td>
+                <!-- <td><%= json[i].timestamp %></td> -->
+                <td><button>rename</button> <button>delete</button></td>
+              </tr>
+              <% } %>
+            </table>
+
+            <!-- <%= json[1].model_fullname%> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>

@@ -39,7 +39,7 @@
                     <!-- <form class="form" method="POST" action="/upload" enctype="application/x-www-form-urlencoded" > -->
                     <!-- the above will pass the text input, but cant upload the file -->
                     <h4 class="step-directions-upload">1. Name a new project or select a project<span class="required-field">*</span><span></span></h4>
-                    <%if(projectName){%><p class="selected-project">You've selected project: <%= projectName%></p><%}%>
+                    <%if(projectName){%><p class="selected-project">You've selected project: <%= projectName%>. (<a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= projectName%>">view trained models of this project</a>)</p><%}%>
                     <div class="category-container">
                         <% projects.forEach(function(project){ %>
                             <%if(project!=".DS_Store"){%>
@@ -107,16 +107,16 @@
                     <h4 class="step-directions-upload">3. Select a folder above and upload file(s) to it<span class="required-field">*</span></h4>
                     <% if(selectedDir != ""){%>                    
                         <form class="form upload-form" method="POST" action="/upload/createFile" enctype="multipart/form-data" >
-                                <input
-                                    class="choose-files-button"
-                                    name="file"
-                                    type="file"
-                                    multiple
-                                >
-                                <p class="selected-category-text"> Files will be uploaded to : <span class="selected-category"><%=  selectedDir%></span></p> 
-                                <button class="btn btn-block upload-files-button" type="submit">
-                                    upload files
-                                </button>
+                            <div class="selected-category-text"> Files will be uploaded to : <span class="selected-category"><%=  selectedDir%></span></div> 
+                            <input
+                                class="choose-files-button"
+                                name="file"
+                                type="file"
+                                multiple
+                            >
+                            <button class="btn btn-block upload-files-button" type="submit">
+                                upload files
+                            </button>
                         </form>
                     <%}%>
                 </div>

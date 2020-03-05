@@ -1,0 +1,12 @@
+
+test accuracy = 0.4444444477558136.
+test loss = 1.403194546699524; 
+Your model "animalscm" is trained at 2020/02/11-19:15:05;
+
+User inputs: {"selectedModel": "VGG16", "projectName": "animals", "modelName": "animalscm", "userid": 43, "epoch": "1", "optimizer": "Adam", "learningRate": "0.0001", "train_batch_size": "8", "test_batch_size": "27", "useremail": "tyin1@mail.sfsu.edu"};
+
+Class indices: {"0": "cats", "1": "dogs", "2": "pandas"};
+
+
+epoch; accuracy; loss; validation_accuracy; validation_loss:
+0;0.37804878;1.8377728171464873;0.5714285969734192;0.6763891577720642

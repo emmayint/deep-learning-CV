@@ -9,3 +9,6 @@ sudo pip3 install flask-mysql
 brew install mysql
 pip3 install mysqlclient
 pip3 install flask_mysqldb
+pip install Flask-Mail
+pip install mlxtend
+pip install imagenet_utils

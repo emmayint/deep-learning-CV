@@ -2,13 +2,27 @@ let express = require("express");
 let router = express.Router();
 const axios = require("axios");
 const fs = require("fs");
-// var selectedModel = require("./selectModel").selectedModel;
+const db = require("../database/db");
 
 router.get("/", function(req, res) {
   var modelName = "";
+  const mysql = require("mysql");
+
   if (req.isAuthenticated()) {
     let user = req.user;
-    res.render("nameModel", { modelName: modelName, uname: user.user_name });
+    var sql = "SELECT model_fullname FROM Models";
+    db.query(sql, function(err, result) {
+      if (err) throw err;
+      console.log("-- Data received from Db");
+      var string = JSON.stringify(result);
+      var json = JSON.parse(string);
+      console.log("-- json: ", json);
+      res.render("nameModel", {
+        modelName: modelName,
+        uname: user.user_name,
+        json: json
+      });
+    });
   } else {
     res.redirect("/");
   }
@@ -24,17 +38,18 @@ router.post("/", function(req, res) {
   let useremail = user.user_email;
   // console.log("user: ", user);
   modelName = req.body.modelName;
-  module.exports.modelName = modelName;
+  // module.exports.modelName = modelName;
   const body = {
-    selectedModel: require("./selectModel").selectedModel,
-    projectName: require("./upload").projectName,
+    // selectedModel: require("./selectModel").selectedModel,
+    selectedModel: req.cookies.selectedModel,
+    projectName: req.cookies.projectName,
     modelName: modelName,
     userid: userid,
-    epoch: parseInt(require("./params").epoch),
-    optimizer: require("./params").optimizer,
-    learningRate: parseFloat(require("./params").learningRate),
-    train_batch_size: parseInt(require("./params").train_batch_size),
-    test_batch_size: parseInt(require("./params").test_batch_size),
+    epoch: req.cookies.epoch,
+    optimizer: req.cookies.optimizer,
+    learningRate: req.cookies.learningRate,
+    train_batch_size: req.cookies.train_batch_size,
+    test_batch_size: req.cookies.test_batch_size,
     useremail: useremail
   };
   console.log(useremail);

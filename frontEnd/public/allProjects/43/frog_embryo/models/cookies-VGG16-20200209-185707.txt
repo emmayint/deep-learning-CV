@@ -1,0 +1,12 @@
+
+test accuracy = 0.4482758641242981.
+test loss = 0.9080767631530762; 
+Your model "cookies" is trained at 2020/02/09-18:57:07;
+
+User inputs: {"selectedModel": "VGG16", "projectName": "frog_embryo", "modelName": "cookies", "userid": 43, "epoch": 1, "optimizer": "Adam", "learningRate": 0.0001, "train_batch_size": 8, "test_batch_size": 29, "useremail": "tyin1@mail.sfsu.edu"};
+
+Class indices: {"0": "control", "1": "mutant"};
+
+
+epoch; accuracy; loss; validation_accuracy; validation_loss:
+0;0.46153846;1.1448285854779756;0.5;0.8381833434104919

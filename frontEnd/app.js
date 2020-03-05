@@ -33,6 +33,8 @@ const selectModelRouter = require("./routes/selectModel").router;
 const paramsRouter = require("./routes/params").router;
 const nameModelRouter = require("./routes/nameModel").router;
 const loggerRouter = require("./routes/logger");
+const cmcellRouter = require("./routes/cmcell");
+const viewMoodelsRouter = require("./routes/viewMoodels");
 // const predictRouter = require("./routes/predict").router;
 // const testFlaskRouter = require("./routes/testFlask").router;
 
@@ -51,6 +53,8 @@ app.use(bodyParser.json());
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(__dirname + '/public'));
+// app.use( express.static( "public" ) );
 app.use(cors());
 
 // Allow access control, i.e., avoid CORS error
@@ -65,10 +69,14 @@ app.use(function(req, res, next) {
 });
 
 let options = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  host: "localhost",
+  user: "root",
+  password: "980731@muyan",
+  database: "csc899"
+  // host: process.env.DB_HOST,
+  // user: process.env.DB_USERNAME,
+  // password: process.env.DB_PASSWORD,
+  // database: process.env.DB_NAME
 };
 
 let sessionStore = new MySQLStore(options);
@@ -101,6 +109,9 @@ app.use("/selectModel", selectModelRouter);
 app.use("/params", paramsRouter);
 app.use("/nameModel", nameModelRouter);
 app.use("/logger", loggerRouter);
+app.use("/cmcell", cmcellRouter);
+app.use("/viewMoodels", viewMoodelsRouter);
+
 // app.use("/predict", predictRouter);
 // app.use("/testFlask", testFlaskRouter);
 app.get("/predict", (req, res) => {

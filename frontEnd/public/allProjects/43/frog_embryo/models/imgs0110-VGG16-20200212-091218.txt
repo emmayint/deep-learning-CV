@@ -1,0 +1,12 @@
+
+test accuracy = 0.6206896305084229.
+test loss = 0.661622941493988; 
+Your model "imgs0110" is trained at 2020/02/12-09:12:18;
+
+User inputs: {"selectedModel": "VGG16", "projectName": "frog_embryo", "modelName": "imgs0110", "userid": 43, "epoch": "1", "optimizer": "Adam", "learningRate": "0.0001", "train_batch_size": "8", "test_batch_size": "29", "useremail": "tyin1@mail.sfsu.edu"};
+
+Class indices: {"0": "control", "1": "mutant"};
+
+
+epoch; accuracy; loss; validation_accuracy; validation_loss:
+0;0.53846157;0.8504543212743906;0.699999988079071;0.9213294982910156

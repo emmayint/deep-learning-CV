@@ -49,6 +49,6 @@
   },
   "devDependencies": {
     "body-parser": "^1.18.2",
-    "mysql": "latest"
+    "mysql": "^2.18.1"
   }
 }
