@@ -137,6 +137,46 @@ $(document).ready(function() {
 
     cropInstance.push(cropper);
   }
+
+  // Choose model algo and type
+  var training_algo_arr = new Array("Select Training Algorithm","VGG16","VGG19","Simple CNN");
+
+  $.each(training_algo_arr, function (i, item) {
+      $('#training_algo').append($('<option>', {
+          value: i,
+          text : item,
+      }, '</option>' ));
+  });
+
+  // Model
+  var s_a = new Array();
+  s_a[0]="Select Model";
+  s_a[1]="Select Model|VGG16- Model1VGG16- Model1VGG16- Model1|VGG16- Model2|VGG16- Model3|VGG16- Model4";
+  s_a[2]="Select Model|VGG19- Model1|VGG19- Model2";
+  s_a[3]="Select Model|Simple CNN- Model1";
+
+  $('#training_algo').change(function(){
+      var c = $(this).val();
+      var model_arr = s_a[c].split("|");
+      $('#model').empty();
+      if(c==0){
+          $('#model').append($('<option>', {
+              value: '0',
+              text: 'Select Model',
+          }, '</option>'));
+      }else {
+          $.each(model_arr, function (i, item_model) {
+              $('#model').append($('<option>', {
+                  value: item_model,
+                  text: item_model,
+              }, '</option>'));
+          });
+      }
+  });
+
+  $('#model').change(function(){
+      $("#prediction").prop("disabled", false);
+  });
 });
 
 function enableAllCropButtons(isCropEnabled) {
