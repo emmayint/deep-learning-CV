@@ -42,14 +42,10 @@ import json
 from flask_mail import Mail, Message
 
 app = Flask(__name__)
-# app.config['MYSQL_HOST'] = process.env.DB_HOST,
-# app.config['MYSQL_USER'] = process.env.DB_USERNAME,
-# app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
-# app.config['MYSQL_DB'] = process.env.DB_NAME
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '980731@muyan'
-app.config['MYSQL_DB'] = 'csc899'
+app.config['MYSQL_HOST'] = process.env.DB_HOST,
+app.config['MYSQL_USER'] = process.env.DB_USERNAME,
+app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
+app.config['MYSQL_DB'] = process.env.DB_NAME
 
 mysql = MySQL(app)
 
