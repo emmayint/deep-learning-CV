@@ -80,7 +80,7 @@ router.post("/:id", function(req, res, next) {
         " AND user_validate is NULL;",
 
       function(error, results, fields) {
-        console.log("QUERY---", this.sql);
+        console.log("PrevPrediction QUERY---", this.sql);
         if (error) throw error;
       }
     );

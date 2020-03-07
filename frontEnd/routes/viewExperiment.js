@@ -75,6 +75,50 @@ router.get("/:id", function(req, res, next) {
   }
 });
 
+router.get("/:id/getModels/:trainingAlgo", function(req, res, next) {
+  if (req.isAuthenticated()) {
+    let user = req.user;
+    let trainingAlgo = req.params.trainingAlgo;
+    // SELECT selected_model,model_fullname FROM csc899.Models where user_id = 9;
+    db.query(
+      "SELECT model_fullname FROM Models m" +
+        " WHERE m.user_id = " +
+        user.user_id +
+        " AND m.selected_model= '" +
+        trainingAlgo +
+        "';",
+      function(error, results, fields) {
+        console.log("getModels query:", this.sql);
+        if (error) throw error;
+        res.send(results);
+      }
+    );
+  } else {
+    res.redirect("/");
+  }
+});
+
+router.get("/:id/getTrainingAlgo", function(req, res, next) {
+  if (req.isAuthenticated()) {
+    let user = req.user;
+
+    // SELECT selected_model,model_fullname FROM csc899.Models where user_id = 9;
+    db.query(
+      "SELECT distinct selected_model FROM Models m" +
+        " WHERE m.user_id = " +
+        user.user_id +
+        " ;",
+      function(error, results, fields) {
+        console.log("getTrainingAlgo query:", this.sql);
+        if (error) throw error;
+        res.send(results);
+      }
+    );
+  } else {
+    res.redirect("/");
+  }
+});
+
 // Add middleware to the route
 router.get("/:id", authenticationMiddleware(), function(req, res) {
   res.render("viewExperiment");
