@@ -287,12 +287,15 @@ function viewPredictionPage(e) {
 
   console.log("EXPERIMENT ID________", expID);
   let imageIdArray = Array.from(selectedImageIds);
-
+  var selectedTrainingAlgo = document.getElementById("training_algo").children[document.getElementById("training_algo").value].text;
+  var selectedModel = document.getElementById("model").value;
   $.ajax({
     type: "POST",
     url: "/prediction/getImagePrediction",
     data: {
-      id: JSON.stringify(imageIdArray)
+      id: JSON.stringify(imageIdArray),
+      trainingAlgo: selectedTrainingAlgo,
+      modelName: selectedModel
     },
     success: function (result) {
       console.log("cropped data=======>", result);
