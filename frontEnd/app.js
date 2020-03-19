@@ -22,12 +22,14 @@ const signInRouter = require("./routes/signIn");
 const homeRouter = require("./routes/home");
 const homeGallaryRouter = require("./routes/gallary")
 const homeSummaryRouter = require("./routes/summary")
+const testDataSummaryRouter = require("./routes/testSummary")
 const defaultRouter = require("./routes/default");
 const logoutRouter = require("./routes/logout");
 const addExperimentRouter = require("./routes/addExperiment");
 const viewExperimentRouter = require("./routes/viewExperiment");
 const viewPredictionRouter = require("./routes/viewPrediction");
 const prevPredictionRouter = require("./routes/prevPrediction");
+const testSummaryDetailRouter = require("./routes/testSummaryDetail");
 
 // // Emma's code
 const uploadRouter = require("./routes/upload").router;
@@ -92,12 +94,14 @@ app.use("/signUp", signUpRouter);
 app.use("/home", homeRouter);
 app.use("/gallary", homeGallaryRouter);
 app.use("/summary", homeSummaryRouter);
+app.use("/testSummary", testDataSummaryRouter);
 app.use("/logout", logoutRouter);
 app.use("/addExperiment", addExperimentRouter);
 app.use("/viewExperiment", viewExperimentRouter);
 app.use("/prediction", viewPredictionRouter);
 app.use("/prevprediction", prevPredictionRouter);
 app.use("/default", defaultRouter);
+app.use("/testSummaryDetail", testSummaryDetailRouter);
 
 // // Emma's code
 app.use("/upload", uploadRouter);

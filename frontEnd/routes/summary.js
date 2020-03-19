@@ -8,7 +8,6 @@ let router = express.Router();
 router.get('/', function (req, res, next) {
     if (req.isAuthenticated()) {
         let user = req.user;
-        console.log("M HERE--->", user.user_id);
     db.query('SELECT p.exp_id, DATE_FORMAT(p.created_at,"%Y/%m/%d %T") AS prediction_date, e.exp_title, p.training_algo as training_algo, p.model_name as model_name, '
             + 'COUNT(p.exp_img_id) as total_images, SUM(case when p.exp_type= "CONTROL" then 1 else 0 end) as control_count, '
             + 'SUM(case when p.exp_type= "MUTANT" then 1 else 0 end) as mutant_count, ' 

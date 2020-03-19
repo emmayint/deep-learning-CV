@@ -132,7 +132,6 @@ router.get("/:id/:create_at/:is_validated", function(req, res, next) {
     let create_at = req.params.create_at;
 
     let is_validated = req.params.is_validated;
-    console.log("************ is_validated ***********: " ,is_validated);
     let id = req.params.id;
     console.log(id);
     // const labelNameewrew = req.params.prevdate;
