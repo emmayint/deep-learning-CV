@@ -22,36 +22,6 @@ let upload = multer({
   })
 });
 
-// apply filter by date
-// router.post("/:id/filter", function(req, res, next) {
-//   let user = req.user;
-//   let id = req.params.id;
-//   const bodydata = req.body;
-//   const paramsdata = req.params;
-//   console.log("user_id: " + user.user_id);
-//   let prevdate = req.body.prevdate;
-//   var prevdateonly = "'" + prevdate + "'";
-
-//   db.query(
-//     "SELECT * FROM prediction_type WHERE exp_id = " +
-//       id +
-//       " AND DATE(created_at) = " +
-//       prevdateonly +
-//       ";",
-//     function(error, results, fields) {
-//       if (error) throw error;
-
-//       res.render("filterPrediction", {
-//         uname: user.user_name,
-//         data: results,
-//         id: id
-//       });
-//     }
-//   );
-// });
-
-// verify predictions by user
-
 router.post("/:id", function(req, res, next) {
   let user = req.user;
   let exp_id = req.params.id;

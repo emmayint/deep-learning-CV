@@ -25,21 +25,20 @@
             <!-- Tabbed Interface -->
             <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link tab-a active"
-                        id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                        aria-selected="false" onclick="showSearch()">Total Images Used</a>
+                    <a class="nav-link tab-a active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        aria-controls="profile" aria-selected="false" onclick="showSearch()">Total Images Used</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link tab-a"
-                        id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                        aria-selected="true" onclick="hideSearch()">Actual Control Predicted Mutant</a>
+                    <a class="nav-link tab-a" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        aria-controls="home" aria-selected="true" onclick="hideSearch()">Actual Control Predicted
+                        Mutant</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link tab-a"
-                        id="home-tab1" data-toggle="tab" href="#ampc" role="tab" aria-controls="ampc"
-                        aria-selected="true" onclick="hideSearch()">Actual Mutant Predicted Control</a>
+                    <a class="nav-link tab-a" id="home-tab1" data-toggle="tab" href="#ampc" role="tab"
+                        aria-controls="ampc" aria-selected="true" onclick="hideSearch()">Actual Mutant Predicted
+                        Control</a>
                 </li>
             </ul>
         </div>
@@ -47,23 +46,6 @@
             <div class="row">
                 <input type="search" id="container-search" value="" class="form-control"
                     placeholder="Enter a keyword to search" onkeyup="searchPrevExpFunc()" />
-                <div class="pull-right">
-                    <button class="btn btn-dark btn-xs btn-filter" onclick="showFilters()">
-                        <i class="fas fa-search"></i> Advanced Search</button>
-                </div>
-            </div>
-            <div class="col-sm-9 filters">
-                <div class="row filter-text">Filter Results By: </div>
-                <div class="row date-filter">
-                    <div class="form-group">
-                        Date: <input type="date" id="txtDate" class="date" onchange="filterByDateFunc()"></div>
-                    <div class="form-group">
-                        Month & Year: <input type="text" name="date" id="startDate" class="date-picker"
-                            onchange="filterByMonthFunc()" /></div>
-                    <div class="form-group">
-                        <input class="btn btn-primary btn-sm" type="reset" value="Reset"
-                            onClick="window.location.reload()"></div>
-                </div>
             </div>
         </div>
         <p class="count-rst" id="count-result"></p>
@@ -74,10 +56,10 @@
                     <p class="show-msg" id="show-message">No result found</p>
 
                     <% for (var i = 0; i < data.length; i++) { %>
-                        <% var image_dir = data[i].img_dir.substring("8"); %>
-                        <% var image_name = data[i].img_dir.substring(data[i].img_dir.lastIndexOf("/") + 1, data[i].img_dir.length); %>
+                    <% var image_dir = data[i].img_dir.substring("8"); %>
+                    <% var image_name = data[i].img_dir.substring(data[i].img_dir.lastIndexOf("/") + 1, data[i].img_dir.length); %>
 
-                    <div class="col-md-4 gap" id="filter-div">
+                    <div class="col-md-4 gap" id="filter-div-<%= i %>">
                         <div class="img-responsive img-thumbnail">
                             <a href="#" class="pop">
                                 <img class="scaled image" src="<%= image_dir %>">
@@ -110,17 +92,20 @@
                         <div class="container">
                             <div class="row">
                                 <% for (var i = 0; i < modeldata.length; i++) { %>
-                                    <% if (modeldata[i].imgs01 !== "\"\"") { %>
-                                    <% var image_name = modeldata[i].imgs01.substring("2"); %>
-                                    <% var image_name1 = image_name.substring(0, image_name.length - 1); %>
-                                    <% var image_arr = image_name1.split(","); %>
-                                    <% for (var j = 0; j < image_arr.length; j++) { %>
+                                <% if (modeldata[i].imgs01 !== "\"\"") { %>
+                                <% var image_name = modeldata[i].imgs01.substring("2"); %>
+                                <% var image_name1 = image_name.substring(0, image_name.length - 1); %>
+                                <% var image_arr = image_name1.split(","); %>
+                                <% for (var j = 0; j < image_arr.length; j++) { %>
                                 <div class="col-md-4 gap" id="filter-div">
                                     <div class="img-responsive img-thumbnail">
                                         <a href="#" class="pop1">
-                                            <img class="scaled image" src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
+                                            <img class="scaled image"
+                                                src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
                                         </a>
-                                        <p class="fileName all-p"><b> <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %> </b></p>
+                                        <p class="fileName all-p"><b>
+                                                <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %>
+                                            </b></p>
                                         <!-- <p class="fileName all-p"><%= image_name %></p> -->
                                         <div class="modal fade" id="imagemodal1" tabindex="-1" role="dialog"
                                             aria-labelledby="myModalLabel" aria-hidden="true">
@@ -152,20 +137,23 @@
                     <section class="gallery-block cards-gallery">
                         <div class="container">
                             <div class="row">
-                                
+
                                 <% for (var i = 0; i < modeldata.length; i++) { %>
-                                    <% if (modeldata[i].imgs10 !== "\"\"") { %>
-                                    <% var image_name = modeldata[i].imgs10.substring("2"); %>
-                                    <% var image_name1 = image_name.substring(0, image_name.length - 1); %>
-                                    <% var image_arr = image_name1.split(","); %>
-                                    
-                                    <% for (var j = 0; j < image_arr.length; j++) { %>
+                                <% if (modeldata[i].imgs10 !== "\"\"") { %>
+                                <% var image_name = modeldata[i].imgs10.substring("2"); %>
+                                <% var image_name1 = image_name.substring(0, image_name.length - 1); %>
+                                <% var image_arr = image_name1.split(","); %>
+
+                                <% for (var j = 0; j < image_arr.length; j++) { %>
                                 <div class="col-md-4 gap" id="filter-div">
                                     <div class="img-responsive img-thumbnail">
                                         <a href="#" class="pop2">
-                                            <img class="scaled image" src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
+                                            <img class="scaled image"
+                                                src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
                                         </a>
-                                        <p class="fileName all-p"><b> <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %> </b></p>
+                                        <p class="fileName all-p"><b>
+                                                <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %>
+                                            </b></p>
                                         <!-- <p class="fileName all-p"><%= image_name %></p> -->
                                         <div class="modal fade" id="imagemodal2" tabindex="-1" role="dialog"
                                             aria-labelledby="myModalLabel" aria-hidden="true">
@@ -210,60 +198,10 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
     </script>
     <script>
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-
-        $(function () {
-            var dtToday = new Date();
-
-            var month = dtToday.getMonth() + 1;
-            var day = dtToday.getDate();
-            var year = dtToday.getFullYear();
-            if (month < 10)
-                month = '0' + month.toString();
-            if (day < 10)
-                day = '0' + day.toString();
-
-            var maxDate = year + '-' + month + '-' + day;
-            $('#txtDate').attr('max', maxDate);
-        });
-
-
-        function filterByDateFunc() {
-            var input = document.getElementById("txtDate");
-            // filter = input.value.replace(/-/gi,"/");
-            var filter = input.value;
-            var showflag = false;
-            var countResult = 0
-            var initial = filter.split("-");
-            filter = [initial[1], initial[2], initial[0]].join('/');
-            for (var k = 0; k < $(".img-responsive").length; k++) {
-                var searchableDiv = document
-                    .getElementById("search-container-" + k).innerText.trim();
-                if (searchableDiv.indexOf(filter) <= -1) {
-                    $("#filter-div-" + k).css("display", "none");
-                } else {
-                    $("#filter-div-" + k).css("display", "");
-                    showflag = true;
-                    countResult += 1;
-                    document.getElementById("count-result").innerHTML = "Found " + countResult + " results";
-                }
-            }
-            if (showflag == false) {
-                $("#count-result").css("display", "none");
-                $(".show-msg").css("display", "block");
-
-            } else {
-                $("#count-result").css("display", "block");
-                $(".show-msg").css("display", "none");
-            }
-        }
-
         function searchPrevExpFunc() {
             var input = document.getElementById("container-search");
-            var showMonthFlag = false;
-            var countMonthResult = 0;
+            var countFlag = false;
+            var countResult = 0;
             filter = input.value.toLowerCase();
             for (var k = 0; k < $(".img-responsive").length; k++) {
                 var searchableDiv = document
@@ -274,95 +212,18 @@
                     $("#filter-div-" + k).css("display", "none");
                 } else {
                     $("#filter-div-" + k).css("display", "");
-                    showMonthFlag = true;
-                    countMonthResult += 1;
-                    document.getElementById("count-result").innerHTML = "Found " + countMonthResult + " results";
+                    countFlag = true;
+                    countResult += 1;
+                    document.getElementById("count-result").innerHTML = "Found " + countResult + " results";
                 }
             }
-            if (showMonthFlag == false) {
+            if (countFlag == false) {
                 $("#count-result").css("display", "none");
                 $(".show-msg").css("display", "block");
 
             } else {
                 $("#count-result").css("display", "block");
                 $(".show-msg").css("display", "none");
-            }
-        }
-
-        function filterByMonthFunc() {
-            var input = document.getElementById("startDate");
-            var filterMonth = input.value;
-            var showMonthFlag = false;
-            var countMonthResult = 0
-            for (var k = 0; k < $(".img-responsive").length; k++) {
-                var searchableDiv = document.getElementById("search-container-" + k).innerText.trim();
-                var fMonth = searchableDiv.replace(/ /gi, "").substring(13, 23).split("/");
-                var getFinalMonth = ([fMonth[0], fMonth[2]]).join("/");
-                if (filterMonth.indexOf(getFinalMonth) <= -1) {
-                    $("#filter-div-" + k).css("display", "none");
-                } else {
-                    $("#filter-div-" + k).css("display", "");
-                    showMonthFlag = true;
-                    countMonthResult += 1;
-                    document.getElementById("count-result").innerHTML = "Found " + countMonthResult + " results";
-                }
-            }
-            if (showMonthFlag == false) {
-                $("#count-result").css("display", "none");
-                $(".show-msg").css("display", "block");
-
-            } else {
-                $("#count-result").css("display", "block");
-                $(".show-msg").css("display", "none");
-            }
-        }
-
-
-        $(function () {
-            $('.date-picker').datepicker({
-                dateFormat: "mm/yy",
-                changeMonth: true,
-                changeYear: true,
-                showButtonPanel: true,
-                onClose: function (dateText, inst) {
-
-
-                    function isDonePressed() {
-                        return ($('#ui-datepicker-div').html().indexOf(
-                            'ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover'
-                        ) > -1);
-                    }
-
-                    if (isDonePressed()) {
-                        var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                        $(this).datepicker('setDate', new Date(year, month, 1)).trigger('change');
-
-                        $('.date-picker')
-                            .focusout() //Added to remove focus from datepicker input box on selecting date
-                    }
-                },
-                beforeShow: function (input, inst) {
-
-                    inst.dpDiv.addClass('month_year_datepicker')
-
-                    if ((datestr = $(this).val()).length > 0) {
-                        year = datestr.substring(datestr.length - 4, datestr.length);
-                        month = datestr.substring(0, 2);
-                        $(this).datepicker('option', 'defaultDate', new Date(year, month - 1, 1));
-                        $(this).datepicker('setDate', new Date(year, month - 1, 1));
-                        $(".ui-datepicker-calendar").hide();
-                    }
-                }
-            })
-        });
-
-        function showFilters() {
-            var filters = document.getElementsByClassName("filters")
-            if (filters[0].style.display == "" || filters[0].style.display == "none") {
-                $(".filters").css("display", "block");
-            } else {
-                $(".filters").css("display", "none");
             }
         }
 
@@ -385,7 +246,8 @@
         $(function () {
             $('.pop').on('click', function () {
                 $('.imagepreview').attr('src', $(this).find('img').attr('src'));
-                var imgName = $(this).find('img').attr('src').replace('/allProjects/<%= id %>/frog_embryo/testData/control/', '');
+                var imgName = $(this).find('img').attr('src').replace(
+                    '/allProjects/<%= id %>/frog_embryo/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal').modal('show');
@@ -396,7 +258,8 @@
         $(function () {
             $('.pop1').on('click', function () {
                 $('.imagepreview1').attr('src', $(this).find('img').attr('src'));
-                var imgName = $(this).find('img').attr('src').replace('/allProjects/<%= id %>/frog_embryo/testData/control/', '');
+                var imgName = $(this).find('img').attr('src').replace(
+                    '/allProjects/<%= id %>/frog_embryo/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal1').modal('show');
@@ -406,13 +269,13 @@
         $(function () {
             $('.pop2').on('click', function () {
                 $('.imagepreview2').attr('src', $(this).find('img').attr('src'));
-                var imgName = $(this).find('img').attr('src').replace('/allProjects/<%= id %>/frog_embryo/testData/mutant/', '');
+                var imgName = $(this).find('img').attr('src').replace(
+                    '/allProjects/<%= id %>/frog_embryo/testData/mutant/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal2').modal('show');
             });
         });
-
     </script>
 </body>
 
