@@ -1,5 +1,0 @@
-
-test accuracy = 0.621.
-test loss = 1.045; 
-epoch;accuracy;loss;validation_accuracy;validation_loss
-0;0.59615386;1.1850298138765187;0.6499999761581421;0.9512431621551514

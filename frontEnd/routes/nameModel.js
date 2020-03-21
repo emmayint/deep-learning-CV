@@ -3,6 +3,7 @@ let router = express.Router();
 const axios = require("axios");
 const fs = require("fs");
 const db = require("../database/db");
+const mysql = require("mysql");
 
 router.get("/", function(req, res) {
   var modelName = "";
@@ -13,7 +14,7 @@ router.get("/", function(req, res) {
     var sql = "SELECT model_fullname FROM Models";
     db.query(sql, function(err, result) {
       if (err) throw err;
-      console.log("-- Data received from Db");
+      // console.log("-- Data received from Db");
       var string = JSON.stringify(result);
       var json = JSON.parse(string);
       console.log("-- json: ", json);
@@ -36,8 +37,27 @@ router.post("/", function(req, res) {
   console.log(user);
   let userid = user.user_id;
   let useremail = user.user_email;
-  // console.log("user: ", user);
   modelName = req.body.modelName;
+
+  var sql =
+    "SELECT EXISTS(SELECT * from Models WHERE model_fullname=" +
+    mysql.escape(modelName + ".h5") +
+    "); ";
+  // console.log("sql ", sql);
+  db.query(sql, function(err, result) {
+    var str = JSON.stringify(result);
+    var json = JSON.parse(str)[0];
+    // console.log("json", json);
+    for (var key in json) {
+      // console.log("not exists?", json[key] == 0);
+      if (json[key] == 0) {
+        // console.log("not exist");
+      } else {
+        console.log("model name taken");
+      }
+    }
+  });
+  // console.log("user: ", user);
   // module.exports.modelName = modelName;
   const body = {
     // selectedModel: require("./selectModel").selectedModel,
@@ -49,10 +69,11 @@ router.post("/", function(req, res) {
     optimizer: req.cookies.optimizer,
     learningRate: req.cookies.learningRate,
     train_batch_size: req.cookies.train_batch_size,
-    test_batch_size: req.cookies.test_batch_size,
-    useremail: useremail
+    test_batch_size: req.cookies.testSize,
+    useremail: useremail,
+    exp_id: req.cookies.exp_id
   };
-  console.log(useremail);
+  // console.log(useremail);
   // try {
   console.log("reaching flask");
   // const api_res = await axios.post("http://localhost:5000/train", body);

@@ -24,6 +24,7 @@ let uploadTrain = multer({
 });
 
 router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
+  let json;
   if (req.cookies.selectTestDir == 1) {
     // add images to experiment_images table
     let user = req.user;
@@ -33,8 +34,7 @@ router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
       mysql.escape(expTitle);
     db.query(sql, function(err, result) {
       var string = JSON.stringify(result);
-      var json = JSON.parse(string);
-
+      json = JSON.parse(string);
       // insert uploaded image files
       let now = new Date(new Date().toString().split("GMT")[0] + " UTC")
         .toISOString()
@@ -52,7 +52,7 @@ router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
       let array = removedLastComma.split(",");
       for (let k = 0; k < array.length; k++) {
         db.query(
-          "INSERT INTO experiment_images (exp_id, user_id, exp_images, created_at, label, type, img_dir) VALUES (?, ?, ?, ?, ?, ?, ?)",
+          "INSERT IGNORE INTO experiment_images (exp_id, user_id, exp_images, created_at, label, type, img_dir) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [
             json[0].exp_id,
             user.user_id,
@@ -157,11 +157,11 @@ router.post("/nameProject", function(req, res) {
     .split(".")[0]
     .replace("T", "-");
   db.query(
-    "INSERT INTO experiments (users_id, exp_title, exp_birth_date, type) VALUES (?, ?, ?, ?)",
+    "INSERT IGNORE INTO experiments (users_id, exp_title, exp_birth_date, type) VALUES (?, ?, ?, ?)",
     [user.user_id, expTitle, now, "T"],
     function(error, results, fields) {
       if (error) throw error;
-      console.log("results.insertId", results.insertId);
+      console.log("results.insertId (exp_id)", results.insertId);
     }
   );
 

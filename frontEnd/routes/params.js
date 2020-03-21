@@ -16,13 +16,6 @@ router.get("/", function(req, res) {
     "/" +
     req.cookies.projectName +
     "/testData";
-  // countFiles(traindir, function(err, results) {
-  //   trainSize = results.files;
-  // });
-  // // train_batch_size = Math.sqrt(trainSize).toFixed(0);
-  // countFiles(testdir, function(err, results) {
-  //   testSize = results.files;
-  // });
   countFiles(traindir, function(err, results) {
     var trainSize = results.files;
     res.cookie("trainSize", trainSize);
@@ -145,7 +138,7 @@ router.post("/", function(req, res) {
   train_batch_size = req.body.train_batch_size;
   res.cookie("train_batch_size", req.body.train_batch_size);
   res.cookie("validation_batch_size", req.body.validation_batch_size);
-  test_batch_size = req.body.test_batch_size;
+  test_batch_size = req.body.testSize;
   res.cookie("test_batch_size", req.body.test_batch_size);
   optimizer = req.body.optimizer;
   res.cookie("optimizer", optimizer);

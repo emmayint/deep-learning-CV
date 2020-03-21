@@ -69,10 +69,14 @@ app.use(function(req, res, next) {
 });
 
 let options = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  host: "localhost",
+  user: "root",
+  password: "980731@muyan",
+  database: "csc899"
+  // host: process.env.DB_HOST,
+  // user: process.env.DB_USERNAME,
+  // password: process.env.DB_PASSWORD,
+  // database: process.env.DB_NAME
 };
 
 let sessionStore = new MySQLStore(options);

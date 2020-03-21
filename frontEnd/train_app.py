@@ -42,10 +42,14 @@ import json
 from flask_mail import Mail, Message
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = process.env.DB_HOST,
-app.config['MYSQL_USER'] = process.env.DB_USERNAME,
-app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
-app.config['MYSQL_DB'] = process.env.DB_NAME
+# app.config['MYSQL_HOST'] = process.env.DB_HOST,
+# app.config['MYSQL_USER'] = process.env.DB_USERNAME,
+# app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
+# app.config['MYSQL_DB'] = process.env.DB_NAME
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '980731@muyan'
+app.config['MYSQL_DB'] = 'csc899'
 
 mysql = MySQL(app)
 
@@ -76,8 +80,16 @@ def train():
     train_batch_size = int(message['train_batch_size'])
     test_batch_size = int(message['test_batch_size'])
     USER_EMAIL = message['useremail']
+    # EXP_ID=message['exp_id']
     print(message)
    
+    # expid=0;
+    exptitle=PROJECT_NAME+"-testData"
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT exp_id FROM experiments WHERE exp_title = '%s'" % exptitle)
+    expid = cur.fetchall()
+    print("expid", expid)
+
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top; __file__ refers to the file settings.py 
     train_path =os.path.join(APP_ROOT, 'public', 'allProjects', str(USERID), PROJECT_NAME, 'datasets' )
     print('training on data: ', train_path)
@@ -105,7 +117,7 @@ def train():
     
     # ## fixed time for model and log names
     now = datetime.datetime.now()
-    TIME_F = now.strftime("%Y-%m-%d-%H:%M:%S")
+    TIME_F = now.strftime("%Y/%m/%d-%H:%M:%S")
     # TIME = now.strftime("%Y%m%d-%H%M%S")
     # modelName_time = "{}-{}-{}".format(MODELNAME, SELECTED_MODEL, TIME_F)
     PROJ_DIR =os.path.join(APP_ROOT, 'public', 'allProjects', str(USERID),  PROJECT_NAME)
@@ -186,7 +198,7 @@ def train():
     # ## Save the fine-tuned VGG16 model
     print('model saved as: ', model_path)
     defaultEpoch = 9
-    # model.save(model_path)
+    model.save(model_path)
 
     # confusion matrix with .predict
     print("Computing confusion matrix...")
@@ -233,8 +245,6 @@ def train():
         test_imgs_2.sort()
         print("test_imgs_2 has {} files".format(len(test_imgs_2)))
 
-    # test_imgs_0 = ['cropdata/test/control/{}'.format(CLASSES[0], i) for i in os.listdir('cropdata/test/control')] #get test images of control
-    # test_imgs_1 = ['cropdata/test/mutant/{}'.format(CLASSES[1], i) for i in os.listdir('cropdata/test/mutant')] #get test images of control
     # get all wrong images based on the index from predictions
     imgs01 = ""
     imgs10 = ""
@@ -243,8 +253,7 @@ def train():
     imgs12 = ""
     imgs20 = ""
     imgs21 = ""
-    # index01 = []
-    # index10 = []
+
     for i in range(0, test_batch_size):
         if(test_labels.argmax(axis=1)[i] ==0 and predictions.argmax(axis=1)[i]==1):
             # index01.append(i)
@@ -263,16 +272,7 @@ def train():
         if(test_labels.argmax(axis=1)[i] ==2 and predictions.argmax(axis=1)[i]==1):
             imgs21 = imgs21  + "," + test_imgs_2[i-len(test_imgs_0)-len(test_imgs_1)]
     
-    
-    # print("wrong in ", CLASSES[0])
-    # for i in index01: 
-    #     print(test_imgs_0[i])
-    #     imgs01 = imgs01 + "," + test_imgs_0[i]
-    #     # imgs01.append(test_imgs_0[i])
-    # print("wrong in ", CLASSES[1])
-    # for i in index10: 
-    #     print(test_imgs_1[i-len(test_imgs_0)])
-    #     imgs10 = imgs10  + "," + test_imgs_1[i-len(test_imgs_0)]
+
     print("imgs01: ", imgs01)
     print("imgs10: ", imgs10)
     print("imgs02: ", imgs02)
@@ -287,9 +287,9 @@ def train():
 
     # save model and info to DB TODO cm, wrong-preds0, wrong-preds1, proj-path?
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, inv_label_map, favorite, cm, imgs01, imgs10, imgs02, imgs12, imgs20, imgs21, project_path, train_size) \
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
-        (model_path, USERID, PROJECT_NAME, log_name, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, "%.3f" % test_acc, "%.3f" % test_loss, TIME_F, train_batch_size, NAME, json.dumps(CLASSES), json.dumps(inv_label_map), "0", cm_string, json.dumps(imgs01), json.dumps(imgs10), json.dumps(imgs02), json.dumps(imgs12), json.dumps(imgs20), json.dumps(imgs21), PROJ_DIR, trainSize))
+    cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, inv_label_map, favorite, cm, imgs01, imgs10, imgs02, imgs12, imgs20, imgs21, project_path, train_size, exp_id) \
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
+        (model_path, USERID, PROJECT_NAME, log_name, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, "%.3f" % test_acc, "%.3f" % test_loss, TIME_F, train_batch_size, NAME, json.dumps(CLASSES), json.dumps(inv_label_map), "0", cm_string, json.dumps(imgs01), json.dumps(imgs10), json.dumps(imgs02), json.dumps(imgs12), json.dumps(imgs20), json.dumps(imgs21), PROJ_DIR, trainSize, expid))
     mysql.connection.commit()
     cur.close()
 
@@ -307,7 +307,8 @@ def train():
         msg = Message(subject="your model \"" + MODELNAME + "\" is complete",
                       sender=app.config.get("MAIL_USERNAME"),
                       recipients=[USER_EMAIL], # replace with your email for testing
-                      html= "Your model \"" + MODELNAME + "\" is trained at "+TIME_F+";\n\n" + "<br>" + htmlcontent +"<br>"+ content) 
+                    #   html= "Your model \"" + MODELNAME + "\" is trained at "+TIME_F+";\n\n" + "<br>" + htmlcontent +"<br>"+ content) 
+                      html= "Your model \"" + MODELNAME + "\" is trained at "+TIME_F+";\n\n" + "<br>" + htmlcontent)
         mail.send(msg)
     print("email sent to user ", USER_EMAIL)
 

@@ -90,8 +90,9 @@
 
           </div>
           <div style="display:block">
-            <p>Test accuracy = <strong><%= test_accuracy%></strong> <br>
-            (Click on a cell in the matrix to view image(s) that are predicted differently from their label.)</p>
+            <p>Test accuracy = <%= test_accuracy%> <br>
+            (Click on a cell in the matrix to view image(s) that are predicted differently from their label, 
+            or <a href="">view test data as experiment</a>)</p>
             <p> If you are not satisfied with this model, you can <a target="_blank" rel="noopener noreferrer" href="/selectModel">restart training</a> or
               <a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= project_name%>"
                 >view all trained models of this project</a>
@@ -110,30 +111,62 @@
           <div style="height: 400px"></div>
             <p>possible ways to improve your model:</p>
 
-            <%if(epoch<15){%>
+            <%if(epoch<20){%>
               <p><strong>Hyperparameter Tuning</strong><br>
-                Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.<br>If you model's learning curve does not plateau, try add more epochs to your next training.</p>
-              <p><strong>Add more data</strong><br>
-                Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features.</P>
-              <p><strong>Clean Your Data</strong><br>
-                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.</p>
+                Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
+                <br>If you model's learning curve does not plateau in the graph, try add more epochs to your next training.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">Read more about hyperparameters</a>
+                <br>You may also experiment with the size of your batches, optimizer and learning rate. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
               
+              <p><strong>Add more data</strong><br>
+                Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
+                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">Read more about data tactics</a></p>
+                
+              <p><strong>Clean Your Data</strong><br>
+                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">Read more about data quality, scope and quantity</a></p>
+                  
               <p><strong>Select features and examples</strong><br>
               If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
              
-            <%}else if(train_size<500){%>
+            <%}else if(train_size<1000){%>
               <p><strong>Add more data</strong><br>
-              Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features.</P>
-              <p><strong>Clean Your Data</strong><br>
-                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.</p>
+              Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
+              <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">Read more about data tactics</a></p>
               
+              <p><strong>Clean Your Data</strong><br>
+                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">Read more about data quality, scope and quantity</a></p>
+
               <p><strong>Select features and examples</strong><br>
               If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
             
               <p><strong>Hyperparameter Tuning</strong><br>
-              Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.<br>If you model's learning curve does not plateau, try add more epochs to your next training.</p>
+              Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
+              <br>If you model's learning curve does not plateau, try add more epochs to your next training.
+              <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">Read more about hyperparameters</a>
+              <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
               
-            <%}%>
+            <%}else{%>
+              
+                <p><strong>Clean Your Data</strong><br>
+                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">Read more about data quality, scope and quantity</a></p>
+  
+                <p><strong>Add more data</strong><br>
+                Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
+                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">Read more about data tactics</a></p>
+                  
+                <p><strong>Select features and examples</strong><br>
+                If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
+              
+                <p><strong>Hyperparameter Tuning</strong><br>
+                Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
+                <br>If you model's learning curve does not plateau, try add more epochs to your next training.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">Read more about hyperparameters</a>
+                <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
+                
+              <%}%>
             
           <!-- <img src="/allProjects/43/frog_embryo/testData/control/2139289.jpg" /> -->
           <!-- <p>-view full log</p>
@@ -229,7 +262,6 @@
         .y(function(d) {
           return y(d.accuracy);
         });
-
       // define the 2nd line
       // var valueline2 = d3
       //   .line()
@@ -249,7 +281,7 @@
         .y(function(d) {
           return y(d.val_accuracy);
         });
-
+      
       // define the 4th line
       // var valueline4 = d3
       //   .line()
@@ -309,6 +341,7 @@
           .append("path")
           .data([data])
           .attr("class", "line")
+          .style("stroke", "blue")
           .attr("d", valueline);
 
         // Add the valueline3 path.
@@ -353,6 +386,7 @@
           )
           .style("text-anchor", "middle")
           .text("epoch");
+          
         svg
           .append("text")
           .attr("transform", "rotate(-90)")
@@ -361,7 +395,22 @@
           .attr("dy", "1em")
           .style("text-anchor", "middle")
           .text("train and validation accuracy");
-      });
+
+        svg.append("text")
+          .attr("transform", "translate("+(width/2)+","+y(data[data.length-1].accuracy)+")")
+          .attr("dy", ".35em")
+          .attr("text-anchor", "start")
+          .style("fill", "blue")
+          .text("accuracy");
+
+        svg.append("text")
+            .attr("transform", "translate("+(width/2)+","+y(data[data.length-1].accuracy*0.92)+")")
+            .attr("dy", ".35em")
+            .attr("text-anchor", "start")
+            .style("fill", "red")
+            .text("val_accuracy");
+            });
+      
     </script>
     <% include partials/footer %>
   </body>
