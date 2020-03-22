@@ -12,16 +12,23 @@ let ImageUrl = "http://localhost:5001/uploads/";
 router.post("/getImagePrediction", function(req, res) {
   try {
     const id = JSON.parse(req.body.id).join(",");
+    const selectedTrainingAlgo = req.body.trainingAlgo;
+    const selectedModel = req.body.modelName;
+    console.log("ModelName**********", selectedTrainingAlgo);
+    console.log("Request BODY**********", req.body);
+    
     let data = [];
-    pythonApiData(id, req, res);
+    pythonApiData(id, selectedTrainingAlgo, selectedModel, req, res);
   } catch (e) {
     console.log("Error", e);
     res.send(e);
   }
 });
 
-function pythonApiData(id, req, res) {
+function pythonApiData(id, selectedTrainingAlgo, selectedModel, req, res) {
   let resultExImag1 = [];
+  console.log("Model selected is********", selectedModel);
+  console.log("Training ALgo selected is********", selectedTrainingAlgo);
   // Fetch crop id and location of the cropped images from the experiment_cropped_images table and store in a variable responseJson
   db.query(
     "SELECT * FROM experiment_cropped_images WHERE exp_img_id IN (" + id + ");",
@@ -67,14 +74,14 @@ function pythonApiData(id, req, res) {
               }
             );
           }
-          callPythonApi(responseJson, resultExImag1, req, res);
+          callPythonApi(responseJson, resultExImag1, selectedTrainingAlgo, selectedModel, req, res);
         }
       );
     }
   );
 }
 
-function callPythonApi(responseJson, resultExImag1, req, res) {
+function callPythonApi(responseJson, resultExImag1, selectedTrainingAlgo, selectedModel, req, res) {
   console.log("Python ML Api called");
   console.log("STRINGYFY RESPONSE JSON", JSON.stringify(responseJson));
 
@@ -83,7 +90,7 @@ function callPythonApi(responseJson, resultExImag1, req, res) {
     {
       method: "POST",
       uri: apiBaseUrl,
-      form: { data: JSON.stringify(responseJson) },
+      form: { data: JSON.stringify(responseJson) , selectedTrainingAlgo, selectedModel},
       rejectUnauthorized: false
     },
     function(error, response, body) {
@@ -139,7 +146,7 @@ function callPythonApi(responseJson, resultExImag1, req, res) {
                   if (results) {
                     results.forEach(function(result) {
                       db.query(
-                        "INSERT INTO prediction (user_id, exp_img_id, exp_id, name, img, crop_id, exp_type, created_at, updated_at) VALUES (?, ?, ?,?, ?, ?,?,?,?)",
+                        "INSERT INTO prediction (user_id, exp_img_id, exp_id, name, img, crop_id, exp_type, created_at, updated_at,training_algo,model_name ) VALUES (?, ?, ?,?, ?, ?,?,?,?,?,?)",
                         [
                           user_id,
                           result.exp_img_id,
@@ -149,7 +156,9 @@ function callPythonApi(responseJson, resultExImag1, req, res) {
                           result.id,
                           type.toUpperCase(),
                           created_at,
-                          updated_at
+                          now,
+                          selectedTrainingAlgo,
+                          selectedModel
                         ]
                       );
                     });
@@ -162,14 +171,16 @@ function callPythonApi(responseJson, resultExImag1, req, res) {
               let predTypePercentage = JSON.stringify(pyResponse[k].prediction);
               console.log("stringify: ", predTypePercentage);
               db.query(
-                "INSERT INTO prediction_type (exp_img_id, exp_id, exp_type, img, created_at, pred_percentage) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO prediction_type (exp_img_id, exp_id, exp_type, img, created_at, pred_percentage, training_algo,model_name) VALUES (?, ?, ?,?,?, ?, ?, ?)",
                 [
                   pyResponse[k].exp_img_id,
                   exp_id,
                   pyResponse[k].type.toUpperCase(),
                   dataImage[pyResponse[k].exp_img_id],
                   now,
-                  predTypePercentage
+                  predTypePercentage,
+                  selectedTrainingAlgo,
+                  selectedModel
                 ]
               );
             }
@@ -245,20 +256,19 @@ router.get("/view/validate/:id", function(req, res) {
   if (req.isAuthenticated()) {
     let user = req.user;
     let id = req.params.id;
+    // if (req.session.predictionData) {
+    //   let responseData = req.session.predictionData;
+    //   console.log("Response Data: ", responseData);
+    //   setTimeout(function() {
+    //     req.session.predictionData = "";
+    //   }, 2000);
 
-    if (req.session.predictionData) {
-      let responseData = req.session.predictionData;
-      console.log("Response Data: ", responseData);
-      setTimeout(function() {
-        req.session.predictionData = "";
-      }, 2000);
+    //   let smallArr = [];
 
-      let smallArr = [];
-
-      for (let i = 0; i < responseData.length; i++) {
-        let image_id = responseData[i].exp_img_id;
-        smallArr.push(image_id);
-      }
+    //   for (let i = 0; i < responseData.length; i++) {
+    //     let image_id = responseData[i].exp_img_id;
+    //     smallArr.push(image_id);
+    //   }
 
       // Get prediction to be displayed on the web interface
       db.query(
@@ -279,9 +289,9 @@ router.get("/view/validate/:id", function(req, res) {
           }
         }
       );
-    } else {
-      res.redirect("back");
-    }
+    // } else {
+    //   res.redirect("back");
+    // }
   }
 });
 

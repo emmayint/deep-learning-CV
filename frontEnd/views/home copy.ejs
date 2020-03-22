@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Home</title>
+  <% include partials/head %>
+  <link href="/stylesheets/style.css" rel="stylesheet" />
+  <link href="/stylesheets/home.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
+  <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <% include partials/home-header %>
+  <div class="social-box">
+    <div class="container">
+     	<div class="row">
+			 
+			    <div class="col-lg-4 col-xs-12 text-center">
+					<div class="box">
+                        <i class="fa fa-list-alt fa-3x" aria-hidden="true"></i>
+						<div class="box-title">
+							<h3>Experiment Summary</h3>
+						</div>
+						<div class="box-text">
+							<span>Exhaustive summary of all previous experiments that includes important information like prediction date, model name and prediction types</span>
+						</div>
+						<div class="box-btn">
+						    <a href="/summary">Click Here</a>
+						</div>
+					 </div>
+				</div>	 
+				
+				 <div class="col-lg-4 col-xs-12  text-center">
+					<div class="box">
+					    <i class="fa fa-image fa-3x" aria-hidden="true"></i>
+						<div class="box-title">
+							<h3>Experiments Gallary</h3>
+						</div>
+						<div class="box-text">
+              <span>Gallary like list view <br> of all the experiments <br>performed having images<br> and more information</span>
+						</div>
+						<div class="box-btn">
+						    <a href="/gallary">Click Here</a>
+						</div>
+					 </div>
+				</div>	 
+				
+				 <div class="col-lg-4 col-xs-12 text-center">
+					<div class="box">
+                        <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+						<div class="box-title">
+							<h3>Add New Experiment</h3>
+						</div>
+						<div class="box-text">
+							<span>Create a new experiment<br> by adding one or more<br> images for performing <br>model predictions </span>
+						</div>
+						<div class="box-btn">
+						    <a href="/addExperiment">Click Here</a>
+						</div>
+					 </div>
+        </div>
+        </div>
+        </div>
+  </div>
+  <!-- -->
+
+  <% include partials/footer %>
+
+</body>
+
+</html>

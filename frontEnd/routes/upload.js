@@ -52,7 +52,7 @@ router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
       let array = removedLastComma.split(",");
       for (let k = 0; k < array.length; k++) {
         db.query(
-          "INSERT IGNORE INTO experiment_images (exp_id, user_id, exp_images, created_at, label, type, img_dir) VALUES (?, ?, ?, ?, ?, ?, ?)",
+          "INSERT IGNORE INTO experiment_images (exp_id, user_id, exp_images, created_at, label, exp_type, img_dir) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [
             json[0].exp_id,
             user.user_id,
@@ -157,7 +157,7 @@ router.post("/nameProject", function(req, res) {
     .split(".")[0]
     .replace("T", "-");
   db.query(
-    "INSERT IGNORE INTO experiments (users_id, exp_title, exp_birth_date, type) VALUES (?, ?, ?, ?)",
+    "INSERT IGNORE INTO experiments (users_id, exp_title, exp_birth_date, exp_type) VALUES (?, ?, ?, ?)",
     [user.user_id, expTitle, now, "T"],
     function(error, results, fields) {
       if (error) throw error;

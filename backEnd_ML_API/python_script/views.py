@@ -23,8 +23,14 @@ class FileUploadView(APIView):
     def post(self, request, *args, **kwargs):
         print(request.POST)
         data = json.loads(request.POST['data'])
+        training_algo = request.POST['selectedTrainingAlgo']
+        data_model = request.POST['selectedModel']
         print(data)
-        print(data[0])
+        # print("Printing data[0]",data[0])
+        print("***************************************")
+        print("Training Algo selected for prediction - ", training_algo)
+        print("Model selected for prediction - ",data_model)
+        print("***************************************")
         finlay = {}
         CATEGORIES = ["CONTROL", "MUTANT"]
 
@@ -37,10 +43,10 @@ class FileUploadView(APIView):
                 imgurl = data[i][id_list[0]][j]['link']
                 req.urlretrieve(imgurl, "./media/" + str(j) + ".jpg""")
 
-                model = tf.keras.models.load_model("./model/vgg16model.h5")
+                model = tf.keras.models.load_model("./model/" + data_model)
                 print("Before Prediction..")
                 # prediction = model.predict([prepareCNN("./media/" + str(j) + ".jpg""")])
-                prediction = model.predict([prepareVGG16("./media/" + str(j) + ".jpg""")])
+                prediction = model.predict([prepare("./media/" + str(j) + ".jpg""")])
 
                 Prediction1.append(CATEGORIES[int(prediction[0][0])])
 
@@ -65,14 +71,14 @@ class FileUploadView(APIView):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
-def prepareVGG16(filepath):
+def prepare(filepath):
     IMG_SIZE = 224
     img_array = cv2.imread(filepath, cv2.COLOR_BGR2RGB)
     new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
     return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 3)
-
-def prepareCNN(filepath):
-    IMG_SIZE = 224
-    img_array = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
-    new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
-    return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+#
+# def prepareCNN(filepath):
+#     IMG_SIZE = 224
+#     img_array = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+#     new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
+#     return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 1)

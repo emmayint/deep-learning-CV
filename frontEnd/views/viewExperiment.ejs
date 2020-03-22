@@ -5,11 +5,16 @@
     <title>View Experiment</title>
     <% include partials/head %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link href="/stylesheets/croppr.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/viewexperiment.css">
     <link href="/stylesheets/cropper.css" rel="stylesheet">
-    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <link href="/stylesheets/viewexperiment.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
 
 </head>
 
@@ -18,52 +23,65 @@
     <div id="loadingPredict" style="display: none"></div>
 
     <!-- Navigation Bar -->
-    <% include partials/prevpred-header %>
+    <% include partials/prev-header %>
     <% if(data.length == 0){ %>
-        <a href="/Home">
-            <button class="btn btn-primary delAllImages" type="button">
-                Experiment has been removed. Click here to go to homepage
-            </button></a>
-            <% } else { %>
+    <a href="/Home">
+        <button class="btn btn-primary delAllImages" type="button">
+            Experiment has been removed. Click here to go to homepage
+        </button></a>
+    <% } else { %>
 
     <div class="container">
         <!-- 1st row buttons -->
-        <div class="row topmargin">
-            <button class="btn btn-primary btnStyle" data-target="#addImageModal" data-toggle="modal" type="button">Add
-                Images
-            </button>
-
-            <button class="btn btn-primary btnStyle" class="del_img_view" data-target="#deleteImageModal"
-                data-toggle="modal" type="button">Delete Images
-            </button>
-
-            <!-- <a href="/Prevprediction/<%=id%>">
-                    <button class="btn btn-primary btnStyle" id="previous_prediction " type="button">
-                        Previous Prediction
-                    </button>
-                </a> -->
-
-            <button class="btn btn-primary btnStyle" id="btnUnselectAll" type="button">
-                Unselect All
-            </button>
-
-            <button class="btn btn-primary btnStyle" id="btnSelectAll" type="button">Select All
-            </button>
-
-            <button class="btn btn-primary btnStyle" id="btnDisableCrop" type="button">Disable Selected Crop
-            </button>
-
-            <button class="btn btn-primary btnStyle" id="btnEnableCrop" type="button">Enable Selected Crop
-            </button>
-
-            <button class="btn btn-primary btnStyle" id="prediction" type="button">
+        <div class="heading" style="margin-top: 8%;">
+            <h2>
+                Choose Training Algorithm and model to start making predictions
+            </h2>
+            <hr class="mt-2 mb-5" />
+        </div>
+        <div class="row" style="margin-top: -10%; margin-left: 1%;">
+            <select name="training_algo" id="training_algo" style="margin-top: 8%;margin-bottom: 3%;"></select>
+            <select name="model" id="model" style="margin-top: 8%;margin-bottom: 3%; margin-left: 2%;"></select>
+            <button class="btn btn-primary btnStyle" id="prediction" type="button" style="
+            margin-top: 8%;
+            margin-bottom: 3%;
+            margin-left:2%"
+            disabled>
                 Predict
             </button>
+        </div>
 
+        <div class="row" style="margin-top: -10%;margin-left: 70%;">
+            <div class="btn-group" style="margin-top:8%">
+                <button class="btn btn-lg btn-outline-primary dropdown-toggle example-button" data-toggle="dropdown"
+                    aria-expanded="false">
+                    Select All
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a id="btnSelectAll" class="dropdown-item clearfix" href="#">Select All Images</a></li>
+                    <li><a id="btnUnselectAll" class="dropdown-item clearfix" href="#">Unselect All Images</a></li>
+                </ul>
+            </div>
+            <div class="btn-group" style="padding-left: 2%;margin-top: 7.3%;">
+                <button class="btn btn-lg btn-outline-primary dropdown-toggle example-button" data-toggle="dropdown"
+                    aria-expanded="false">
+                    More Options
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item clearfix" href="#" data-target="#addImageModal" data-toggle="modal">Add
+                            Images</a></li>
+                    <li><a class="dropdown-item clearfix del_img_view" data-target="#deleteImageModal"
+                            data-toggle="modal">Delete Images</a></li>
+                    <li><a id="btnEnableCrop" class="dropdown-item clearfix" href="#">Enable Selected Crop</a></li>
+                    <li><a id="btnDisableCrop" class="dropdown-item clearfix" href="#">Disable Selected Crop</a></li>
+                </ul>
+            </div>
         </div>
 
         <!-- Display images -->
-        <div class="row">
+        <div class="row viewexp-topmargin">
 
             <!-- Fetch images from the database -->
             <% for (let i = 0; i < data.length; i++) { %>
@@ -93,7 +111,9 @@
                         <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
                             type='button' value='Crop' />
                     </p> -->
-                    <div class="fileName"><p>Name: <b> <%= data[i].exp_images%></b></p></div>
+                    <div class="fileName">
+                        <p>Name: <b> <%= data[i].exp_images%></b></p>
+                    </div>
                     <div class="croppr-container object-fit_cover">
                         <div class="croppr ">
 
@@ -135,7 +155,9 @@
                         <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
                             type='button' value='Crop' />
                     </p> -->
-                    <div class="fileName"><p>Name: <b> <%= data[i].exp_images%></b></p></div>
+                    <div class="fileName">
+                        <p>Name: <b> <%= data[i].exp_images%></b></p>
+                    </div>
 
                     <img class="large-image" src="/uploads/<%= data[i].exp_images %>" />
                 </div>
@@ -197,7 +219,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <input type="text" id="deleteExpID" style="display: none;" value="<%= data[0].exp_id %>"></input>
+                        <input type="text" id="deleteExpID" style="display: none;"
+                            value="<%= data[0].exp_id %>"></input>
                         <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
                         <button class="btn btn-primary" id="deleteBtn" type="submit">Delete Images</button>
                     </div>
@@ -240,6 +263,22 @@
     <script src="/javascripts/viewexperiment.js"></script>
     <script src="/javascripts/croppr.js"></script>
     <script src="/javascripts/cropper.js"></script>
+
+    <script>
+        $(".dropdown-toggle").on("mouseenter", function () {
+            // make sure it is not shown:
+            if (!$(this).parent().hasClass("show")) {
+                $(this).click();
+            }
+        });
+
+        $(".btn-group, .dropdown").on("mouseleave", function () {
+            // make sure it is shown:
+            if ($(this).hasClass("show")) {
+                $(this).children('.dropdown-toggle').first().click();
+            }
+        });
+    </script>
 </body>
 
 </html>

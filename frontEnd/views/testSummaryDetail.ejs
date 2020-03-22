@@ -1,0 +1,282 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Test Data Predictions</title>
+    <% include partials/head %>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/prevprediction.css">
+    <link rel="stylesheet" href="/stylesheets/cards-gallery.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <% include partials/home-header %>
+    <div class="container">
+        <div class="heading" style="margin-top: 8%;">
+            <h2>
+                Test data summary details
+            </h2>
+            <hr class="mt-2 mb-5" />
+        </div>
+        <div class="row div" style="margin-top:-10%">
+            <!-- Tabbed Interface -->
+            <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link tab-a active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        aria-controls="profile" aria-selected="false" onclick="showSearch()">Total Images Used</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link tab-a" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        aria-controls="home" aria-selected="true" onclick="hideSearch()">Actual Control Predicted
+                        Mutant</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link tab-a" id="home-tab1" data-toggle="tab" href="#ampc" role="tab"
+                        aria-controls="ampc" aria-selected="true" onclick="hideSearch()">Actual Mutant Predicted
+                        Control</a>
+                </li>
+            </ul>
+        </div>
+        <div class="rowmargintop">
+            <div class="row">
+                <input type="search" id="container-search" value="" class="form-control"
+                    placeholder="Enter a keyword to search" onkeyup="searchPrevExpFunc()" />
+            </div>
+        </div>
+        <p class="count-rst" id="count-result"></p>
+        <div class="tab-content" id="myTabContent">
+            <!-- All Image data -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="row rowmargin">
+                    <p class="show-msg" id="show-message">No result found</p>
+
+                    <% for (var i = 0; i < data.length; i++) { %>
+                    <% var image_dir = data[i].img_dir.substring("8"); %>
+                    <% var image_name = data[i].img_dir.substring(data[i].img_dir.lastIndexOf("/") + 1, data[i].img_dir.length); %>
+
+                    <div class="col-md-4 gap" id="filter-div-<%= i %>">
+                        <div class="img-responsive img-thumbnail">
+                            <a href="#" class="pop">
+                                <img class="scaled image" src="<%= image_dir %>">
+                            </a>
+                            <p class="fileName all-p"><b> <%= image_name %> </b></p>
+
+                            <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <button type="button" class="close" data-dismiss="modal"><span
+                                                    aria-hidden="true">&times;</span><span
+                                                    class="sr-only">Close</span></button><br>
+                                            <p class="modalFileName all-p"></p>
+                                            <img src="" class="imagepreview" style="width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="tab-pane fade show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <!-- Actual Control Predicted Mutant -->
+                <div class="row rowmargin">
+                    <section class="gallery-block cards-gallery">
+                        <div class="container">
+                            <div class="row">
+                                <% for (var i = 0; i < modeldata.length; i++) { %>
+                                <% if (modeldata[i].imgs01 !== "\"\"") { %>
+                                <% var image_name = modeldata[i].imgs01.substring("2"); %>
+                                <% var image_name1 = image_name.substring(0, image_name.length - 1); %>
+                                <% var image_arr = image_name1.split(","); %>
+                                <% for (var j = 0; j < image_arr.length; j++) { %>
+                                <div class="col-md-4 gap" id="filter-div">
+                                    <div class="img-responsive img-thumbnail">
+                                        <a href="#" class="pop1">
+                                            <img class="scaled image"
+                                                src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
+                                        </a>
+                                        <p class="fileName all-p"><b>
+                                                <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %>
+                                            </b></p>
+                                        <!-- <p class="fileName all-p"><%= image_name %></p> -->
+                                        <div class="modal fade" id="imagemodal1" tabindex="-1" role="dialog"
+                                            aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <button type="button" class="close" data-dismiss="modal"><span
+                                                                aria-hidden="true">&times;</span><span
+                                                                class="sr-only">Close</span></button><br>
+                                                        <p class="modalFileName all-p"></p>
+                                                        <img src="" class="imagepreview1" style="width: 100%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="tab-pane fade show" id="ampc" role="tabpanel" aria-labelledby="home-tab1">
+                <!-- Actual Mutant Predicted Control -->
+                <div class="row rowmargin">
+                    <section class="gallery-block cards-gallery">
+                        <div class="container">
+                            <div class="row">
+
+                                <% for (var i = 0; i < modeldata.length; i++) { %>
+                                <% if (modeldata[i].imgs10 !== "\"\"") { %>
+                                <% var image_name = modeldata[i].imgs10.substring("2"); %>
+                                <% var image_name1 = image_name.substring(0, image_name.length - 1); %>
+                                <% var image_arr = image_name1.split(","); %>
+
+                                <% for (var j = 0; j < image_arr.length; j++) { %>
+                                <div class="col-md-4 gap" id="filter-div">
+                                    <div class="img-responsive img-thumbnail">
+                                        <a href="#" class="pop2">
+                                            <img class="scaled image"
+                                                src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
+                                        </a>
+                                        <p class="fileName all-p"><b>
+                                                <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %>
+                                            </b></p>
+                                        <!-- <p class="fileName all-p"><%= image_name %></p> -->
+                                        <div class="modal fade" id="imagemodal2" tabindex="-1" role="dialog"
+                                            aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <button type="button" class="close" data-dismiss="modal"><span
+                                                                aria-hidden="true">&times;</span><span
+                                                                class="sr-only">Close</span></button><br>
+                                                        <p class="modalFileName all-p"></p>
+                                                        <img src="" class="imagepreview2" style="width: 100%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <% include partials/footer %> -->
+    <!-- <script src="/javascripts/viewexperiment.js"></script> -->
+    <!-- <script src="/javascripts/prevprediction.js"></script> -->
+    <script src="/javascripts/croppr.js"></script>
+    <script src="/javascripts/cropper.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+    <script>
+        function searchPrevExpFunc() {
+            var input = document.getElementById("container-search");
+            var countFlag = false;
+            var countResult = 0;
+            filter = input.value.toLowerCase();
+            for (var k = 0; k < $(".img-responsive").length; k++) {
+                var searchableDiv = document
+                    .getElementById("filter-div-" + k)
+                    .children[0].innerText.toLowerCase()
+                    .trim();
+                if (searchableDiv.indexOf(filter) <= -1) {
+                    $("#filter-div-" + k).css("display", "none");
+                } else {
+                    $("#filter-div-" + k).css("display", "");
+                    countFlag = true;
+                    countResult += 1;
+                    document.getElementById("count-result").innerHTML = "Found " + countResult + " results";
+                }
+            }
+            if (countFlag == false) {
+                $("#count-result").css("display", "none");
+                $(".show-msg").css("display", "block");
+
+            } else {
+                $("#count-result").css("display", "block");
+                $(".show-msg").css("display", "none");
+            }
+        }
+
+        function hideSearch() {
+            $(".rowmargintop").css("display", "none");
+            $("#count-result").css("display", "none");
+            // $(".show-msg").css("display", "none");
+        }
+
+        function showSearch() {
+            $(".rowmargintop").css("display", "block");
+            var noresult = document.getElementsByClassName("show-msg")
+            if (noresult[0].style.display == "" || noresult[0].style.display == "none") {
+                $("#count-result").css("display", "block");
+            } else {
+                $("#count-result").css("display", "none");
+            }
+        }
+
+        $(function () {
+            $('.pop').on('click', function () {
+                $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+                var imgName = $(this).find('img').attr('src').replace(
+                    '/allProjects/<%= id %>/frog_embryo/testData/control/', '');
+                $('.modalFileName').css("display", "block");
+                $(".modalFileName").text(imgName);
+                $('#imagemodal').modal('show');
+            });
+        });
+
+
+        $(function () {
+            $('.pop1').on('click', function () {
+                $('.imagepreview1').attr('src', $(this).find('img').attr('src'));
+                var imgName = $(this).find('img').attr('src').replace(
+                    '/allProjects/<%= id %>/frog_embryo/testData/control/', '');
+                $('.modalFileName').css("display", "block");
+                $(".modalFileName").text(imgName);
+                $('#imagemodal1').modal('show');
+            });
+        });
+
+        $(function () {
+            $('.pop2').on('click', function () {
+                $('.imagepreview2').attr('src', $(this).find('img').attr('src'));
+                var imgName = $(this).find('img').attr('src').replace(
+                    '/allProjects/<%= id %>/frog_embryo/testData/mutant/', '');
+                $('.modalFileName').css("display", "block");
+                $(".modalFileName").text(imgName);
+                $('#imagemodal2').modal('show');
+            });
+        });
+    </script>
+</body>
+
+</html>

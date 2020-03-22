@@ -20,7 +20,7 @@ router.get("/", function(req, res) {
     const db = require("../database/db");
 
     var sql =
-      "SELECT project_path, cm, classes, project_name, model_path, log_path, test_accuracy, selected_model, epoch, train_size FROM Models WHERE model_fullname = " +
+      "SELECT project_path, cm, classes, project_name, model_path, log_path, test_accuracy, selected_model, epoch, train_size, exp_id FROM Models WHERE model_fullname = " +
       mysql.escape(modelName);
     db.query(sql, function(err, result) {
       if (err) throw err;
@@ -49,7 +49,8 @@ router.get("/", function(req, res) {
         logPath: array[1],
         epoch: json[0].epoch,
         train_size: json[0].train_size,
-        selected_model: json[0].selected_model
+        selected_model: json[0].selected_model,
+        exp_id: json[0].exp_id
       });
     });
   } else {

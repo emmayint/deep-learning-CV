@@ -16,11 +16,11 @@ let selectedImagesForCroppingIds = new Set();
 
 let rect;
 
-$(document).ready(function() {
+$(document).ready(function () {
   // Disable all crop buttons on page load
   $(".cropBtn").prop("disabled", true);
   // Click listener for class 'checkboxImageTop'
-  $(".checkboxImageTop").click(function() {
+  $(".checkboxImageTop").click(function () {
     let clickedCheckBox = this;
     let checkBoxId = clickedCheckBox.id;
 
@@ -34,7 +34,7 @@ $(document).ready(function() {
   });
 
   // Click listener for 'Crop' button beneath each image
-  $(".checkBoxToggleCrop").click(function() {
+  $(".checkBoxToggleCrop").click(function () {
     let clickedToggleCheckBox = this;
     let toggleCheckBoxId = clickedToggleCheckBox.id;
     let cropButtonId = toggleCheckBoxId.replace("cbToggle", "btnCrop");
@@ -42,24 +42,24 @@ $(document).ready(function() {
   });
 
   // Click listener for 'Select All' button
-  $("#btnSelectAll").click(function() {
+  $("#btnSelectAll").click(function () {
     checkAllImageTopCheckBoxes(true);
   });
 
   // Click listener for 'Unselect All' button
-  $("#btnUnselectAll").click(function() {
+  $("#btnUnselectAll").click(function () {
     checkAllImageTopCheckBoxes(false);
   });
 
-  $("#btnEnableCrop").click(function() {
+  $("#btnEnableCrop").click(function () {
     enableAllCropButtons(true);
   });
 
-  $("#btnDisableCrop").click(function() {
+  $("#btnDisableCrop").click(function () {
     enableAllCropButtons(false);
   });
 
-  $("#deleteBtn").click(function(e) {
+  $("#deleteBtn").click(function (e) {
     deleteImages(e);
   });
 
@@ -68,15 +68,15 @@ $(document).ready(function() {
   //     $("#cropPromtBox").modal('show');
   // });
 
-  $(".promtSubmit").click(function(e) {
+  $(".promtSubmit").click(function (e) {
     cropImages(e);
   });
 
-  $("#prediction").click(function(e) {
+  $("#prediction").click(function (e) {
     viewPredictionPage(e);
   });
 
-  $(".checkboxImageTop").click(function(e) {
+  $(".checkboxImageTop").click(function (e) {
     checkCrop(e);
   });
 
@@ -84,12 +84,12 @@ $(document).ready(function() {
   const cropInstance = [];
   var lock = false;
 
-  const callback = function(id, value) {
+  const callback = function (id, value) {
     console.log("cropbox moved in from image# " + id);
 
     if (!lock) {
       lock = true;
-      cropInstance.forEach(function(cropper, index) {
+      cropInstance.forEach(function (cropper, index) {
         if (index !== id) {
           console.log("moving cropbox " + index);
           // cropper.moveTo(value.x, value.y);
@@ -107,7 +107,7 @@ $(document).ready(function() {
     let cropper = new Croppr(images[i], {
       startSize: [280, 280, "px"],
       returnMode: "raw",
-      onCropEnd: function(value) {
+      onCropEnd: function (value) {
         console.log(value.x, value.y, value.width, value.height);
 
         let top = value.y;
@@ -137,6 +137,18 @@ $(document).ready(function() {
 
     cropInstance.push(cropper);
   }
+
+  //Get request to get training algorithm
+  $.ajax({
+    type: "GET",
+    url: window.location.href + "/getTrainingAlgo",
+    success: function (result) {
+      populate_models_data(result);
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  });
 });
 
 function enableAllCropButtons(isCropEnabled) {
@@ -216,16 +228,20 @@ function deleteImages(e) {
   e.preventDefault();
   let expID = document.getElementById("deleteExpID").value;
   let imageIdArray = Array.from(selectedImageIds);
-  const data = { foo: imageIdArray };
+  const data = {
+    foo: imageIdArray
+  };
   $.ajax({
     type: "POST",
     url: window.location.href + "/deleteImages",
-    data: { images: JSON.stringify(imageIdArray) },
-    success: function(result) {
+    data: {
+      images: JSON.stringify(imageIdArray)
+    },
+    success: function (result) {
       location.href = "/viewExperiment/" + expID;
       // location.href = "/home";
     },
-    error: function(err) {
+    error: function (err) {
       console.log(err);
     }
   });
@@ -236,8 +252,12 @@ function cropImages(e) {
 
   let imageIdArray = Array.from(selectedImagesForCroppingIds);
 
-  const data = { foo: imageIdArray };
-  const data1 = { bar: rect };
+  const data = {
+    foo: imageIdArray
+  };
+  const data1 = {
+    bar: rect
+  };
 
   $("#rectId").val(rect);
 
@@ -246,11 +266,15 @@ function cropImages(e) {
   $.ajax({
     type: "POST",
     url: window.location.href + "/cropImages",
-    data: { id: JSON.stringify(imageIdArray), rect, labelName },
-    success: function(result) {
+    data: {
+      id: JSON.stringify(imageIdArray),
+      rect,
+      labelName
+    },
+    success: function (result) {
       location.href = window.location.href;
     },
-    error: function(err) {
+    error: function (err) {
       console.log(err);
     }
   });
@@ -263,17 +287,22 @@ function viewPredictionPage(e) {
 
   console.log("EXPERIMENT ID________", expID);
   let imageIdArray = Array.from(selectedImageIds);
-
+  var selectedTrainingAlgo = document.getElementById("training_algo").children[document.getElementById("training_algo").value].text;
+  var selectedModel = document.getElementById("model").value;
   $.ajax({
     type: "POST",
     url: "/prediction/getImagePrediction",
-    data: { id: JSON.stringify(imageIdArray) },
-    success: function(result) {
+    data: {
+      id: JSON.stringify(imageIdArray),
+      trainingAlgo: selectedTrainingAlgo,
+      modelName: selectedModel
+    },
+    success: function (result) {
       console.log("cropped data=======>", result);
       $("#loadingPredict").hide();
       window.location.replace("/prediction/view/" + expID);
     },
-    error: function(err) {
+    error: function (err) {
       console.log(err);
     }
   });
@@ -286,8 +315,10 @@ function checkCrop(e) {
   $.ajax({
     type: "POST",
     url: "/prediction/checkCrop",
-    data: { id: JSON.stringify(imageIdArray) },
-    success: function(result) {
+    data: {
+      id: JSON.stringify(imageIdArray)
+    },
+    success: function (result) {
       if (result.data == 200) {
         if ($(".checkboxImageTop").is(":checked")) {
           $("#prediction").prop("disabled", false);
@@ -298,8 +329,66 @@ function checkCrop(e) {
         // $("#prediction").prop("disabled", true);
       }
     },
-    error: function(err) {
+    error: function (err) {
       console.log(err);
     }
   });
+}
+
+function populate_models_data(trainingalgo_data) {
+  var training_algo_arr = new Array("Select Training Algorithm");
+
+  // Choose model algo and type
+  for (i = 0; i < trainingalgo_data.length; i++) {
+    training_algo_arr.push(trainingalgo_data[i].selected_model);
+  };
+
+  $.each(training_algo_arr, function (i, item) {
+    $('#training_algo').append($('<option>', {
+      id: item,
+      value: i,
+      text: item,
+    }, '</option>'));
+  });
+
+  $('#training_algo').change(function () {
+    var c = $(this).val();
+    var selectedAlgo = $(this)[0].children[c].text;
+
+    //Get request to get training algorithm
+    $.ajax({
+      type: "GET",
+      url: window.location.href + "/getModels/" + selectedAlgo,
+      success: function (result) {
+        var s_a = new Array("Select Model");
+        for (i = 0; i < result.length; i++) {
+          s_a.push(result[i].model_fullname);
+        }
+        $('#model').empty();
+        if (c == 0) {
+          $('#model').append($('<option>', {
+            value: '0',
+            text: 'Select Model',
+          }, '</option>'));
+        } else {
+          $.each(s_a, function (i, item_model) {
+            $('#model').append($('<option>', {
+              value: item_model,
+              text: item_model,
+            }, '</option>'));
+          });
+        }
+        $('#model').change(function () {
+          $("#prediction").prop("disabled", false);
+        });
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
+}
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
 }
