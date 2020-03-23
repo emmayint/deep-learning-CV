@@ -93,7 +93,7 @@
             <p>Test accuracy = <%= test_accuracy%> <br>
             (Click on a cell in the matrix to view image(s) that are predicted differently from their label, 
             <% var explink= "http://localhost:5001/testSummaryDetail/" + exp_id%>
-            or <a href=<%=explink%>>view test data as experiment</a>)</p>
+            or <a target="_blank" rel="noopener noreferrer"  href=<%=explink%>>view test data as experiment</a>)</p>
             <p> If you are not satisfied with this model, you can <a target="_blank" rel="noopener noreferrer" href="/selectModel">restart training</a> or
               <a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= project_name%>"
                 >view all trained models of this project</a>

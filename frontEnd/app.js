@@ -20,9 +20,9 @@ const MySQLStore = require("express-mysql-session")(session);
 const signUpRouter = require("./routes/signUp");
 const signInRouter = require("./routes/signIn");
 const homeRouter = require("./routes/home");
-const homeGallaryRouter = require("./routes/gallary")
-const homeSummaryRouter = require("./routes/summary")
-const testDataSummaryRouter = require("./routes/testSummary")
+const homeGallaryRouter = require("./routes/gallary");
+const homeSummaryRouter = require("./routes/summary");
+const testDataSummaryRouter = require("./routes/testSummary");
 const defaultRouter = require("./routes/default");
 const logoutRouter = require("./routes/logout");
 const addExperimentRouter = require("./routes/addExperiment");
@@ -73,14 +73,10 @@ app.use(function(req, res, next) {
 });
 
 let options = {
-  host: "localhost",
-  user: "root",
-  password: "980731@muyan",
-  database: "csc899"
-  // host: process.env.DB_HOST,
-  // user: process.env.DB_USERNAME,
-  // password: process.env.DB_PASSWORD,
-  // database: process.env.DB_NAME
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 };
 
 let sessionStore = new MySQLStore(options);
