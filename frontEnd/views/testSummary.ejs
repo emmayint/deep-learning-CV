@@ -36,7 +36,7 @@
               <% var create_at = testSummary[i].Date.split('/').join('-') %>
             <tr>
                 <td data-sort><%= testSummary[i].Date %></td>
-                <td><a id="redirectTestPred" href="testSummaryDetail/<%= testSummary[i].exp_id %>" onclick="check();" style="color:black;"><%= testSummary[i].exp_title %></a></td>
+                <td><a id="redirectTestPred" href="testSummaryDetail/<%= testSummary[i].exp_id %>/<%= testSummary[i].id %>" onclick="check();" style="color:black;"><%= testSummary[i].exp_title %></a></td>
                 <td><%= testSummary[i].model_fullname %></td>
                 <td><%= testSummary[i].test_accuracy %></td>
                 <% var total_imgs = testSummary[i].cm.match(/\d+/g).reduce(function(a,b) {return +a + +b;}); %>
@@ -61,8 +61,6 @@
         </tfoot>
       </table>
     </div>
-  <!-- </div> -->
-  <!-- </div> -->
   </div>
 
   <!-- <% include partials/footer %> -->
