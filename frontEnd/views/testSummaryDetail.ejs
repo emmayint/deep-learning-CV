@@ -246,7 +246,7 @@
                 $('.imagepreview').attr('src', $(this).find('img').attr('src'));
                 var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= u_id %>/'+proj_name[3]+'/testData/control/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal').modal('show');
@@ -259,19 +259,20 @@
                 $('.imagepreview1').attr('src', $(this).find('img').attr('src'));
                 var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= u_id %>/'+proj_name[3]+'/testData/control/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal1').modal('show');
             });
         });
 
+
         $(function () {
             $('.pop2').on('click', function () {
                 $('.imagepreview2').attr('src', $(this).find('img').attr('src'));
                 var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= u_id %>/'+proj_name[3]+'/testData/mutant/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/mutant/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal2').modal('show');

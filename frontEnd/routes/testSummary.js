@@ -6,23 +6,23 @@ let router = express.Router();
 // @desc    Retrieve summary of all test experiments conducted by the user
 // @access  Private
 
-// Select DATE_FORMAT(e.exp_birth_date,"%Y/%m/%d %T")  as "Date", e.exp_title as "Experiment Name", m.model_fullname, m.cm,
-// m.imgs01 as "Acutal Control Predicted Mutant", m.imgs10 as "Actual Mutant Predicted Control"
-// from csc899.experiments e, csc899.models m 
-// where e.users_id=9 and e.exp_type='T' and m.exp_id = e.exp_id;
 
 router.get('/', function (req, res, next) {
     if (req.isAuthenticated()) {
         let user = req.user;
-    db.query('SELECT m.id, e.exp_id, DATE_FORMAT(m.timestamp,"%Y/%m/%d %T")  as "Date", e.exp_title, m.test_accuracy,  m.model_fullname, m.cm, m.imgs01, '
-            + ' m.imgs10 '
-            + 'from csc899.experiments e, csc899.models m  '
-            + 'WHERE m.exp_id = e.exp_id AND e.users_id = ' + user.user_id + ' '
-            + 'order by Date desc;', function (error, results, fields) {
-            if (error) throw error;
-        console.log(this.sql);
-            res.render('testSummary', {uname: user.user_name, testSummary: results});
-        });
+        db.query('SELECT m.id, e.exp_id, DATE_FORMAT(m.timestamp,"%Y/%m/%d %T")  as "Date", e.exp_title, m.test_accuracy,  m.model_fullname, m.cm, m.imgs01, ' +
+            ' m.imgs10 ' +
+            'from csc899.experiments e, csc899.models m  ' +
+            'WHERE m.exp_id = e.exp_id AND e.users_id = ' + user.user_id + ' ' +
+            'order by Date desc;',
+            function (error, results, fields) {
+                if (error) throw error;
+                console.log(this.sql);
+                res.render('testSummary', {
+                    uname: user.user_name,
+                    testSummary: results
+                });
+            });
     } else {
         res.redirect('/');
     }
