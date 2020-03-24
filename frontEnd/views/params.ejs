@@ -56,16 +56,18 @@
             method="POST"
             action="/params"
           >
-            epoch: <input type="number" name="epoch" min="1" max="20" value=
+            epoch: <input type="number" name="epoch" min="1" max="50" value=
             <%=epoch%>>
             <br />
             <br />
             train_batch_size: <input type="number" name="train_batch_size"
-            min="1" max=<%= trainSize%> value= <%= train_batch_size%>>
+            min="1" max=<%= (trainSize * 0.75).toFixed(0)%> value= <%= train_batch_size%>>
             <br />
             <br />
-            test_batch_size: <input type="number" name="test_batch_size" min="1"
-            max=<%=testSize%> value= <%= test_batch_size%>>
+            <!-- test_batch_size: <input type="number" name="test_batch_size" min="1"
+            max=<%=testSize%> value= <%= test_batch_size%>> -->
+            validation_batch_size: <input type="number" name="validation_batch_size" min="1"
+            max=<%=(trainSize * 0.25).toFixed(0)%> value= <%= validation_batch_size%>>
             <br />
             <br />
             <button type="button" id="advanced-input-button">

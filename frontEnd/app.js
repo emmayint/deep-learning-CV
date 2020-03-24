@@ -20,9 +20,9 @@ const MySQLStore = require("express-mysql-session")(session);
 const signUpRouter = require("./routes/signUp");
 const signInRouter = require("./routes/signIn");
 const homeRouter = require("./routes/home");
-const homeGallaryRouter = require("./routes/gallary")
-const homeSummaryRouter = require("./routes/summary")
-const testDataSummaryRouter = require("./routes/testSummary")
+const homeGallaryRouter = require("./routes/gallary");
+const homeSummaryRouter = require("./routes/summary");
+const testDataSummaryRouter = require("./routes/testSummary");
 const defaultRouter = require("./routes/default");
 const logoutRouter = require("./routes/logout");
 const addExperimentRouter = require("./routes/addExperiment");
@@ -37,6 +37,8 @@ const selectModelRouter = require("./routes/selectModel").router;
 const paramsRouter = require("./routes/params").router;
 const nameModelRouter = require("./routes/nameModel").router;
 const loggerRouter = require("./routes/logger");
+const cmcellRouter = require("./routes/cmcell");
+const viewMoodelsRouter = require("./routes/viewMoodels");
 // const predictRouter = require("./routes/predict").router;
 // const testFlaskRouter = require("./routes/testFlask").router;
 
@@ -55,6 +57,8 @@ app.use(bodyParser.json());
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(__dirname + '/public'));
+// app.use( express.static( "public" ) );
 app.use(cors());
 
 // Allow access control, i.e., avoid CORS error
@@ -109,6 +113,9 @@ app.use("/selectModel", selectModelRouter);
 app.use("/params", paramsRouter);
 app.use("/nameModel", nameModelRouter);
 app.use("/logger", loggerRouter);
+app.use("/cmcell", cmcellRouter);
+app.use("/viewMoodels", viewMoodelsRouter);
+
 // app.use("/predict", predictRouter);
 // app.use("/testFlask", testFlaskRouter);
 app.get("/predict", (req, res) => {

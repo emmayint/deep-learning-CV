@@ -19,6 +19,7 @@ router.get("/:id/:model_id", function(req, res, next) {
     // console.log("Datepicke1111: " + labelNameewrew);
 
     console.log(req.params);
+
     db.query(
       "SELECT distinct m.user_id, e.exp_id, e.img_dir, e.label FROM experiment_images e, models m  WHERE e.exp_type='T' AND e.exp_id=m.exp_id AND e.user_id = " + user.user_id + 
       " AND e.exp_id = " +

@@ -5,64 +5,89 @@ let path = require("path");
 var fs = require("fs");
 var countFiles = require("count-files");
 
-var selectedModel = require("./selectModel").selectedModel;
-console.log("selectedModel imported ", selectedModel);
-// const db = require('../database/db');
-
-var projectName;
-var trainSize = 0;
-var testSize = 0;
-
-var selectedCategory = "";
-var selectedDir = "";
-// var hasTestDir = false;
-var trainfiles = [];
+// var selectedModel = require("./selectModel").selectedModel;
+// console.log("selectedModel imported ", selectedModel);
+const db = require("../database/db");
+const mysql = require("mysql");
 
 // Setting up upload function using multer
 let uploadTrain = multer({
   storage: multer.diskStorage({
     destination: function(req, file, cb) {
-      cb(null, selectedDir);
+      cb(null, req.cookies.selectedDir);
     },
     filename: (req, file, cb) => {
-      console.log(file.originalname);
+      // console.log("uploading", file.originalname);
       cb(null, path.basename(file.originalname));
     }
   })
 });
 
 router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
-  var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
-  var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
-  countFiles(traindir, function(err, results) {
-    trainSize = results.files;
-    module.exports.trainSize = trainSize;
-  });
-  // train_batch_size = Math.sqrt(trainSize).toFixed(0);
-  countFiles(testdir, function(err, results) {
-    testSize = results.files;
-    module.exports.testSize = testSize;
-  });
-  // test_batch_size = Math.sqrt(testSize).toFixed(0);
+  let json;
+  if (req.cookies.selectTestDir == 1) {
+    // add images to experiment_images table
+    let user = req.user;
+    let expTitle = req.cookies.projectName + "-testData";
+    var sql =
+      "SELECT exp_id FROM experiments WHERE exp_title = " +
+      mysql.escape(expTitle);
+    db.query(sql, function(err, result) {
+      var string = JSON.stringify(result);
+      json = JSON.parse(string);
+      // insert uploaded image files
+      let now = new Date(new Date().toString().split("GMT")[0] + " UTC")
+        .toISOString()
+        .split(".")[0]
+        .replace("T", "-");
+
+      let fileLength = req.files.length;
+      let text = "";
+      for (let i = 0; i < fileLength; i++) {
+        let fileName = req.files[i].filename;
+        text += fileName + ",";
+      }
+
+      let removedLastComma = text.substring(0, text.length - 1);
+      let array = removedLastComma.split(",");
+      for (let k = 0; k < array.length; k++) {
+        db.query(
+          "INSERT IGNORE INTO experiment_images (exp_id, user_id, exp_images, created_at, label, exp_type, img_dir) VALUES (?, ?, ?, ?, ?, ?, ?)",
+          [
+            json[0].exp_id,
+            user.user_id,
+            array[k],
+            now,
+            req.cookies.selectedCategory,
+            "T",
+            req.cookies.selectedDir + "/" + array[k]
+          ]
+        );
+      }
+    });
+  }
   res.redirect("/upload");
-  // res.send("uploaded file");
 });
 
-// TODO Add middleware to the route
 router.get("/", function(req, res) {
   // display all categories in current project
   if (req.isAuthenticated()) {
-    let allProjectBuf = Buffer.from("./allProjects/" + userid);
+    let allProjectBuf = Buffer.from(
+      "./public/allProjects/" + req.cookies.userid
+    );
     let user = req.user;
     fs.readdir(allProjectBuf, (err, projects) => {
       // get all exixting projects
       if (err) {
         console.log(err.message);
       } else {
-        if (projectName) {
+        if (req.cookies.projectName) {
           // when a project is selected
           let projectBuf = Buffer.from(
-            "./allProjects/" + userid + "/" + projectName
+            "./public/allProjects/" +
+              req.cookies.userid +
+              "/" +
+              req.cookies.projectName
           );
           fs.readdir(projectBuf, (err, files) => {
             if (err) {
@@ -77,18 +102,23 @@ router.get("/", function(req, res) {
           });
           // if a project is created or selected, show all categories under its datasets
           let dirBuf = Buffer.from(
-            "./allProjects/" + userid + "/" + projectName + "/datasets"
+            "./public/allProjects/" +
+              req.cookies.userid +
+              "/" +
+              req.cookies.projectName +
+              "/datasets"
           );
           fs.readdir(dirBuf, (err, files) => {
             if (err) {
               console.log(err.message);
             } else {
-              trainfiles = files;
+              // res.cookie("trainfiles", files);
+              var trainfiles = files;
               res.render("upload", {
                 projects: projects,
                 trainfiles: trainfiles,
-                projectName: projectName,
-                selectedDir: selectedDir,
+                projectName: req.cookies.projectName,
+                selectedDir: req.cookies.selectedDir,
                 uname: user.user_name
               });
             }
@@ -96,9 +126,9 @@ router.get("/", function(req, res) {
         } else {
           res.render("upload", {
             projects: projects,
-            trainfiles: trainfiles,
-            projectName: projectName,
-            selectedDir: selectedDir,
+            trainfiles: [],
+            projectName: req.cookies.projectName,
+            selectedDir: req.cookies.selectedDir,
             uname: user.user_name
           });
         }
@@ -111,46 +141,90 @@ router.get("/", function(req, res) {
 
 router.post("/nameProject", function(req, res) {
   console.log("post /nameProject with body:", req.body);
-  projectName = req.body.projectName;
-  module.exports.projectName = projectName;
-  // global.projectName = projectName;
+  // projectName = req.body.projectName;
+  res.cookie("projectName", req.body.projectName);
+  res.cookie("epoch", -1);
+  res.cookie("train_batch_size", -1);
+  res.cookie("validation_batch_size", -1);
+  res.cookie("test_batch_size", -1);
+  res.cookie("selectedCategory", "");
+  res.cookie("selectedDir", "");
 
-  console.log("projectName: ", projectName);
+  let user = req.user;
+  let expTitle = req.body.projectName + "-testData";
+  let now = new Date(new Date().toString().split("GMT")[0] + " UTC")
+    .toISOString()
+    .split(".")[0]
+    .replace("T", "-");
+  db.query(
+    "INSERT IGNORE INTO experiments (users_id, exp_title, exp_birth_date, exp_type) VALUES (?, ?, ?, ?)",
+    [user.user_id, expTitle, now, "T"],
+    function(error, results, fields) {
+      if (error) throw error;
+      console.log("results.insertId (exp_id)", results.insertId);
+    }
+  );
 
   if (
-    !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/datasets")
+    !fs.existsSync(
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.body.projectName +
+        "/datasets"
+    )
   ) {
-    fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/datasets", {
-      recursive: true
-    });
+    fs.mkdirSync(
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.body.projectName +
+        "/datasets",
+      {
+        recursive: true
+      }
+    );
   }
   if (
-    !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/testData")
+    !fs.existsSync(
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.body.projectName +
+        "/testData"
+    )
   ) {
-    fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/testData", {
-      recursive: true
-    });
+    fs.mkdirSync(
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.body.projectName +
+        "/testData",
+      {
+        recursive: true
+      }
+    );
   }
   if (
-    !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/models")
+    !fs.existsSync(
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.body.projectName +
+        "/models"
+    )
   ) {
-    fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/models", {
-      recursive: true
-    });
+    fs.mkdirSync(
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.body.projectName +
+        "/models",
+      {
+        recursive: true
+      }
+    );
   }
-
-  var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
-  var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
-  countFiles(traindir, function(err, results) {
-    trainSize = results.files;
-    module.exports.trainSize = trainSize;
-  });
-  // train_batch_size = Math.sqrt(trainSize).toFixed(0);
-  countFiles(testdir, function(err, results) {
-    testSize = results.files;
-    module.exports.testSize = testSize;
-  });
-
   res.redirect("/upload");
 });
 
@@ -158,18 +232,24 @@ router.post("/nameProject", function(req, res) {
 router.post("/createDir", function(req, res) {
   console.log("post /createDir, ", "body:", req.body);
   category = req.body.category;
-  console.log(
-    "creating dir: ",
-    "./allProjects/" + userid + "/" + projectName + "/datasets/" + category
-  );
 
   if (
     !fs.existsSync(
-      "./allProjects/" + userid + "/" + projectName + "/datasets/" + category
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.cookies.projectName +
+        "/datasets/" +
+        category
     )
   ) {
     fs.mkdirSync(
-      "./allProjects/" + userid + "/" + projectName + "/datasets/" + category,
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.cookies.projectName +
+        "/datasets/" +
+        category,
       {
         recursive: true
       }
@@ -177,11 +257,21 @@ router.post("/createDir", function(req, res) {
   }
   if (
     !fs.existsSync(
-      "./allProjects/" + userid + "/" + projectName + "/testData/" + category
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.cookies.projectName +
+        "/testData/" +
+        category
     )
   ) {
     fs.mkdirSync(
-      "./allProjects/" + userid + "/" + projectName + "/testData/" + category,
+      "./public/allProjects/" +
+        req.cookies.userid +
+        "/" +
+        req.cookies.projectName +
+        "/testData/" +
+        category,
       {
         recursive: true
       }
@@ -190,61 +280,50 @@ router.post("/createDir", function(req, res) {
   res.redirect("/upload");
 });
 
-// TODO select from testData
 // select a category directory to upload
 router.post("/selectDir", function(req, res) {
-  console.log("post /selectDir, ", "body:", req.body);
-  selectedCategory = req.body.category;
-  selectedDir =
-    "./allProjects/" +
-    userid +
-    "/" +
-    projectName +
-    "/datasets/" +
-    selectedCategory;
-  console.log("selected ", selectedDir);
+  res.cookie("selectedCategory", req.body.category);
+  // console.log("post /selectDir, ", "body:", req.body);
+  // selectedCategory = req.body.category;
+  res.cookie(
+    "selectedDir",
+    "./public/allProjects/" +
+      req.cookies.userid +
+      "/" +
+      req.cookies.projectName +
+      "/datasets/" +
+      req.body.category
+  );
+  res.cookie("selectTestDir", 0);
   res.redirect("/upload");
 });
 
+// same as /selectDir, but with /../testDate/selectedCategory/ as target folder
 router.post("/selectTestDir", function(req, res) {
-  console.log("post /selectTestDir, ", "body:", req.body);
-  selectedCategory = req.body.category;
-  selectedDir =
-    "./allProjects/" +
-    userid +
-    "/" +
-    projectName +
-    "/testData/" +
-    selectedCategory;
-  console.log("selected ", selectedDir);
+  res.cookie("selectedCategory", req.body.category);
+  res.cookie(
+    "selectedDir",
+    "./public/allProjects/" +
+      req.cookies.userid +
+      "/" +
+      req.cookies.projectName +
+      "/testData/" +
+      req.body.category
+  );
+  res.cookie("selectTestDir", 1);
   res.redirect("/upload");
 });
 
 // select a project
 router.post("/selectProject", function(req, res) {
   console.log("post /selectProject with body:", req.body);
-  projectName = req.body.projectName;
-  module.exports.projectName = projectName;
-  // global.projectName = projectName;
-  var traindir = "./allProjects/" + userid + "/" + projectName + "/datasets";
-  var testdir = "./allProjects/" + userid + "/" + projectName + "/testData";
-  // fs.readdir(traindir, (error, files) => {
-  //   trainSize = files.length; // return the number of files
-  //   module.exports.trainSize = trainSize;
-  // });
-  // fs.readdir(testdir, (error, files) => {
-  //   testSize = files.length; // return the number of files
-  //   module.exports.testSize = testSize;
-  // });
-  countFiles(traindir, function(err, results) {
-    trainSize = results.files;
-    module.exports.trainSize = trainSize;
-  });
-  countFiles(testdir, function(err, results) {
-    testSize = results.files;
-    module.exports.testSize = testSize;
-  });
-  // TODO check and set value for hasTestDir
+  res.cookie("projectName", req.body.projectName);
+  res.cookie("epoch", -1);
+  res.cookie("train_batch_size", -1);
+  res.cookie("validation_batch_size", -1);
+  res.cookie("test_batch_size", -1);
+  res.cookie("selectedCategory", "");
+  res.cookie("selectedDir", "");
   res.redirect("/upload");
 });
 
@@ -256,16 +335,16 @@ router.post("/selectProject", function(req, res) {
 
 // router.post("/createTestDir", function(req, res) {
 //   console.log("post /createTestDir, ", "body:", req.body);
-//   console.log("creating dir: ", "./allProjects/" + userid + "/" + projectName + "/testData");
+//   console.log("creating dir: ", "./public/allProjects/" + userid + "/" + projectName + "/testData");
 
-//   if (!fs.existsSync("./allProjects/" + userid + "/" + projectName + "/testData")) {
-//     fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/testData", {
+//   if (!fs.existsSync("./public/allProjects/" + userid + "/" + projectName + "/testData")) {
+//     fs.mkdirSync("./public/allProjects/" + userid + "/" + projectName + "/testData", {
 //       recursive: true
 //     });
 //   }
 //   hasTestDir = true;
 
-//   let dirBuf = Buffer.from("./allProjects/" + userid + "/" + projectName + "/datasets");
+//   let dirBuf = Buffer.from("./public/allProjects/" + userid + "/" + projectName + "/datasets");
 //   fs.readdir(dirBuf, (err, files) => {
 //     if (err) {
 //       console.log(err.message);
@@ -273,9 +352,9 @@ router.post("/selectProject", function(req, res) {
 //       // propagate all categories in datasets(train) to testData
 //       files.forEach(function(file) {
 //         if (
-//           !fs.existsSync("./allProjects/" + userid + "/" + projectName + "/testData/" + file)
+//           !fs.existsSync("./public/allProjects/" + userid + "/" + projectName + "/testData/" + file)
 //         ) {
-//           fs.mkdirSync("./allProjects/" + userid + "/" + projectName + "/testData/" + file, {
+//           fs.mkdirSync("./public/allProjects/" + userid + "/" + projectName + "/testData/" + file, {
 //             recursive: true
 //           });
 //         }
@@ -289,9 +368,6 @@ router.post("/selectProject", function(req, res) {
 router.get("/", authenticationMiddleware(), function(req, res) {
   res.render("upload");
 });
-
-// router.post("/setBatchSize", function(req, res) {
-// });
 
 // Auth middleware
 function authenticationMiddleware() {
