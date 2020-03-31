@@ -50,7 +50,7 @@ router.get("/", authenticationMiddleware(), function(req, res) {
 // @access  Private
 router.post("/", upload.array("expImage", 40), function(req, res, next) {
   let user = req.user;
-
+  let exp_id;
   expTitle = req.body.expTitle;
   expBirthDate = req.body.expBirthDate;
   expChannel = req.body.expChannel;
@@ -99,6 +99,7 @@ router.post("/", upload.array("expImage", 40), function(req, res, next) {
           .toISOString()
           .split(".")[0]
           .replace("T", "-");
+        exp_id = results.insertId;
         db.query(
           "INSERT INTO experiment_images (exp_id, user_id, exp_images, created_at, channel) VALUES (?, ?, ?, ?, ?)",
           [results.insertId, user.user_id, array[k], now, expChannel]
@@ -116,7 +117,7 @@ router.post("/", upload.array("expImage", 40), function(req, res, next) {
           ) {
             if (error) throw error;
 
-            res.redirect("/home");
+            res.redirect("/viewExperiment/"+ exp_id);
           });
         }
       );
