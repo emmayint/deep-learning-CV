@@ -101,12 +101,11 @@
                                     <div class="img-responsive img-thumbnail">
                                         <a href="#" class="pop1">
                                             <img class="scaled image"
-                                                src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
+                                                src="/allProjects/<%= modeldata[i].user_id %>/<%= modeldata[i].project_name %>/testData/<%= image_arr[j] %>">
                                         </a>
                                         <p class="fileName all-p"><b>
                                                 <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %>
                                             </b></p>
-                                        <!-- <p class="fileName all-p"><%= image_name %></p> -->
                                         <div class="modal fade" id="imagemodal1" tabindex="-1" role="dialog"
                                             aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -149,12 +148,11 @@
                                     <div class="img-responsive img-thumbnail">
                                         <a href="#" class="pop2">
                                             <img class="scaled image"
-                                                src="/allProjects/<%= id %>/frog_embryo/testData/<%= image_arr[j] %>">
+                                                src="/allProjects/<%= modeldata[i].user_id %>/<%= modeldata[i].project_name %>/testData/<%= image_arr[j] %>">
                                         </a>
                                         <p class="fileName all-p"><b>
                                                 <%= image_arr[j].substring(image_arr[j].lastIndexOf("/") + 1, image_arr[j].length) %>
                                             </b></p>
-                                        <!-- <p class="fileName all-p"><%= image_name %></p> -->
                                         <div class="modal fade" id="imagemodal2" tabindex="-1" role="dialog"
                                             aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -246,8 +244,9 @@
         $(function () {
             $('.pop').on('click', function () {
                 $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+                var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= id %>/frog_embryo/testData/control/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal').modal('show');
@@ -258,19 +257,22 @@
         $(function () {
             $('.pop1').on('click', function () {
                 $('.imagepreview1').attr('src', $(this).find('img').attr('src'));
+                var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= id %>/frog_embryo/testData/control/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal1').modal('show');
             });
         });
 
+
         $(function () {
             $('.pop2').on('click', function () {
                 $('.imagepreview2').attr('src', $(this).find('img').attr('src'));
+                var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= id %>/frog_embryo/testData/mutant/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/mutant/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal2').modal('show');

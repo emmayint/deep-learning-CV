@@ -17,18 +17,6 @@
   <!-- Navigation Bar -->
   <% include partials/home-header %>
   <div class="container">
-    <!-- <div class="row div"> -->
-    <!-- <div class="col-md-12 btn-group-toggle topmargin"> -->
-        <!-- <div class="heading">
-      <h2>
-        SUMMARY
-        <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom" title="Go Back to Home page"
-              class="custombtn btn-primary btn-lg" href="/home" role="button">
-              <i class="fas fa-arrow-left"></i>
-            </a>
-      </h2>
-      <hr class="mt-2 mb-5" />
-    </div> -->
     <div class="row tbrow">
       <table id="example" class="table table-striped table-bordered" style="width:110%;">
         <thead>
@@ -46,21 +34,27 @@
         </thead>
 
         <tbody>
-            <% for (var i = 0; i < dataSummary.length; i++) { %>
-              <% var create_at = dataSummary[i].prediction_date.split('/').join('-') %>
-            <tr>
-                <!-- <td><input type="checkbox" name=""></td> -->
-                <td data-sort><%= dataSummary[i].prediction_date %></td>
-                <!-- <td><a href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>"><%= dataSummary[i].exp_title %></a></td> -->
-                <td><a id="redirectPrevPred" href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>/<%= dataSummary[i].is_validated %>" onclick="check();" style="color:black;"><%= dataSummary[i].exp_title %></a></td>
-                <td><%= dataSummary[i].training_algo %></td>
-                <td><%= dataSummary[i].model_name %></td>
-                <td><%= dataSummary[i].total_images %></td>
-                <td><%= dataSummary[i].control_count %></td>
-                <td><%= dataSummary[i].mutant_count %></td>
-                <td><%= dataSummary[i].is_validated %></td>
-            </tr>
-            <% } %>
+          <% if (dataSummary.length == 0) { %>
+            <p>No results present</p>
+            <% } else { %>
+          <% for (var i = 0; i < dataSummary.length; i++) { %>
+          <% var create_at = dataSummary[i].prediction_date.split('/').join('-') %>
+          <tr>
+            <!-- <td><input type="checkbox" name=""></td> -->
+            <td data-sort><%= dataSummary[i].prediction_date %></td>
+            <!-- <td><a href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>"><%= dataSummary[i].exp_title %></a></td> -->
+            <td><a id="redirectPrevPred"
+                href="prevprediction/<%= dataSummary[i].exp_id %>/<%= create_at %>/<%= dataSummary[i].is_validated %>"
+                onclick="check();" target="_blank" style="color:black;"><%= dataSummary[i].exp_title %></a></td>
+            <td><%= dataSummary[i].training_algo %></td>
+            <td><%= dataSummary[i].model_name %></td>
+            <td><%= dataSummary[i].total_images %></td>
+            <td><%= dataSummary[i].control_count %></td>
+            <td><%= dataSummary[i].mutant_count %></td>
+            <td><%= dataSummary[i].is_validated %></td>
+          </tr>
+          <% } %>
+          <% } %>
         </tbody>
         <tfoot>
           <tr>
@@ -77,13 +71,13 @@
         </tfoot>
       </table>
     </div>
-  <!-- </div> -->
-  <!-- </div> -->
+    <!-- </div> -->
+    <!-- </div> -->
   </div>
 
   <!-- <% include partials/footer %> -->
   <script src="/javascripts/croppr.js"></script>
-  <script src="/javascripts/cropper.js"></script> 
+  <script src="/javascripts/cropper.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
   </script>

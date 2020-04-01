@@ -32,21 +32,22 @@
         </thead>
 
         <tbody>
-            <% for (var i = 0; i < testSummary.length; i++) { %>
-              <% var create_at = testSummary[i].Date.split('/').join('-') %>
-            <tr>
-                <td data-sort><%= testSummary[i].Date %></td>
-                <td><a id="redirectTestPred" href="testSummaryDetail/<%= testSummary[i].exp_id %>" onclick="check();" style="color:black;"><%= testSummary[i].exp_title %></a></td>
-                <td><%= testSummary[i].model_fullname %></td>
-                <td><%= testSummary[i].test_accuracy %></td>
-                <% var total_imgs = testSummary[i].cm.match(/\d+/g).reduce(function(a,b) {return +a + +b;}); %>
-                <td><%= total_imgs %></td>
-                <% var acpm = testSummary[i].cm.split(",")[1]; %>
-                <td><%= acpm %></td>
-                <% var amps = testSummary[i].cm.split(",")[2]; %>
-                <td><%= amps %></td>
-            </tr>
-            <% } %>
+          <% for (var i = 0; i < testSummary.length; i++) { %>
+          <% var create_at = testSummary[i].Date.split('/').join('-') %>
+          <tr>
+            <td data-sort><%= testSummary[i].Date %></td>
+            <td><a id="redirectTestPred" href="testSummaryDetail/<%= testSummary[i].exp_id %>/<%= testSummary[i].id %>"
+                onclick="check();" target="_blank" style="color:black;"><%= testSummary[i].exp_title %></a></td>
+            <td><%= testSummary[i].model_fullname %></td>
+            <td><%= testSummary[i].test_accuracy %></td>
+            <% var total_imgs = testSummary[i].cm.match(/\d+/g).reduce(function(a,b) {return +a + +b;}); %>
+            <td><%= total_imgs %></td>
+            <% var acpm = testSummary[i].cm.split(",")[1]; %>
+            <td><%= acpm %></td>
+            <% var amps = testSummary[i].cm.split(",")[2]; %>
+            <td><%= amps %></td>
+          </tr>
+          <% } %>
         </tbody>
         <tfoot>
           <tr>
@@ -61,13 +62,11 @@
         </tfoot>
       </table>
     </div>
-  <!-- </div> -->
-  <!-- </div> -->
   </div>
 
   <!-- <% include partials/footer %> -->
   <script src="/javascripts/croppr.js"></script>
-  <script src="/javascripts/cropper.js"></script> 
+  <script src="/javascripts/cropper.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
   </script>
