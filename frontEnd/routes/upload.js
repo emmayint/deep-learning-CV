@@ -119,7 +119,8 @@ router.get("/", function(req, res) {
                 trainfiles: trainfiles,
                 projectName: req.cookies.projectName,
                 selectedDir: req.cookies.selectedDir,
-                uname: user.user_name
+                uname: user.user_name,
+                imgs: req.cookies.imgs
               });
             }
           });
@@ -129,7 +130,8 @@ router.get("/", function(req, res) {
             trainfiles: [],
             projectName: req.cookies.projectName,
             selectedDir: req.cookies.selectedDir,
-            uname: user.user_name
+            uname: user.user_name,
+            imgs: req.cookies.imgs
           });
         }
       }
@@ -283,8 +285,6 @@ router.post("/createDir", function(req, res) {
 // select a category directory to upload
 router.post("/selectDir", function(req, res) {
   res.cookie("selectedCategory", req.body.category);
-  // console.log("post /selectDir, ", "body:", req.body);
-  // selectedCategory = req.body.category;
   res.cookie(
     "selectedDir",
     "./public/allProjects/" +
@@ -295,7 +295,21 @@ router.post("/selectDir", function(req, res) {
       req.body.category
   );
   res.cookie("selectTestDir", 0);
-  res.redirect("/upload");
+
+  console.log("__dirname: ", __dirname.split("routes")[0]);
+  var selected_dir =
+    __dirname.split("routes")[0] +
+    "public/allProjects/" +
+    req.cookies.userid +
+    "/" +
+    req.cookies.projectName +
+    "/datasets/" +
+    req.body.category;
+  // let imgs = "";
+  fs.readdir(selected_dir, (err, files) => {
+    res.cookie("imgs", files);
+    res.redirect("/upload");
+  });
 });
 
 // same as /selectDir, but with /../testDate/selectedCategory/ as target folder
@@ -311,7 +325,22 @@ router.post("/selectTestDir", function(req, res) {
       req.body.category
   );
   res.cookie("selectTestDir", 1);
-  res.redirect("/upload");
+
+  console.log("__dirname: ", __dirname.split("routes")[0]);
+  var selected_dir =
+    __dirname.split("routes")[0] +
+    "public/allProjects/" +
+    req.cookies.userid +
+    "/" +
+    req.cookies.projectName +
+    "/testData/" +
+    req.body.category;
+
+  fs.readdir(selected_dir, (err, files) => {
+    console.log("imgs", files);
+    res.cookie("imgs", files);
+    res.redirect("/upload");
+  });
 });
 
 // select a project
@@ -324,6 +353,7 @@ router.post("/selectProject", function(req, res) {
   res.cookie("test_batch_size", -1);
   res.cookie("selectedCategory", "");
   res.cookie("selectedDir", "");
+  res.cookie("imgs", "");
   res.redirect("/upload");
 });
 

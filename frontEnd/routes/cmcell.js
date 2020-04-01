@@ -41,9 +41,9 @@ router.get("/", function(req, res) {
         console.log("-- classes: ", typeof classes, classes);
         var value;
         for (var key in json[0]) {
-          console.log("Key: " + key);
-          console.log(key === imgsStr);
-          console.log("Value: " + json[0][key]);
+          // console.log("Key: " + key);
+          // console.log(key === imgsStr);
+          // console.log("Value: " + json[0][key]);
           if (key === imgsStr) {
             value = json[0][key];
           }
@@ -51,7 +51,7 @@ router.get("/", function(req, res) {
         // var value = json[0].imgsStr;
         // var value = Object.values(json[0]);
         console.log("-- value ", value);
-        console.log("-- JSON.parse value: ", JSON.parse(value));
+        console.log("-- JSON.parse(value): ", JSON.parse(value));
         //   console.log("-- json[0].imgs01: ", json[0].imgs01);
         //   console.log("-- parsed json[0].imgs01: ", JSON.parse(json[0].imgs01));
         res.render("cmcell", {

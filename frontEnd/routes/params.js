@@ -145,18 +145,20 @@ router.post("/", function(req, res) {
   learningRate = req.body.learningRate;
   res.cookie("learningRate", learningRate);
 
-  res.render("params", {
-    projectName: req.cookies.projectName,
-    trainSize: req.cookies.trainSize ? req.cookies.trainSize : trainSize,
-    testSize: req.cookies.testSize ? req.cookies.testSize : testSize,
-    epoch: req.body.epoch,
-    uname: user.user_name,
-    train_batch_size: req.body.train_batch_size,
-    validation_batch_size: req.body.train_batch_size,
-    test_batch_size: req.body.test_batch_size,
-    optimizer: req.body.optimizer,
-    learningRate: req.body.learningRate
-  });
+  res.redirect("/params");
+  // res.render("params"
+  // , {
+  //   projectName: req.cookies.projectName,
+  //   trainSize: req.cookies.trainSize ? req.cookies.trainSize : trainSize,
+  //   testSize: req.cookies.testSize ? req.cookies.testSize : testSize,
+  //   epoch: req.body.epoch,
+  //   uname: user.user_name,
+  //   train_batch_size: req.body.train_batch_size,
+  //   validation_batch_size: req.body.train_batch_size,
+  //   test_batch_size: req.body.test_batch_size,
+  //   optimizer: req.body.optimizer,
+  //   learningRate: req.body.learningRate
+  // });
 });
 
 // Add mideleware to the route

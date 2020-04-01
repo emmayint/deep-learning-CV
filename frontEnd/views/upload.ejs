@@ -9,7 +9,7 @@
 <body>
     <!-- Navigation Bar -->
     <br /><br /><br />
-    <% include partials/home-header %>
+    <% include partials/train_header %>
     <div class="container">
         <div class="add-categories content-container">
             <!-- progress bar -->
@@ -114,7 +114,7 @@
                                 type="file"
                                 multiple
                             >
-                            <button class="btn btn-block upload-files-button" type="submit">
+                            <button class="btn btn-block upload-files-button" id="upload-files-button" type="submit">
                                 upload files
                             </button>
                         </form>
@@ -136,8 +136,56 @@
                     </button>
                 </a>
             </div>
+            <div>
+                <% if(selectedDir){%>
+                    <p>total <%=imgs.length%> images in <%=selectedDir.split("public")[1]%></p>
+                    <table>
+                    <%if(imgs!=""){
+                        var i =0;
+                        imgs.forEach(function(ln){ 
+                            if(ln!=""){ 
+                                var path = selectedDir.split("public")[1] + "/" + ln; 
+                                console.log("path ",path);%>
+                                <%if(i%3==0){%>
+                                <tr>
+                                    <td>
+                                        <img src= <%= path%> style="width: 200px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                    
+                                <%}else if(i%3==1){%>
+                                    <td>
+                                        <img src= <%= path%> style="width: 200px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                <%}else if(i%3==2){%>
+                                    <td>
+                                        <img src= <%= path%> style="width: 200px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                <%i++;%>
+                                <!-- <p><%=i%></p> -->
+                        <% }})%> 
+                    <%}%>
+                </table>
+                <%}%>            
+            </div>
         </div>
     </div>
+    <script>
+        document.getElementById('upload-files-button').addEventListener('click', function (e) {
+            // e.preventDefault();
+            alert("Files uploaded");
+        });
+    </script>
     <% include partials/footer %>
 </body>
 </html>
