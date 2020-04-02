@@ -45,15 +45,16 @@ router.get("/:id", function(req, res, next) {
     let id = req.params.id;
 
     db.query(
-      "SELECT * FROM experiments, experiment_images " +
-        "WHERE experiments.users_id = " +
+      'SELECT DATE_FORMAT(e.exp_birth_date,"%m/%d/%Y") AS exp_date, e.*, ei.* FROM experiments e, experiment_images ei' +
+        ' WHERE e.users_id = ' +
         user.user_id +
-        " AND experiments.exp_id= " +
+        ' AND e.exp_id= ' +
         id +
-        " AND experiment_images.exp_id= " +
+        ' AND ei.exp_id= ' +
         id +
-        " ;",
+        ' ;',
       function(error, results, fields) {
+        console.log(this.sql);
         if (error) throw error;
 
         for (let i = 0; i < results.length; i++) {
@@ -81,7 +82,7 @@ router.get("/:id/getModels/:trainingAlgo", function(req, res, next) {
     let trainingAlgo = req.params.trainingAlgo;
     // SELECT selected_model,model_fullname FROM csc899.Models where user_id = 9;
     db.query(
-      "SELECT model_fullname FROM Models m" +
+      "SELECT model_fullname, favorite FROM Models m" +
         " WHERE m.user_id = " +
         user.user_id +
         " AND m.selected_model= '" +
