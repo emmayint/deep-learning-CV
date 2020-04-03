@@ -40,6 +40,10 @@ from glob import glob
 import datetime
 import json 
 from flask_mail import Mail, Message
+from pathlib import Path
+
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = process.env.DB_HOST,
@@ -121,7 +125,11 @@ def train():
     MODEL_DIR =os.path.join(APP_ROOT, 'public', 'allProjects', str(USERID),  PROJECT_NAME, 'models/')
     # NAME = "{}-{}.h5".format(MODELNAME, SELECTED_MODEL)
     NAME = "{}.h5".format(MODELNAME)
-    model_path =os.path.join(MODEL_DIR, NAME)
+
+    # model_path =os.path.join(MODEL_DIR, NAME)
+    model_path = Path(APP_ROOT).parent #  /Users/mac/Desktop/899/csc899_masterProject
+    model_path = os.path.join(model_path, 'backEnd_ML_API', 'model', NAME)
+    print("model_path", model_path)
 
     # ## create the training log file
     # log_name = "{}{}.txt".format(MODEL_DIR, NAME)
