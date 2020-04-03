@@ -9,7 +9,7 @@
 <body>
     <!-- Navigation Bar -->
     <br /><br /><br />
-    <% include partials/home-header %>
+    <% include partials/train_header %>
     <div class="container">
         <div class="add-categories content-container">
             <!-- progress bar -->
@@ -39,7 +39,8 @@
                     <!-- <form class="form" method="POST" action="/upload" enctype="application/x-www-form-urlencoded" > -->
                     <!-- the above will pass the text input, but cant upload the file -->
                     <h4 class="step-directions-upload">1. Name a new project or select a project<span class="required-field">*</span><span></span></h4>
-                    <%if(projectName){%><p class="selected-project">You've selected project: <%= projectName%>. (<a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= projectName%>">view trained models of this project</a>)</p><%}%>
+                    <%if(projectName){%><p>You've selected project: <%= projectName%>. (<a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= projectName%>">view trained models of this project</a>)</p><%}%>
+                    <!-- <%if(projectName){%><p class="selected-project">You've selected project: <%= projectName%>. (<a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= projectName%>">view trained models of this project</a>)</p><%}%> -->
                     <div class="category-container">
                         <% projects.forEach(function(project){ %>
                             <%if(project!=".DS_Store"){%>
@@ -64,6 +65,7 @@
                     </form>
                     
                     <hr class="horizontal-line">
+
                     <h4 class="step-directions-upload">2. Add category<span class="required-field">*</span></h4>
                     <!-- <p>your categories:</p> -->
                     <!-- <label class="select-category-text" for="category"> NOTE: category names should not contain spaces.</label> -->
@@ -103,18 +105,20 @@
                             </form> 
                         <% })%>
                     </div>
+
                     <hr class="horizontal-line">
                     <h4 class="step-directions-upload">3. Select a folder above and upload file(s) to it<span class="required-field">*</span></h4>
+                    <div>currently <%=imgs.length%> images in <%=  selectedDir.split(projectName)[1]%></div>
                     <% if(selectedDir != ""){%>                    
                         <form class="form upload-form" method="POST" action="/upload/createFile" enctype="multipart/form-data" >
-                            <div class="selected-category-text"> Files will be uploaded to : <span class="selected-category"><%=  selectedDir%></span></div> 
+                            <!-- <div class="selected-category-text"> <span class="selected-category"> </span></div>  -->
                             <input
                                 class="choose-files-button"
                                 name="file"
                                 type="file"
                                 multiple
                             >
-                            <button class="btn btn-block upload-files-button" type="submit">
+                            <button class="btn btn-block upload-files-button" id="upload-files-button" type="submit">
                                 upload files
                             </button>
                         </form>
@@ -136,8 +140,57 @@
                     </button>
                 </a>
             </div>
+            <div>
+                <% if(selectedDir){%>
+                    <p>total <%=imgs.length%> images in <%=selectedDir.split(projectName)[1]%></p>
+                    <table>
+                    <%if(imgs!=""){
+                        var i =0;
+                        imgs.forEach(function(ln){ 
+                            if(ln!=""){ 
+                                var path = selectedDir.split("public")[1] + "/" + ln; 
+                                console.log("path ",path);%>
+                                <%if(i%5==0){%>
+                                <tr>
+                                    <td>
+                                        <img src= <%= path%> style="width: 150px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                    
+                               
+                                <%}else if(i%5==4){%>
+                                    <td>
+                                        <img src= <%= path%> style="width: 150px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                </tr>
+                                <%}else{%>
+                                    <td>
+                                        <img src= <%= path%> style="width: 150px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                <%}%>
+                                <%i++;%>
+                                <!-- <p><%=i%></p> -->
+                        <% }})%> 
+                    <%}%>
+                </table>
+                <%}%>            
+            </div>
         </div>
     </div>
+    <script>
+        document.getElementById('upload-files-button').addEventListener('click', function (e) {
+            // e.preventDefault();
+            alert("Files uploaded");
+        });
+    </script>
     <% include partials/footer %>
 </body>
 </html>
