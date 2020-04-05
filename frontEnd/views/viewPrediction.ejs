@@ -53,7 +53,7 @@
                         <% if (dataImg[i].exp_type) { %>
                         <p>Prediction : <b> <%= dataImg[i].exp_type %></b></p>
                         <% } else { %>
-                        <p>Prediction : <b> <%= JSON.stringify(data[0]['type']).split('"').join("") %></b></p>
+                        <p>Prediction : <b> <%= JSON.stringify(data[i]['type']).split('"').join("") %></b></p>
                         <% } %>
                         <% var j = 0; %>
                         <div class="btn-group btn-group-toggle yesno" data-toggle="buttons">
