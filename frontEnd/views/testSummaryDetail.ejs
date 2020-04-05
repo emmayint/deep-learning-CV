@@ -61,7 +61,7 @@
 
                     <div class="col-md-4 gap" id="filter-div-<%= i %>">
                         <div class="img-responsive img-thumbnail">
-                            <a href="#" class="pop">
+                            <a class="pop">
                                 <img class="scaled image" src="<%= image_dir %>">
                             </a>
                             <p class="fileName all-p"><b> <%= image_name %> </b></p>
@@ -114,7 +114,7 @@
                                                         <button type="button" class="close" data-dismiss="modal"><span
                                                                 aria-hidden="true">&times;</span><span
                                                                 class="sr-only">Close</span></button><br>
-                                                        <p class="modalFileName all-p"></p>
+                                                        <p class="modalFileName1 all-p"></p>
                                                         <img src="" class="imagepreview1" style="width: 100%;">
                                                     </div>
                                                 </div>
@@ -161,7 +161,7 @@
                                                         <button type="button" class="close" data-dismiss="modal"><span
                                                                 aria-hidden="true">&times;</span><span
                                                                 class="sr-only">Close</span></button><br>
-                                                        <p class="modalFileName all-p"></p>
+                                                        <p class="modalFileName2 all-p"></p>
                                                         <img src="" class="imagepreview2" style="width: 100%;">
                                                     </div>
                                                 </div>
@@ -249,7 +249,7 @@
                     '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
-                $('#imagemodal').modal('show');
+                $('#imagemodal').modal("show");
             });
         });
 
@@ -260,8 +260,8 @@
                 var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
                     '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
-                $('.modalFileName').css("display", "block");
-                $(".modalFileName").text(imgName);
+                $('.modalFileName1').css("display", "block");
+                $(".modalFileName1").text(imgName);
                 $('#imagemodal1').modal('show');
             });
         });
@@ -273,8 +273,8 @@
                 var proj_name = $(this).find('img').attr('src').split('/');
                 var imgName = $(this).find('img').attr('src').replace(
                     '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/mutant/', '');
-                $('.modalFileName').css("display", "block");
-                $(".modalFileName").text(imgName);
+                $('.modalFileName2').css("display", "block");
+                $(".modalFileName2").text(imgName);
                 $('#imagemodal2').modal('show');
             });
         });

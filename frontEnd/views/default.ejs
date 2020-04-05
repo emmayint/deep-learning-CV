@@ -63,6 +63,22 @@
             >
           </div>
         </div>
+        <% if (uname == 'admin') { %>
+        <div class="col-sm-12 col-md-3">
+          <div class="col-md-12 feature-box">
+            <span><i class="fas fa-columns fa-5x"></i></span>
+            <h4>View Admin Report</h4>
+            <p>
+              Please select this option if you want to view admin report
+            </p>
+            <a href="/adminReport"
+              ><button type="button" class="btn btn-primary site-btn">
+                Start Right Now
+              </button></a
+            >
+          </div>
+        </div>
+       <% } %>
       </div>
     </div>
     <% include partials/footer %>
