@@ -41,6 +41,8 @@ const cmcellRouter = require("./routes/cmcell");
 const viewMoodelsRouter = require("./routes/viewMoodels");
 // const predictRouter = require("./routes/predict").router;
 // const testFlaskRouter = require("./routes/testFlask").router;
+const whatstrainingRouter = require("./routes/whatstraining").router;
+const whatspredictionRouter = require("./routes/whatsprediction").router;
 
 const app = express();
 
@@ -106,6 +108,7 @@ app.use("/prediction", viewPredictionRouter);
 app.use("/prevprediction", prevPredictionRouter);
 app.use("/default", defaultRouter);
 app.use("/testSummaryDetail", testSummaryDetailRouter);
+app.use("/testSummaryDetail", testSummaryDetailRouter);
 
 // // Emma's code
 app.use("/upload", uploadRouter);
@@ -115,6 +118,8 @@ app.use("/nameModel", nameModelRouter);
 app.use("/logger", loggerRouter);
 app.use("/cmcell", cmcellRouter);
 app.use("/viewMoodels", viewMoodelsRouter);
+app.use("/whatstraining", whatstrainingRouter);
+app.use("/whatsprediction", whatspredictionRouter);
 
 // app.use("/predict", predictRouter);
 // app.use("/testFlask", testFlaskRouter);

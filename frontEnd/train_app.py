@@ -35,7 +35,9 @@ print(K.image_data_format())
 # get_ipython().run_line_magic('matplotlib', 'inline')
 from keras.callbacks import CSVLogger
 from flask import Flask, render_template
+
 from flask_mysqldb import MySQL
+
 from glob import glob
 import datetime
 import json 

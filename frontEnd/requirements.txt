@@ -11,7 +11,7 @@ mysqlclient
 flask_mysqldb
 Flask-Mail
 mlxtend
-imagenet_utils
+# imagenet_utils
 
 # pip install Flask
 # sudo pip3 install numpy
@@ -21,9 +21,13 @@ imagenet_utils
 # sudo pip3 install keras
 # sudo pip3 install theano
 # sudo pip3 install flask-mysql
-# brew install mysql
-# pip3 install mysqlclient
-# pip3 install flask_mysqldb
-# pip install Flask-Mail
-# pip install mlxtend
-# pip install imagenet_utils
+(install brew)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+brew install mysql
+pip3 install mysqlclient
+pip3 install flask_mysqldb
+# pip3 install Flask-Mail
+# pip3 install mlxtend
+
+# cant install
+# pip3 install imagenet_utils

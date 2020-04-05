@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to imagePrediction</title>
+    <% include partials/head %>
+    <link href="/stylesheets/default.css" rel="stylesheet" />
+    <link href="/stylesheets/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <br /><br /><br />
+    <!-- Navigation Bar -->
+    <% include partials/default-header %>
+
+    <div>
+      <div class="container">
+        <div class="row">
+          <h2>Training model with Fine tuning</h2>
+          <p>
+            This is a process to take a network model that has already been
+            trained for a given task, and make it perform a second similar task.
+          </p>
+          <p>
+            Assuming the original task is similar to the new task, using a
+            network that has already been designed & trained allows us to take
+            advantage of the feature extraction that happens in the front layers
+            of the network without developing that feature extraction network
+            from scratch.
+          </p>
+          <br />
+          <p>With respect to the controls vs mutants example:</p>
+          <ul>
+            <li>
+              The original task would be classifying the images into the 1000s
+              of Imagenet categories.
+            </li>
+            <li>
+              The new task would be to classify the images into just 2
+              categories i.e., controls or mutants.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>

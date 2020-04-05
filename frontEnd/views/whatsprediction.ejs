@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to imagePrediction</title>
+    <% include partials/head %>
+    <link href="/stylesheets/default.css" rel="stylesheet" />
+    <link href="/stylesheets/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <br /><br /><br />
+    <!-- Navigation Bar -->
+    <% include partials/default-header %>
+
+    <div>
+      <div class="container">
+        <div class="row">
+          <h2>Make prediction with models</h2>
+          <br />
+
+          <p>
+            You can upload images of your experiment and use the trained model
+            to perform classification tasks. This was done in order to give you
+            an estimate of the skill of the model on out-of-sample data, e.g.
+            new data.
+          </p>
+          <p>
+            Before you can make predictions, you must train a final model. If
+            you have not trained any model, please go back and select "train a
+            model"
+          </p>
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>

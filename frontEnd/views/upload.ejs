@@ -108,7 +108,14 @@
 
                     <hr class="horizontal-line">
                     <h4 class="step-directions-upload">3. Select a folder above and upload file(s) to it<span class="required-field">*</span></h4>
-                    <div>currently <%=imgs.length%> images in <%=  selectedDir.split(projectName)[1]%></div>
+                    <%if(selectedDir){%>
+                        <div>You selected <strong> <%=  selectedDir.split(projectName)[1]%></strong>
+                        <%if(imgs){%>
+                            <span> (currently <%=imgs.length%> images in it).</span>
+                        <%}%>
+                        </div>
+                    <%}%>
+                    
                     <% if(selectedDir != ""){%>                    
                         <form class="form upload-form" method="POST" action="/upload/createFile" enctype="multipart/form-data" >
                             <!-- <div class="selected-category-text"> <span class="selected-category"> </span></div>  -->
@@ -134,17 +141,19 @@
                         Prev
                     </button>
                 </a>
+                <%if(projectName){%>
                 <a href="/params">
                     <button class="nav-button next-button">
                         Next
                     </button>
                 </a>
+                <%}%>
             </div>
             <div>
                 <% if(selectedDir){%>
                     <p>total <%=imgs.length%> images in <%=selectedDir.split(projectName)[1]%></p>
                     <table>
-                    <%if(imgs!=""){
+                    <%if(imgs){
                         var i =0;
                         imgs.forEach(function(ln){ 
                             if(ln!=""){ 
