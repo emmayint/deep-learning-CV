@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
         let user = req.user;
         db.query('SELECT m.id, e.exp_id, DATE_FORMAT(m.timestamp,"%Y/%m/%d %T")  as "Date", e.exp_title, m.test_accuracy,  m.model_fullname, m.cm, m.imgs01, ' +
             ' m.imgs10 ' +
-            'from csc899.experiments e, csc899.models m  ' +
+            'from experiments e, Models m  ' +
             'WHERE m.exp_id = e.exp_id AND e.users_id = ' + user.user_id + ' ' +
             'order by Date desc;',
             function (error, results, fields) {
