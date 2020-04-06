@@ -41,7 +41,15 @@
           <h4 class="step-directions">Name and train your model</h4>
 
           <form class="name-model-form" method="POST" action="/nameModel">
+            <%if(nametaken==true){%>
+            <label style="color:red"
+              >"<%=modelName%>" is already taken. Please use a different
+              name.</label
+            >
+            <%}else{%>
+
             <label for="modelName">name of your model</label><br />
+            <%}%>
             <input
               type="text"
               class="form-control"

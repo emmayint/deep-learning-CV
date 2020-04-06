@@ -49,8 +49,8 @@ router.get("/", function(req, res) {
               ? req.cookies.train_batch_size
               : Math.sqrt(trainSize * 0.75).toFixed(0),
           validation_batch_size:
-            req.cookies.train_batch_size != -1
-              ? req.cookies.train_batch_size
+            req.cookies.validation_batch_size != -1
+              ? req.cookies.validation_batch_size
               : Math.sqrt(trainSize * 0.25).toFixed(0),
           test_batch_size:
             req.cookies.test_batch_size != -1

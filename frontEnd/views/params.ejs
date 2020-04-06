@@ -47,7 +47,7 @@
             >what are these hyperparameters?</a
           >
           <p>
-            (training data size = <%= trainSize*0.75%>; testing data size=<%=testSize%>)
+            (training data size = <%= (trainSize*0.75).toFixed(0)%>; validation data size=<%=trainSize-(trainSize*0.75).toFixed(0)%>)
           </p>
 
           <form
