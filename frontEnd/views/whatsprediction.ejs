@@ -1,36 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Welcome to imagePrediction</title>
-    <% include partials/head %>
-    <link href="/stylesheets/default.css" rel="stylesheet" />
-    <link href="/stylesheets/style.css" rel="stylesheet" />
-  </head>
-  <body>
-    <br /><br /><br />
-    <!-- Navigation Bar -->
-    <% include partials/default-header %>
 
-    <div>
-      <div class="container">
-        <div class="row">
-          <h2>Make prediction with models</h2>
-          <br />
+<head>
+  <title>Welcome to imagePrediction</title>
+  <% include partials/head %>
+  <link href="/stylesheets/default.css" rel="stylesheet" />
+  <link href="/stylesheets/style.css" rel="stylesheet" />
+</head>
 
-          <p>
-            You can upload images of your experiment and use the trained model
-            to perform classification tasks. This was done in order to give you
-            an estimate of the skill of the model on out-of-sample data, e.g.
-            new data.
-          </p>
-          <p>
-            Before you can make predictions, you must train a final model. If
-            you have not trained any model, please go back and select "train a
-            model"
-          </p>
-        </div>
+<body>
+  <br /><br /><br />
+  <!-- Navigation Bar -->
+  <% include partials/default-header %>
+
+  <div>
+    <div class="container">
+      <div class="row">
+        <h2>Make Predictions with Models</h2>
+        <br />
+      </div>
+      <div class="row">
+        <p>
+          As part of the prediction, once a user has trained the model, he/she can make use of the pre-trained models
+          for the new images and make the predictions. One can upload images in the experiment and use the trained model to perform classification tasks. 
+          This was done in order to give an estimate of the skill of the model on out-of-sample data, e.g. new data. <br /><br/>
+          Below is the full list of functionalities provided by
+          prediction module:
+        </p>
+      </div>
+      <div class="row">
+        <ul>
+          <li>
+            <b>Add new experiment</b> - User can start by adding a new experiment with basic details like experiment name, images to be used for 
+            prediction and miscellaneous label values
+          </li>
+          <li>
+            <b>View All Experiments</b> - Gallary like view of all the experiments conducted by the user
+          </li>
+          <li>
+            <b>Add/Delete/Crop/Select Images</b> - Once an experiment is created, user can add/delete images from it. One can also 
+            crop an image area and send the cropped image for prediction
+          </li>
+          <li>
+            <b>Model Selection and Prediction</b> - User can then select training algorithm and model from the dropdown list and send the images to make final predictions
+          </li>
+          <li>
+            <b>Validate results</b> - Predicted results can be validated by the user immediately or later after prediction
+          </li>
+          <li>
+            <b>View Previous Predictions</b> - All previous predictions including predictions to be validated are visible in a tabbed view
+          </li>
+          <li>
+            <b>Test Data Summary</b> - Exhaustive summary of test data results with details for the confusion matrix
+          </li>
+          <li>
+            <b>Prediction Data Summary</b> - Exhaustive summary of prediction data along with results and statistics
+          </li>
+        </ul>
+
+
+      </div>
+      <div class="row">
+      <p>
+        Before you can make predictions, you must train a final model. If
+        you have not trained any model, please go back and select "Train a
+        model"
+      </p>
       </div>
     </div>
-    <% include partials/footer %>
-  </body>
+  </div>
+  <% include partials/footer %>
+</body>
+
 </html>

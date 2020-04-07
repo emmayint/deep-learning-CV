@@ -30,6 +30,7 @@ const viewExperimentRouter = require("./routes/viewExperiment");
 const viewPredictionRouter = require("./routes/viewPrediction");
 const prevPredictionRouter = require("./routes/prevPrediction");
 const testSummaryDetailRouter = require("./routes/testSummaryDetail");
+const adminReportRouter = require("./routes/adminReport");
 
 // // Emma's code
 const uploadRouter = require("./routes/upload").router;
@@ -109,6 +110,7 @@ app.use("/prevprediction", prevPredictionRouter);
 app.use("/default", defaultRouter);
 app.use("/testSummaryDetail", testSummaryDetailRouter);
 app.use("/testSummaryDetail", testSummaryDetailRouter);
+app.use("/adminReport", adminReportRouter);
 
 // // Emma's code
 app.use("/upload", uploadRouter);
