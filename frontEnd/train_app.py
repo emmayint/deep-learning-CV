@@ -7,7 +7,7 @@ from PIL import Image
 import time
 import matplotlib
 matplotlib.use('Agg')
-import tensorflow as tf
+# import tensorflow as tf
 
 import keras
 from keras import backend as K
@@ -35,23 +35,22 @@ print(K.image_data_format())
 # get_ipython().run_line_magic('matplotlib', 'inline')
 from keras.callbacks import CSVLogger
 from flask import Flask, render_template
-
 from flask_mysqldb import MySQL
-
 from glob import glob
 import datetime
 import json 
 from flask_mail import Mail, Message
 from pathlib import Path
+import pymysql
 
-from tensorflow.python.client import device_lib
-print(device_lib.list_local_devices())
+# from tensorflow.python.client import device_lib
+# print(device_lib.list_local_devices())
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = process.env.DB_HOST,
-app.config['MYSQL_USER'] = process.env.DB_USERNAME,
-app.config['MYSQL_HOST'] = process.env.DB_PASSWORD,
-app.config['MYSQL_DB'] = process.env.DB_NAME
+app.config['MYSQL_HOST'] = 'csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com',
+app.config['MYSQL_USER'] = 'admin',
+app.config['MYSQL_HOST'] = 'admin123',
+app.config['MYSQL_DB'] = 'csc899'
 
 
 mysql = MySQL(app)
@@ -71,9 +70,10 @@ mail = Mail(app)
 @app.route('/')
 def hello_world():
     return 'this is flask app for csc895'
-    
+
 @app.route("/train", methods=["POST"]) # post req (datasets path, params, model name) to endpoint and get trained model
 def train():
+    # return '/tain this is flask app for csc895'
     ## get http request and extract values
     message = request.get_json(force=True)
     SELECTED_MODEL = message['selectedModel']
@@ -92,8 +92,12 @@ def train():
    
     # expid=0;
     exptitle=PROJECT_NAME+"-testData"
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT exp_id FROM experiments WHERE exp_title = '%s'" % exptitle)
+    conn = pymysql.connect(host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com', port=3306, user='admin', passwd='admin123', db='csc899')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users")
+    print(cur.description)
+    # cur = mysql.connection.cursor()
+    cur.execute("SELECT exp_id FROM experiments WHERE exp_title = '%s'" % str(exptitle))
     expid = cur.fetchall()
     print("expid", expid)
 
@@ -297,12 +301,16 @@ def train():
     # plt.savefig("mygraph.png")
 
     # save model and info to DB TODO cm, wrong-preds0, wrong-preds1, proj-path?
-    cur = mysql.connection.cursor()
+    # cur = mysql.connection.cursor()
+    cur = conn.cursor()
     cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, inv_label_map, favorite, cm, imgs01, imgs10, imgs02, imgs12, imgs20, imgs21, project_path, train_size, exp_id) \
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", \
         (model_path, USERID, PROJECT_NAME, log_name, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, "%.3f" % test_acc, "%.3f" % test_loss, TIME_F, train_batch_size, NAME, json.dumps(CLASSES), json.dumps(inv_label_map), "0", cm_string, json.dumps(imgs01), json.dumps(imgs10), json.dumps(imgs02), json.dumps(imgs12), json.dumps(imgs20), json.dumps(imgs21), PROJ_DIR, trainSize, expid))
-    mysql.connection.commit()
-    cur.close()
+    
+    # mysql.connection.commit()
+    # cur.close()
+    conn.commit()
+    conn.close()
 
     # email content from logger txt file
     with open(log_name, 'r') as fp:
@@ -330,7 +338,10 @@ def train():
     }
     return jsonify(response)
 
-# predict logic
+#if __name__ == "__main__":
+#            app.run(host="0.0.0.0", port=5000)
+
+# predict endpoint logic
 def get_model():
     global model
     # APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
@@ -348,7 +359,7 @@ def preprocess_image(image, target_size):
     image = np.expand_dims(image, axis=0)
 
     return image
-    
+        
 @app.route("/predict", methods=["POST"]) # post image to endpoint and get prediction
 def predict():
     print(" * Loading model...")
