@@ -8,7 +8,7 @@ let router = express.Router();
 router.get('/', function (req, res, next) {
     if (req.isAuthenticated() && req.user.user_name === 'admin') {
         let user = req.user;
-        db.query('SELECT e.exp_id, e.exp_title, u.username, DATE_FORMAT(ei.created_at,"%Y/%m/%d %T") AS Date, count(ei.exp_images)  as total, ' +
+        db.query('SELECT e.exp_id, e.exp_title, u.username, DATE_FORMAT(p.created_at,"%Y/%m/%d %T") AS Date, count(ei.exp_images)  as total, ' +
             'SUM(case when p.exp_type= "CONTROL" then 1 else 0 end) as control, ' +
             'SUM(case when p.exp_type= "MUTANT" then 1 else 0 end) as mutant, p.model_name ' +
             'from csc899.experiments e, csc899.users u, csc899.experiment_images ei, csc899.prediction_type p ' +
