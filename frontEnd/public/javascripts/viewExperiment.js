@@ -288,14 +288,14 @@ function viewPredictionPage(e) {
   console.log("EXPERIMENT ID________", expID);
   let imageIdArray = Array.from(selectedImageIds);
   var selectedTrainingAlgo = document.getElementById("training_algo").children[document.getElementById("training_algo").value].text;
-  var selectedModel = document.getElementById("model").value;
+  var selectedModel = document.getElementById("model").value.split(',');
   $.ajax({
     type: "POST",
     url: "/prediction/getImagePrediction",
     data: {
       id: JSON.stringify(imageIdArray),
       trainingAlgo: selectedTrainingAlgo,
-      modelName: selectedModel
+      modelName: selectedModel[0]
     },
     success: function (result) {
       console.log("cropped data=======>", result);
@@ -354,7 +354,7 @@ function populate_models_data(trainingalgo_data) {
   $('#training_algo').change(function () {
     var c = $(this).val();
     var selectedAlgo = $(this)[0].children[c].text;
-
+    $('#modelnote').css("display", "block");
     //Get request to get training algorithm
     $.ajax({
       type: "GET",
@@ -362,7 +362,7 @@ function populate_models_data(trainingalgo_data) {
       success: function (result) {
         var s_a = new Array("Select Model");
         for (i = 0; i < result.length; i++) {
-          s_a.push(result[i].model_fullname);
+          s_a.push(result[i].model_fullname + ',' + result[i].favorite);
         }
         $('#model').empty();
         if (c == 0) {
@@ -371,12 +371,30 @@ function populate_models_data(trainingalgo_data) {
             text: 'Select Model',
           }, '</option>'));
         } else {
-          $.each(s_a, function (i, item_model) {
-            $('#model').append($('<option>', {
-              value: item_model,
-              text: item_model,
-            }, '</option>'));
-          });
+
+            $.each(s_a, function (i, item_model) {
+              if(s_a[i] == 'Select Model'){
+                $('#model').append($('<option>', {
+                  value: 'Select Model',
+                  text: 'Select Model'
+                }, '</option>'));
+              }
+              else{
+                var s_split = s_a[i].split(',');
+                if(s_split[1] == 1){
+                  $('#model').append($('<option>', {
+                    value: item_model,
+                    text: '***' + s_split[0]
+                  }, '</option>'));
+                }
+                else{
+                  $('#model').append($('<option>', {
+                    value: item_model,
+                    text: s_split[0]
+                  }, '</option>'));
+                }
+              }
+            });
         }
         $('#model').change(function () {
           $("#prediction").prop("disabled", false);
