@@ -21,7 +21,7 @@ router.get("/:id/:model_id", function (req, res, next) {
     console.log(req.params);
 
     db.query(
-      "SELECT distinct m.user_id, e.exp_id, e.img_dir, e.label FROM experiment_images e, models m  WHERE e.exp_type='T' AND e.exp_id=m.exp_id AND e.user_id = " + user.user_id +
+      "SELECT distinct m.user_id, e.exp_id, e.img_dir, e.label FROM experiment_images e, Models m  WHERE e.exp_type='T' AND e.exp_id=m.exp_id AND e.user_id = " + user.user_id +
       " AND e.exp_id = " +
       id +
       ";",
@@ -29,7 +29,7 @@ router.get("/:id/:model_id", function (req, res, next) {
         console.log("*****MainQuery********", this.sql);
         if (error) throw error;
         db.query(
-          "SELECT user_id,imgs01,imgs10,project_name FROM models WHERE user_id = " + user.user_id +
+          "SELECT user_id,imgs01,imgs10,project_name FROM Models WHERE user_id = " + user.user_id +
           " AND exp_id = " +
           id +
           " AND id = " +
