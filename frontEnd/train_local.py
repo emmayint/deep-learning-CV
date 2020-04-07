@@ -73,9 +73,7 @@ def hello_world():
     return 'this is flask app for csc895'
 
 
-@app.route(
-    "/train", methods=["POST"]
-)  # post req (datasets path, params, model name) to endpoint and get trained model
+@app.route("/train", methods=["POST"])
 def train():
     ## get http request and extract values
     message = request.get_json(force=True)
@@ -346,7 +344,7 @@ def train():
     # save model and info to DB TODO cm, wrong-preds0, wrong-preds1, proj-path?
     cur = mysql.connection.cursor()
     cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, inv_label_map, favorite, cm, imgs01, imgs10, imgs02, imgs12, imgs20, imgs21, project_path, train_size, exp_id) \
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"                                                                                                                        , \
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"                                                                                                                                                                                                                                                , \
         (model_path, USERID, PROJECT_NAME, log_name, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, "%.3f" % test_acc, "%.3f" % test_loss, TIME_F, train_batch_size, NAME, json.dumps(CLASSES), json.dumps(inv_label_map), "0", cm_string, json.dumps(imgs01), json.dumps(imgs10), json.dumps(imgs02), json.dumps(imgs12), json.dumps(imgs20), json.dumps(imgs21), PROJ_DIR, trainSize, expid))
     mysql.connection.commit()
     cur.close()
