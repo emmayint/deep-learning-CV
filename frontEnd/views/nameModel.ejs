@@ -48,12 +48,14 @@
             >
             <%}else{%>
 
-            <label for="modelName">name of your model</label><br />
+            <label for="modelName"
+              >Name your model (must not contain space)</label
+            ><br />
             <%}%>
             <input
               type="text"
               class="form-control"
-              placeholder="name of your model"
+              placeholder="model-name"
               pattern="^\S+$"
               oninvalid="setCustomValidity('Must not contain space')"
               oninput="setCustomValidity('')"
@@ -66,7 +68,7 @@
               class="name-model-submit-button btn btn-block"
               type="submit"
             >
-              submit and train your model
+              Submit and train your model
             </button>
           </form>
         </div>

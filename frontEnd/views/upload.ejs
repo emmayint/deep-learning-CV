@@ -46,7 +46,10 @@
                             <%if(project!=".DS_Store"){%>
                             <form class="form category-item" id="<%= project %>" method="POST" action="/upload/selectProject" enctype="application/x-www-form-urlencoded" >
                                 <button class="category-item-button" type="submit" onclick="onClickHandler()" name="projectName" value=<%= project %> >
-                                    <span class="category-item-text"><%= project %></span>
+                                    <%if(projectName && projectName==project){%><span class="category-item-text"><strong><%= project %></strong></span>
+                                    <%}else{%>
+                                        <span class="category-item-text"><%= project %></span>
+                                    <%}%>
                                 </button>
                             </form> 
                             <%}%>
