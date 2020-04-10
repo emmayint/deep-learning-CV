@@ -46,8 +46,9 @@
             href="/params"
             >what are these hyperparameters?</a
           >
+          <p>If you're training the model for the first time, you can skip to next step</p>
           <p>
-            (training data size = <%= (trainSize*0.75).toFixed(0)%>; validation data size=<%=trainSize-(trainSize*0.75).toFixed(0)%>)
+            <!-- (training data size = <%= (trainSize*0.75).toFixed(0)%>; validation data size=<%=trainSize-(trainSize*0.75).toFixed(0)%>) -->
           </p>
 
           <form
@@ -57,17 +58,18 @@
             action="/params"
           >
             epoch: <input type="number" name="epoch" min="1" max="50" value=
-            <%=epoch%>>
+            <%=epoch%>> ( at least 20 epochs)
             <br />
             <br />
             train_batch_size: <input type="number" name="train_batch_size"
-            min="1" max=<%= (trainSize * 0.75).toFixed(0)%> value= <%= train_batch_size%>>
+            min="1" max=<%= (trainSize * 0.75).toFixed(0)%> value= <%= train_batch_size%>>  (optional)
             <br />
             <br />
             <!-- test_batch_size: <input type="number" name="test_batch_size" min="1"
             max=<%=testSize%> value= <%= test_batch_size%>> -->
             validation_batch_size: <input type="number" name="validation_batch_size" min="1"
-            max=<%=(trainSize * 0.25).toFixed(0)%> value= <%= validation_batch_size%>>
+            max=<%=(trainSize * 0.25).toFixed(0)%> value= <%= validation_batch_size%>>  (optional)
+
             <br />
             <br />
             <button type="button" id="advanced-input-button">

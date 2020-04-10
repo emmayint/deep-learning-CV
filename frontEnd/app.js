@@ -109,6 +109,7 @@ app.use("/prediction", viewPredictionRouter);
 app.use("/prevprediction", prevPredictionRouter);
 app.use("/default", defaultRouter);
 app.use("/testSummaryDetail", testSummaryDetailRouter);
+app.use("/testSummaryDetail", testSummaryDetailRouter);
 app.use("/adminReport", adminReportRouter);
 
 // // Emma's code

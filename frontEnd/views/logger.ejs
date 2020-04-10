@@ -82,7 +82,11 @@
               stroke-width: 2px;
             }
           </style>
-
+          <h6><strong>This model's test accuracy = <%= test_accuracy%> </strong></h6>
+          <p>(Click on a cell in the matrix to view image(s) that are predicted differently from their label, 
+            <% var explink= "http://localhost:5001/testSummaryDetail/" + exp_id%>
+            or <a target="_blank" rel="noopener noreferrer"  href=<%=explink%>>view test data as experiment</a>)
+          </p>
           <!-- <div id="dataView"></div> -->
           <div style="display:block">
             <div style="display:inline-block" id="container"></div>
@@ -90,14 +94,12 @@
 
           </div>
           <div style="display:block">
-            <p>Test accuracy = <%= test_accuracy%> <br>
-            (Click on a cell in the matrix to view image(s) that are predicted differently from their label, 
-            <% var explink= "http://localhost:5001/testSummaryDetail/" + exp_id%>
-            or <a target="_blank" rel="noopener noreferrer"  href=<%=explink%>>view test data as experiment</a>)</p>
-            <p> If you are not satisfied with this model, you can <a target="_blank" rel="noopener noreferrer" href="/selectModel">restart training</a> or
-              <a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= project_name%>"
-                >view all trained models of this project</a>
-            </p>
+            <p><a
+            onclick="window.open('https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/', '_blank', 'top=100 left=300,width=800,height=500');"
+            href=""
+            >(what's confusion matrix?)</a></p>
+            <br>
+            
             <p><strong> Model details:</strong></p>
             <ul>
               <li>selected base model: <%=selected_model%> </li>
@@ -110,34 +112,37 @@
 <br>
         <div style="display:inline-block; float:left" id="linegraph"></div>
           <div style="height: 400px"></div>
-            <p>possible ways to improve your model:</p>
+            <h6>Not happy with your model? You can <a target="_blank" rel="noopener noreferrer" href="/selectModel">restart training</a> or
+              <a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= project_name%>"
+                >compare all trained models of this project</a>. 
+            Here are possible ways to improve your next training:</h6>
 
             <%if(epoch<20){%>
               <p><strong>Hyperparameter Tuning</strong><br>
                 Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
                 <br>If you model's learning curve does not plateau in the graph, try add more epochs to your next training.
-                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">Read more about hyperparameters</a>
-                <br>You may also experiment with the size of your batches, optimizer and learning rate. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
+                <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">(Read more about hyperparameters)</a>
+                <br>You may also experiment with the size of your batches, optimizer and learning rate. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">(Read more about Hyperparameter Optimization)</a></p>
               
-              <p><strong>Add more data</strong><br>
+              <p><strong>Simply add more data</strong><br>
                 Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
-                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">Read more about data tactics</a></p>
+                <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">(Read more about data tactics)</a></p>
                 
               <p><strong>Clean Your Data</strong><br>
                 Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
-                <br><a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">Read more about data quality, scope and quantity</a></p>
+                <a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">(Read more about data quality, scope and quantity)</a></p>
                   
               <p><strong>Select features and examples</strong><br>
               If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
              
             <%}else if(train_size<1000){%>
-              <p><strong>Add more data</strong><br>
+              <p><strong>Simply add more data</strong><br>
               Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
-              <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">Read more about data tactics</a></p>
+               <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">(Read more about data tactics)</a></p>
               
               <p><strong>Clean Your Data</strong><br>
                 Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
-                <br><a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">Read more about data quality, scope and quantity</a></p>
+                <a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">(Read more about data quality, scope and quantity)</a></p>
 
               <p><strong>Select features and examples</strong><br>
               If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
@@ -145,8 +150,8 @@
               <p><strong>Hyperparameter Tuning</strong><br>
               Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
               <br>If you model's learning curve does not plateau, try add more epochs to your next training.
-              <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">Read more about hyperparameters</a>
-              <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
+               <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">(Read more about hyperparameters)</a>
+              <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">(Read more about Hyperparameter Optimization)</a></p>
               
             <%}else{%>
               
@@ -243,7 +248,7 @@
     </script>
     <script>
       // set the dimensions and margins of the graph
-      var margin = { top: 20, right: 20, bottom: 30, left: 50 },
+      var margin = { top: 20, right: 20, bottom: 90, left: 50 },
         width = 750 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
