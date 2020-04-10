@@ -217,16 +217,18 @@
                   (data[i].exp_validate == 0 && !data[i].user_validate) { %>
                   <div class="col-md-4 gap">
                     <div class="card border-0 transform-on-hover">
+                      <% if (uname != 'admin') { %>
                       <a
                         class="lightbox"
                         href="/prediction/view/validate/<%= data[i].exp_id %>"
-                      >
+                      ><% } %>
                         <img
                           src="/uploads/<%= data[i].img %>"
                           alt="Card Image"
                           class="card-img-top scaled"
                         />
                       </a>
+                      
                       <div class="card-body-prevpred">
                         <p class="fileName all-p">
                           <b> <%= data[i].img %> </b>

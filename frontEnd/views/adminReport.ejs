@@ -43,9 +43,9 @@
           <% var create_at = data[i].Date.split('/').join('-') %>
           <tr>
             <td data-sort><%= data[i].Date %></td>
-            <!-- <td><a id="redirectTestPred" href="prevprediction/<%= data[i].exp_id %>/<%= data[i].id %>"
-                onclick="check();" target="_blank" style="color:black;"><%= data[i].exp_title %></a></td> -->
-            <td data-sort><%= data[i].exp_title %></td> 
+            <td><a id="redirectTestPred" href="viewExperiment/<%= data[i].exp_id %>"
+                onclick="check();" target="_blank" style="color:black;"><%= data[i].exp_title %></a></td>
+            <!-- <td data-sort><%= data[i].exp_title %></td>  -->
             <td><%= data[i].model_name %></td>
             <td><%= data[i].username %></td>
             <td><%= data[i].total %></td>

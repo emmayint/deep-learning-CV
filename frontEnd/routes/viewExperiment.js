@@ -44,15 +44,25 @@ router.get("/:id", function(req, res, next) {
     let user = req.user;
     let id = req.params.id;
 
-    db.query(
-      'SELECT DATE_FORMAT(e.exp_birth_date,"%m/%d/%Y") AS exp_date, e.*, ei.* FROM experiments e, experiment_images ei' +
-        ' WHERE e.users_id = ' +
-        user.user_id +
-        ' AND e.exp_id= ' +
-        id +
-        ' AND ei.exp_id= ' +
-        id +
-        ' ;',
+    var admin_query = 'SELECT DATE_FORMAT(e.exp_birth_date,"%m/%d/%Y") AS exp_date, e.*, ei.* FROM experiments e, experiment_images ei' +
+    ' WHERE e.exp_id= ' +
+    id +
+    ' AND ei.exp_id= ' +
+    id +
+    ' ;'
+
+    var user_query = 'SELECT DATE_FORMAT(e.exp_birth_date,"%m/%d/%Y") AS exp_date, e.*, ei.* FROM experiments e, experiment_images ei' +
+    ' WHERE e.users_id = ' +
+    user.user_id +
+    ' AND e.exp_id= ' +
+    id +
+    ' AND ei.exp_id= ' +
+    id +
+    ' ;'
+
+    // user.user_name != 'admin'? user_query : admin_query;
+
+    db.query(user.user_name != 'admin'? user_query : admin_query,
       function(error, results, fields) {
         console.log(this.sql);
         if (error) throw error;
