@@ -33,24 +33,23 @@
 
     <div class="container">
         <!-- 1st row buttons -->
-        <% if (uname != 'admin') { %>
         <div class="heading" style="margin-top: 8%;">
             <h2>
                 Choose Training Algorithm and model to start making predictions
             </h2>
             <hr class="mt-2 mb-3" />
         </div>
-        <p id="modelnote" style="text-align: left; margin-top: -3%;display: none;"> *** represents user's favorite model
-        </p>
+        <p id="modelnote" style="text-align: left; margin-top: -3%;display: none;"> *** represents user's favorite model</p>
         <div class="row" style="margin-top: -9%; margin-left: 1%;">
             <select name="training_algo" id="training_algo" style="margin-top: 8%;margin-bottom: 3%;"></select>
             <select name="model" id="model" class="selectpicker"
-                style="margin-top: 8%; margin-bottom: 3%; margin-left: 2%;">
+            style="margin-top: 8%; margin-bottom: 3%; margin-left: 2%;">
             </select>
             <button class="btn btn-primary btnStyle" id="prediction" type="button" style="
             margin-top: 8%;
             margin-bottom: 3%;
-            margin-left:2%" disabled>
+            margin-left:2%"
+            disabled>
                 Predict
             </button>
         </div>
@@ -78,41 +77,22 @@
                             Images</a></li>
                     <li><a class="dropdown-item clearfix del_img_view" data-target="#deleteImageModal"
                             data-toggle="modal">Delete Images</a></li>
-                    <li><a id="btnEnableCrop" class="dropdown-item clearfix">Enable Selected Crop</a></li>
-                    <li><a id="btnDisableCrop" class="dropdown-item clearfix">Disable Selected Crop</a></li>
+                    <li><a id="btnEnableCrop" class="dropdown-item clearfix" >Enable Selected Crop</a></li>
+                    <li><a id="btnDisableCrop" class="dropdown-item clearfix" >Disable Selected Crop</a></li>
                 </ul>
             </div>
         </div>
 
-        <% } else{%>
-        <div class="heading" style="margin-top: 11%;margin-bottom: -8%;">
-            <h2>
-                Experiment: <%= data[0].exp_title %>
-            </h2>
-            <hr class="mt-2 mb-1" />
-        </div>
-        <% } %>
         <!-- Display images -->
         <div class="row viewexp-topmargin">
 
             <!-- Fetch images from the database -->
             <% for (let i = 0; i < data.length; i++) { %>
-            <% if (uname == 'admin') { %>
-            <div class="col-md-3" style="margin: 70px 0 10px 0;">
-                <div class="img-thumbnail">
-                    <div class="fileName">
-                        <p>Name: <b> <%= data[i].exp_images%></b></p>
-                        <img alt="null"
-                                src="/uploads/<%= data[i].exp_images %>" style="width: 100%;">
-                    </div>
-                </div>
-            </div>
-            <% } else { %>
+
             <!-- If images are already cropped, highlight the cropped portion -->
             <% if (data[i].rect) { %>
 
             <div class="col-md-3" style="margin: 30px 0 10px 0;">
-
 
                 <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>" />
                 <p style="float:right">
@@ -123,9 +103,17 @@
                     </label>
                     <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
                         type='button' value='Crop' />
-
                 </p><br><br>
                 <div class="img-thumbnail">
+                    <!-- <p style="float:right">
+                        <label class="switch">
+                            <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                                id="cbToggle<%= data[i].id %>" />
+                            <span class="slider round"></span>
+                        </label>
+                        <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                            type='button' value='Crop' />
+                    </p> -->
                     <div class="fileName">
                         <p>Name: <b> <%= data[i].exp_images%></b></p>
                     </div>
@@ -146,10 +134,10 @@
                     </div>
                 </div>
             </div>
+
             <% } else { %>
 
             <div class="col-md-3" style="margin: 30px 0 10px 0;">
-                <% if (uname != 'admin') { %>
                 <input class="checkboxImageTop" type="checkbox" name="cbIt<%= data[i].id %>" id="<%= data[i].id %>" />
                 <p style="float:right">
                     <label class="switch">
@@ -159,9 +147,17 @@
                     </label>
                     <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
                         type='button' value='Crop' />
-                    <% } %>
                 </p><br><br>
                 <div class="img-thumbnail">
+                    <!-- <p style="float:right">
+                        <label class="switch">
+                            <input class="checkBoxToggleCrop" type="checkbox" value="<%= data[i].id %>" name="crop"
+                                id="cbToggle<%= data[i].id %>" />
+                            <span class="slider round"></span>
+                        </label>
+                        <input class="btn btn-primary cropBtn promtSubmit" id='btnCrop<%= data[i].id %>' name="crop"
+                            type='button' value='Crop' />
+                    </p> -->
                     <div class="fileName">
                         <p>Name: <b> <%= data[i].exp_images%></b></p>
                     </div>
@@ -170,7 +166,6 @@
                 </div>
             </div>
 
-            <% } %>
             <% } %>
             <% } %>
         </div>
@@ -248,7 +243,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-
+                        
                         <table>
                             <tr>
                                 <th>Title:&nbsp;</th>
@@ -262,8 +257,8 @@
                             var new_misc = JSON.parse(misc_data);
                             for (var key in new_misc) { %>
                             <tr>
-                                <th><%= key %>:&nbsp;</th>
-                                <td><%= new_misc[key] %></td>
+                                    <th><%= key %>:&nbsp;</th>
+                                    <td><%= new_misc[key] %></td>
                             </tr>
                             <% } %>
                         </table>
@@ -307,10 +302,10 @@
     </div>
     <% } %>
     <!-- <% include partials/footer %> -->
-
     <script src="/javascripts/viewExperiment.js"></script>
     <script src="/javascripts/croppr.js"></script>
     <script src="/javascripts/cropper.js"></script>
+
     <script>
         // $('#model').selectpicker();
 
