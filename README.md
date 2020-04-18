@@ -3,7 +3,7 @@
 ## Steps to install and run the prediciton Module
 git clone the prediction module branch:
 
-`git clone -b predictionMoudle https://github.com/sushilkplassar/csc899_masterProject.git`
+`git clone https://github.com/sushilkplassar/csc899_masterProject.git`
 
 ### Step 1 - Set up Database
 - Create a new database under mySQL workbench. 
