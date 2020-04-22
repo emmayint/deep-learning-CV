@@ -22,7 +22,7 @@
     <br /><br /><br />
     <% include partials/train_header %>
     <div class="container">
-      <div class="content-container">
+      <div>
         <!-- progress bar -->
 
         <h1 class="step-title">
@@ -76,6 +76,7 @@
                 <!-- <th>timestamp</th> -->
                 <!-- <th>classes</th> -->
                 <th><a href="http://localhost:5001/viewMoodels?projectName=<%= json[0].project_name %>&sortby=date">date</a></th>
+                <th>notes</th>
                 <th>actions</th>
               </tr>
               <% for(var i=0; i < json.length; i++) { %>
@@ -98,6 +99,7 @@
                 <td><%= json[i].learning_rate %></td>
                 <!-- <td><%= JSON.parse(json[i].classes)[0] %>, <%= JSON.parse(json[i].classes)[1] %></td> -->
                 <td><%= json[i].timestamp.split("-", 1); %></td>
+                <td><%= json[i].note %></td>
                 <td><button>rename</button> <button>delete</button></td>
               </tr>
               <% } %>

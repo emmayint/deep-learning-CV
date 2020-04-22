@@ -37,12 +37,15 @@
             <h1 class="step-title">1. Choose a model type </h1>
             <div class="step-container">
                 <h4 class="step-directions">Select a model type below.</h4>
-                <a onclick="window.open('https://neurohive.io/en/popular-networks/vgg16/', '_blank', 'top=100 left=300,width=800,height=500');"href="/selectModel">Read more about model types</a>
-                <%if (selectedModel!=""){%><p>You selected model: <%= selectedModel%></p><%}%>
+                <a onclick="window.open('https://neurohive.io/en/popular-networks/vgg16/', '_blank', 'top=100 left=300,width=800,height=500');"href="/selectModel">Read more about model types <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+                    ></a>
+                <!-- <%selectedModel="VGG16"%> -->
+                <!-- <%if (selectedModel!=""){%><p>You selected model: <%= selectedModel%></p><%}%> -->
                 <div class="model-type-button-form">
                     <form  method="POST" action="/selectModel" >
                         <div class="model-type-button-container">
                             <!-- <label for="VGG16">VGG16</label><br> -->
+            
                             <%if(selectedModel==="VGG16"){%> 
                                 <button id="vgg16-button" class="model-type-button model-type-button-selected" type="submit" name="selectedModel" value="VGG16">
                             <%}else{%> 
@@ -52,21 +55,22 @@
                                     VGG16
                                 </p>
                                 <p class="model-type-button-description">
-                                    Deep Convolutional Networks for Large-Scale Image Recognition
+                                    An image classification model proposed by the University of Oxford with outstanding performance
                                 </p>
                             </button>
                             <br>
                             <!-- <label for="CNN">CNN</label><br> -->
-                            <%if(selectedModel==="other-CNN"){%> 
+                            <!-- <%if(selectedModel==="other-CNN"){%> 
                                 <button id="other-cnn-button" class="model-type-button model-type-button-selected" type="submit" name="selectedModel" value="other-CNN">
                             <%}else{%> 
                                 <button id="other-cnn-button" class="model-type-button" type="submit" name="selectedModel" value="other-CNN">
-                            <%}%>
-                                <p class="model-type-button-name">
-                                    other CNN
+                            <%}%> -->
+                            <button id="other-cnn-button" >
+                                <p class="other-cnn-model-type-button-name">
+                                    Other Models
                                 </p>
-                                <p class="model-type-button-description">
-                                    multi-layer neural networks to recognize visual patterns directly from pixel images with minimal preprocessing
+                                <p class="other-cnn-model-type-button-description">
+                                    (coming soon)
                                 </p>
                             </button>
                         </div>
@@ -93,25 +97,7 @@
                 <%}%>
             </div>
         </div>
-        <script>
-            // document.getElementById("vgg16-button").addEventListener("click", function(event){
-            //     event.preventDefault();
-            //     //form submission logic for vgg16 goes here
-            //     // alert("checkpoint1");
 
-            //     //redirect to next page
-            //     window.location.href = "/upload";
-            // });
-
-            // document.getElementById("other-cnn-button").addEventListener("click", function(event){
-            //     event.preventDefault();
-            //     //form submission logic for other-cnn button goes here
-            //     alert("checkpoint2");
-
-            //     //redirect to next page
-            //     window.location.href = "/upload";
-            // });
-        </script>
         <% include partials/footer %>
     </body>
 </html>

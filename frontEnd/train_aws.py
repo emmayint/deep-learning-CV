@@ -1,4 +1,3 @@
-
 import os
 # os.environ["KERAS_BACKEND"] = "theano"
 import base64
@@ -36,7 +35,6 @@ from tensorflow.keras.callbacks import CSVLogger
 # from keras.layers.normalization import BatchNormalization
 # from sklearn.metrics import confusion_matrix
 
-
 from mlxtend.evaluate import confusion_matrix
 import itertools
 import matplotlib.pyplot as plt
@@ -63,7 +61,6 @@ import pymysql
 
 app = Flask(__name__)
 
-
 mysql = MySQL(app)
 
 mail_settings = {
@@ -84,8 +81,11 @@ def hello_world():
     return 'this is flask app for csc895'
 
 
-@app.route("/train", methods=["POST"])
+@app.route(
+    "/train", methods=["POST"]
+)  # post req (datasets path, params, model name) to endpoint and get trained model
 def train():
+    # return '/tain this is flask app for csc895'
     ## get http request and extract values
     message = request.get_json(force=True)
     SELECTED_MODEL = message['selectedModel']
@@ -104,7 +104,7 @@ def train():
 
     # expid=0;
     exptitle = PROJECT_NAME + "-testData"
-    # cur = mysql.connection.cursor()
+    # use environment variable
     conn = pymysql.connect(
         host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com',
         port=3306,
@@ -112,8 +112,11 @@ def train():
         passwd='admin123',
         db='csc899')
     cur = conn.cursor()
+    cur.execute("SELECT * FROM users")
+    print(cur.description)
+    # cur = mysql.connection.cursor()
     cur.execute("SELECT exp_id FROM experiments WHERE exp_title = '%s'" %
-                exptitle)
+                str(exptitle))
     expid = cur.fetchall()
     print("expid", expid)
 
@@ -222,8 +225,8 @@ def train():
     # model.fit_generator(train_batches, steps_per_epoch=18,
     #                     validation_data=valid_batches, validation_steps=10, epochs=15, verbose=2)
     # ## split train and valid
-    # model.fit_generator(
     model.fit_generator(
+        # model.fit(
         train_batches,
         steps_per_epoch=train_batches.samples // train_batch_size,
         validation_data=valid_batches,
@@ -261,7 +264,7 @@ def train():
     print("Computing confusion matrix...")
     test_batches.reset()
     test_imgs, test_labels = next(test_batches)
-    predictions = model.predict_generator(test_batches, steps=1)
+    predictions = model.predict_generator(test_batches, steps=1, verbose=0)
     # print(test_labels)
     # print(predictions)
     cm = confusion_matrix(test_labels.argmax(axis=1),
@@ -287,7 +290,7 @@ def train():
         axis=1))  # [0,0,...,1,1,...] or [0,0,...,1,1,..,2...]
     # test_labels = test_labels[:,0]
     # print("true test_labels: ",test_labels)
-    predictions = model.predict_generator(test_batches, steps=1)
+    predictions = model.predict_generator(test_batches, steps=1, verbose=0)
     print("predictions labels: ", predictions.argmax(axis=1))
     # predictions = np.round(predictions[:,0])
     # print("predictions labels: ",predictions)
@@ -365,12 +368,14 @@ def train():
     # cur = mysql.connection.cursor()
     cur = conn.cursor()
     cur.execute("INSERT INTO Models(model_path, user_id, project_name, log_path, epoch, selected_model, optimizer, learning_rate, test_accuracy, test_loss, timestamp, train_batch_size, model_fullname, classes, inv_label_map, favorite, cm, imgs01, imgs10, imgs02, imgs12, imgs20, imgs21, project_path, train_size, exp_id) \
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                , \
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                , \
         (model_path, USERID, PROJECT_NAME, log_name, EPOCH, SELECTED_MODEL, OPTIMIZER, LEARNING_RATE, "%.3f" % test_acc, "%.3f" % test_loss, TIME_F, train_batch_size, NAME, json.dumps(CLASSES), json.dumps(inv_label_map), "0", cm_string, json.dumps(imgs01), json.dumps(imgs10), json.dumps(imgs02), json.dumps(imgs12), json.dumps(imgs20), json.dumps(imgs21), PROJ_DIR, trainSize, expid))
+
     # mysql.connection.commit()
     # cur.close()
     conn.commit()
     conn.close()
+
     # email content from logger txt file
     with open(log_name, 'r') as fp:
         line = fp.readline()
@@ -379,7 +384,7 @@ def train():
             content = content + line + '<br>'
             line = fp.readline()
     # url for viewing log and confusion matrix. req.query: path, cm [], classes[].
-    htmlcontent = "<a href=\"http://localhost:5001/logger?modelName=" + NAME + "\">Click here to view details about this model</a>"
+    htmlcontent = "<a href=\"http://54.153.74.146:5001/logger?modelName=" + NAME + "\">Click here to view details about this model</a>"
     # send email
     with app.app_context():
         msg = Message(
@@ -397,7 +402,11 @@ def train():
     return jsonify(response)
 
 
-# predict logic
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+
+# predict endpoint logic
 def get_model():
     global model
     # APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top

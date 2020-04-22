@@ -8,6 +8,7 @@ router.get("/", function(req, res) {
     let user = req.user;
     userid = user.user_id;
     res.cookie("userid", userid);
+    res.cookie("selectedModel", "VGG16");
     // res.cookie("selectedModel", "");
     if (!fs.existsSync("./public/allProjects/" + userid)) {
       fs.mkdirSync("./public/allProjects/" + userid, {
@@ -26,13 +27,10 @@ router.get("/", function(req, res) {
 
 router.post("/", function(req, res) {
   let user = req.user;
-  // var selectedModel = "";
-  res.cookie("selectedModel", req.body.selectedModel);
-  // selectedModel = req.body.selectedModel;
-  // module.exports.selectedModel = selectedModel;
+  res.cookie("selectedModel", "VGG16");
+  // res.cookie("selectedModel", req.body.selectedModel);
   res.render("selectModel", {
-    // selectedModel: selectedModel,
-    selectedModel: req.body.selectedModel,
+    selectedModel: "VGG16",
     uname: user.user_name
   });
 });

@@ -1,55 +1,9 @@
+pathlib
 Flask
 numpy
 Pillow
 matplotlib
 tensorflow
-keras
-theano
-pymysql
-flask-mysql
-mysql
-mysqlclient
-flask_mysqldb
 Flask-Mail
 mlxtend
-# imagenet_utils
-
-# pip install Flask
-# sudo pip3 install numpy
-# sudo pip3 install Pillow
-# sudo pip3 install matplotlib
-sudo pip3 install tensorflow
-# sudo pip3 install keras
-# sudo pip3 install theano
-# sudo pip3 install flask-mysql
-(install brew)
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-brew install mysql
-pip3 install mysqlclient
-pip3 install flask_mysqldb
-# pip3 install Flask-Mail
-# pip3 install mlxtend
-
-# cant install
-# pip3 install imagenet_utils
-
-error "cannot find crt1.o No such file or directory"
-    $ find /usr/ -name crti*
-        /usr/lib64/crti.o
-        then add this path to LIBRARY_PATH variable
-    $ export LIBRARY_PATH=/usr/lib64:$LIBRARY_PATH
-
-OSError: Unable to create file (unable to open file: name = ‘/newvolume/backEnd_ML_API/model/newvolumetest.h5’, errno = 13, error message = ‘Permission denied’, flags = 13, o_flags = 242)
-    $ chmod 777 ....
-
-
- deployment # model.save(model_path) 
-
-# new db connection
-import pymysql
-# cur = mysql.connection.cursor() # old package does not work on aws
-conn = pymysql.connect(host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com', port=3306, user='admin', passwd='admin123', db='csc899')
-cur = conn.cursor()
-cur.execute("SELECT * FROM users")
-print(cur.description)
- 
+pymysql

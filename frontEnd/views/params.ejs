@@ -36,19 +36,20 @@
             <span class="step-text">Name+train</span>
           </div>
         </div>
-        <h1 class="step-title">3. Customize model inputs (optional)</h1>
+        <h1 class="step-title">3. Customize model inputs <span style="color: red;">(Optional)</span></h1>
         <div class="step-container params-content">
           <h4 class="step-directions">
-            Set model inputs below (optional)
+            Set model inputs below 
           </h4>
           <a
             onclick="window.open('https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9', '_blank', 'top=100 left=300,width=800,height=500');"
             href="/params"
-            >what are these hyperparameters?</a
+            >What are these hyperparameters? <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+              ></a
           >
-          <p>If you're training the model for the first time, you can skip to next step</p>
+          <p><strong>If you're training the model for the first time, you can skip to next step.</strong></p>
           <p>
-            <!-- (training data size = <%= (trainSize*0.75).toFixed(0)%>; validation data size=<%=trainSize-(trainSize*0.75).toFixed(0)%>) -->
+            <!-- (training data size = <%= (trainSize*0.75).toFixed(0)%>; validation data size=<%=trainSize-(trainSize*0.25).toFixed(0)%>) -->
           </p>
 
           <form
@@ -58,17 +59,17 @@
             action="/params"
           >
             epoch: <input type="number" name="epoch" min="1" max="50" value=
-            <%=epoch%>> ( at least 20 epochs)
+            <%=epoch%>> (commonly 20 to 50 epochs)
             <br />
             <br />
             train_batch_size: <input type="number" name="train_batch_size"
-            min="1" max=<%= (trainSize * 0.75).toFixed(0)%> value= <%= train_batch_size%>>  (optional)
+            min="1" max=<%= (trainSize * 0.75).toFixed(0)%> value= <%= train_batch_size%>> <span>(between <%=train_batch_size%> and <%=(trainSize*0.75).toFixed(0)%>)</span> 
             <br />
             <br />
             <!-- test_batch_size: <input type="number" name="test_batch_size" min="1"
             max=<%=testSize%> value= <%= test_batch_size%>> -->
             validation_batch_size: <input type="number" name="validation_batch_size" min="1"
-            max=<%=(trainSize * 0.25).toFixed(0)%> value= <%= validation_batch_size%>>  (optional)
+            max=<%=(trainSize * 0.25).toFixed(0)%> value= <%= validation_batch_size%>> (between <%=validation_batch_size%> and <%=trainSize-(trainSize*0.75).toFixed(0)%>)
 
             <br />
             <br />

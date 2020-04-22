@@ -138,12 +138,12 @@ Models, CREATE TABLE `Models` (
   `imgs20` varchar(1000) DEFAULT NULL,
   `imgs21` varchar(1000) DEFAULT NULL,
   `favorite` tinyint(1) DEFAULT NULL,
-  `exp_id` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  `exp_title` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `model_fullname_UNIQUE` (`model_fullname`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-
-CREATE TABLE `experiment_images` (
+experiment_images, CREATE TABLE `experiment_images` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `exp_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -153,23 +153,27 @@ CREATE TABLE `experiment_images` (
   `rect` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `channel` varchar(255) DEFAULT '',
   `label` varchar(45) DEFAULT NULL,
-  `type` varchar(4) DEFAULT NULL,
+  `exp_type` varchar(4) DEFAULT NULL,
   `img_dir` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `exp_images_UNIQUE` (`exp_images`),
   KEY `exp_id` (`exp_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `experiment_images_ibfk_1` FOREIGN KEY (`exp_id`) REFERENCES `experiments` (`exp_id`),
   CONSTRAINT `experiment_images_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `experiments` (`users_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8
 
-CREATE TABLE `experiments` (
+
+experiments, CREATE TABLE `experiments` (
   `exp_id` int(11) NOT NULL AUTO_INCREMENT,
   `users_id` int(11) NOT NULL,
   `exp_title` varchar(40) NOT NULL DEFAULT '',
   `exp_birth_date` date NOT NULL,
   `exp_misc_data` json DEFAULT NULL,
-  `type` varchar(4) DEFAULT NULL,
+  `exp_type` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`exp_id`),
+  UNIQUE KEY `exp_title_UNIQUE` (`exp_title`),
   KEY `users_id` (`users_id`),
   CONSTRAINT `experiments_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8
+

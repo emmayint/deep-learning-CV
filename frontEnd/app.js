@@ -44,6 +44,7 @@ const viewMoodelsRouter = require("./routes/viewMoodels");
 // const testFlaskRouter = require("./routes/testFlask").router;
 const whatstrainingRouter = require("./routes/whatstraining").router;
 const whatspredictionRouter = require("./routes/whatsprediction").router;
+const modelRouter = require("./routes/model");
 
 const app = express();
 
@@ -65,7 +66,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 // Allow access control, i.e., avoid CORS error
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.header(
@@ -79,7 +80,7 @@ let options = {
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
 };
 
 let sessionStore = new MySQLStore(options);
@@ -89,7 +90,7 @@ app.use(
     secret: "refdfssadadsa",
     resave: false,
     store: sessionStore,
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 );
 
@@ -122,6 +123,7 @@ app.use("/cmcell", cmcellRouter);
 app.use("/viewMoodels", viewMoodelsRouter);
 app.use("/whatstraining", whatstrainingRouter);
 app.use("/whatsprediction", whatspredictionRouter);
+app.use("/model", modelRouter);
 
 // app.use("/predict", predictRouter);
 // app.use("/testFlask", testFlaskRouter);
@@ -133,12 +135,12 @@ app.get("/", (req, res) => {
 });
 
 // Catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // Error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};

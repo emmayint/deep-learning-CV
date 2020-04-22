@@ -173,6 +173,28 @@
                 <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
                 
               <%}%>
+              <%
+              var action = "/model/note?modelName="+ modelName;
+              %>
+              <%=action%>
+              <form method="POST" action= <%=action%>>
+                <label for="note"
+                >Leave a note for this model here</label><br />  
+                <textarea name="note" rows="4" cols="70"></textarea>
+                <button
+                  id="notebutton"
+                  type="submit"
+                  class="next-button">
+                  Submit note
+                </button>
+                <script>
+                  document.getElementById('notebutton').addEventListener('click', function (e) {
+                      // e.preventDefault();
+                      alert("note added to this model");
+                  });
+              </script>
+              </form>
+              
             
           <!-- <img src="/allProjects/43/frog_embryo/testData/control/2139289.jpg" /> -->
           <!-- <p>-view full log</p>
@@ -193,6 +215,10 @@
         <button class="nav-button next-button">
           Mark as favorite
         </button>
+        <button class="nav-button next-button">
+          Mark as private
+        </button>
+        
 
     </div>
     <!-- <br>
