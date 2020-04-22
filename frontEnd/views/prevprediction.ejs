@@ -1,490 +1,415 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Previous Predictions</title>
-    <% include partials/head %>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="/stylesheets/croppr.css" />
-    <link rel="stylesheet" href="/stylesheets/cropper.css" />
-    <link rel="stylesheet" href="/stylesheets/prevprediction.css" />
-    <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
-    <link
-      rel="stylesheet"
-      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
-    />
-  </head>
 
-  <body>
-    <div id="loadingPredict" style="display: none"></div>
+<head>
+  <title>Previous Predictions</title>
+  <% include partials/head %>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/croppr.css" />
+  <link rel="stylesheet" href="/stylesheets/cropper.css" />
+  <link rel="stylesheet" href="/stylesheets/prevprediction.css" />
+  <link rel="stylesheet" href="/stylesheets/cards-gallery.css" />
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+</head>
 
-    <!-- Navigation Bar -->
-    <% include partials/viewexp-header %>
-    <div class="container">
-      <div class="row div">
-        <!-- Tabbed Interface -->
-        <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a
-              class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'YES' ? 'active' : '') : 'active' %>"
-              id="profile-tab"
-              data-toggle="tab"
-              href="#profile"
-              role="tab"
-              aria-controls="profile"
-              aria-selected="false"
-              onclick="showSearch()"
-              >Validated Predictions</a
-            >
-          </li>
+<body>
+  <div id="loadingPredict" style="display: none"></div>
 
-          <li class="nav-item">
-            <a
-              class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active' : ''): '' %>"
-              id="home-tab"
-              data-toggle="tab"
-              href="#home"
-              role="tab"
-              aria-controls="home"
-              aria-selected="true"
-              onclick="hideSearch()"
-              >Predictions to be validated</a
-            >
-          </li>
-          <!-- <li>
+  <!-- Navigation Bar -->
+  <% include partials/viewexp-header %>
+  <div class="container">
+    <div class="row div">
+      <!-- Tabbed Interface -->
+      <ul class="nav nav-tabs md-tabs tab" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'YES' ? 'active' : '') : 'active' %>"
+            id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"
+            onclick="showSearch()">Validated Predictions</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link tab-a <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active' : ''): '' %>"
+            id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"
+            onclick="hideSearch()">Predictions to be validated</a>
+        </li>
+        <!-- <li>
                     <a aria-pressed="true" data-toggle="tooltip" data-placement="bottom"
                         title="Go Back to View Experiments" class="custombtn btn-primary btn-lg"
                         href="/viewExperiment/<%= id %>" role="button" style="
                 margin-left: 76px;">
                         <i class="fas fa-angle-double-left"></i></a>
                 </li> -->
-        </ul>
-      </div>
-      <div class="rowmargintop">
-        <div class="row">
-          <input
-            type="search"
-            id="container-search"
-            value=""
-            class="form-control"
-            placeholder="Enter a keyword to search"
-            onkeyup="searchPrevExpFunc()"
-          />
-          <div class="pull-right">
-            <button
-              class="btn btn-dark btn-xs btn-filter"
-              onclick="showFilters()"
-            >
-              <i class="fas fa-search"></i> Advanced Search
-            </button>
-          </div>
-        </div>
-        <div class="col-sm-9 filters">
-          <div class="row filter-text">Filter Results By:</div>
-          <div class="row date-filter">
-            <div class="form-group">
-              Date:
-              <input
-                type="date"
-                id="txtDate"
-                class="date"
-                onchange="filterByDateFunc()"
-              />
-            </div>
-
-            <div class="form-group">
-              Month & Year:
-              <input
-                type="text"
-                name="date"
-                id="startDate"
-                class="date-picker"
-                onchange="filterByMonthFunc()"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                class="btn btn-primary btn-sm"
-                type="reset"
-                value="Reset"
-                onClick="window.location.reload()"
-              />
-            </div>
-          </div>
+      </ul>
+    </div>
+    <div class="rowmargintop">
+      <div class="row">
+        <input type="search" id="container-search" value="" class="form-control" placeholder="Enter a keyword to search"
+          onkeyup="searchPrevExpFunc()" />
+        <div class="pull-right">
+          <button class="btn btn-dark btn-xs btn-filter" onclick="showFilters()">
+            <i class="fas fa-search"></i> Advanced Search
+          </button>
         </div>
       </div>
-      <p class="count-rst" id="count-result"></p>
-      <div class="tab-content" id="myTabContent">
-        <!-- Validated Predictions Content -->
-        <div
-          class="tab-pane fade <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'YES' ? 'active show' : '') : 'show active' %>"
-          id="profile"
-          role="tabpanel"
-          aria-labelledby="profile-tab"
-        >
-          <div class="row rowmargin">
-            <p class="show-msg" id="show-message">No result found</p>
-            <% var j = -1; %> <% for (var i = 0; i < data.length; i++) { %> <%
-            if (data[i].exp_validate == 1 && data[i].user_validate) { %> <% j +=
-            1; %>
-            <div class="col-md-4 gap" id="filter-div-<%= j %>">
-              <div class="img-responsive img-thumbnail">
-                <a href="#" class="pop">
-                  <img class="scaled image" src="/uploads/<%= data[i].img %>" />
-                </a>
-                <div class="middle">
-                  <% if (data[i].user_validate == "No") { %>
-                  <div class="text-cross">
-                    <i class="fa fa-times fa-2x"></i><br />Wrong Prediction
-                  </div>
-                  <% } else { %>
-                  <div class="text-check">
-                    <i class="fa fa-check fa-2x"></i><br />Correct Prediction
-                  </div>
-                  <% } %>
-                </div>
-                <p class="fileName all-p"><b> <%= data[i].img %> </b></p>
-                <% if (data[i].user_validate == "No" && data[i].exp_type ==
-                "CONTROL") { %>
-                <p class="actualtop all-p log-font">
-                  Actual : <b class="case"> MUTANT</b>
-                </p>
-                <% } else if (data[i].user_validate == "No" && data[i].exp_type
-                == "MUTANT") { %>
-                <p class="actualtop all-p log-font">
-                  Actual : <b class="case"> CONTROL</b>
-                </p>
-                <% } else { %>
-                <p class=" actualtop all-p log-font">
-                  Actual : <b class="case"> <%= data[i].exp_type %></b>
-                </p>
-                <% } %>
-                <p class="all-p log-font">
-                  Predicted : <b class="case"> <%= data[i].exp_type %></b>
-                </p>
-                <p class="all-p log-font">
-                  Training Algorithm : <b class="case"> VGG-16</b>
-                </p>
-                <p class="all-p log-font">
-                  Probabilities : <b> <%= data[i].pred_percentage %> </b>
-                </p>
-
-                <p class="all-p log-font" id="search-container-<%= j %>">
-                  Prediction On : <b> <%= data[i].create_at %> </b>
-                </p>
-
-                <div
-                  class="modal fade"
-                  id="imagemodal"
-                  tabindex="-1"
-                  role="dialog"
-                  aria-labelledby="myModalLabel"
-                  aria-hidden="true"
-                >
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-body">
-                        <button
-                          type="button"
-                          class="close"
-                          data-dismiss="modal"
-                        >
-                          <span aria-hidden="true">&times;</span
-                          ><span class="sr-only">Close</span></button
-                        ><br />
-                        <p class="modalFileName all-p"></p>
-                        <img src="" class="imagepreview" style="width: 100%;" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <% } %> <% } %>
+      <div class="col-sm-9 filters">
+        <div class="row filter-text">Filter Results By:</div>
+        <div class="row date-filter">
+          <div class="form-group">
+            Date:
+            <input type="date" id="txtDate" class="date" onchange="filterByDateFunc()" />
           </div>
-        </div>
-        <div
-          class="tab-pane fade <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active show' : '') : '' %>"
-          id="home"
-          role="tabpanel"
-          aria-labelledby="home-tab"
-        >
-          <!-- Predictions to be Validated Content -->
-          <div class="row rowmargin">
-            <section class="gallery-block cards-gallery">
-              <div class="container">
-                <div class="row">
-                  <% for (var i = 0; i < data.length; i++) { %> <% if
-                  (data[i].exp_validate == 0 && !data[i].user_validate) { %>
-                  <div class="col-md-4 gap">
-                    <div class="card border-0 transform-on-hover">
-                      <a
-                        class="lightbox"
-                        href="/prediction/view/validate/<%= data[i].exp_id %>"
-                      >
-                        <img
-                          src="/uploads/<%= data[i].img %>"
-                          alt="Card Image"
-                          class="card-img-top scaled"
-                        />
-                      </a>
-                      <div class="card-body-prevpred">
-                        <p class="fileName all-p">
-                          <b> <%= data[i].img %> </b>
-                        </p>
-                        <a href="#" class="all-p log-font"
-                          >Predicted : <b><%= data[i].exp_type %></b></a
-                        >
-                        <p class="all-p log-font">
-                          Training Algorithm : <b class="case"> VGG-16</b>
-                        </p>
-                        <p class="all-p log-font">
-                          Probabilities :
-                          <b> <%= data[i].pred_percentage %> </b>
-                        </p>
-                        <p class="all-p log-font">
-                          Prediction On : <b> <%= data[i].create_at %></b>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <% } %> <% } %>
-                </div>
-              </div>
-            </section>
+
+          <div class="form-group">
+            Month & Year:
+            <input type="text" name="date" id="startDate" class="date-picker" onchange="filterByMonthFunc()" />
+          </div>
+          <div class="form-group">
+            <input class="btn btn-primary btn-sm" type="reset" value="Reset" onClick="window.location.reload()" />
           </div>
         </div>
       </div>
     </div>
-    <!-- <% include partials/footer %> -->
-    <!-- <script src="/javascripts/viewexperiment.js"></script> -->
-    <!-- <script src="/javascripts/prevprediction.js"></script> -->
-    <script src="/javascripts/croppr.js"></script>
-    <script src="/javascripts/cropper.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-      });
+    <p class="count-rst" id="count-result"></p>
+    <div class="tab-content" id="myTabContent">
+      <!-- Validated Predictions Content -->
+      <div
+        class="tab-pane fade <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'YES' ? 'active show' : '') : 'show active' %>"
+        id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="row rowmargin">
+          <p class="show-msg" id="show-message">No result found</p>
+          <% var j = -1; %> <% for (var i = 0; i < data.length; i++) { %> <%
+            if (data[i].exp_validate == 1 && data[i].user_validate) { %> <% j +=
+            1; %>
+          <div class="col-md-4 gap" id="filter-div-<%= j %>">
+            <div class="img-responsive img-thumbnail">
+              <a href="#" class="pop">
+                <img class="scaled image" src="/uploads/<%= data[i].img %>" />
+              </a>
+              <div class="middle">
+                <% if (data[i].user_validate == "No") { %>
+                <div class="text-cross">
+                  <i class="fa fa-times fa-2x"></i><br />Wrong Prediction
+                </div>
+                <% } else { %>
+                <div class="text-check">
+                  <i class="fa fa-check fa-2x"></i><br />Correct Prediction
+                </div>
+                <% } %>
+              </div>
+              <p class="fileName all-p"><b> <%= data[i].img %> </b></p>
+              <% if (data[i].user_validate == "No" && data[i].exp_type ==
+                "CONTROL") { %>
+              <p class="actualtop all-p log-font">
+                Actual : <b class="case"> MUTANT</b>
+              </p>
+              <% } else if (data[i].user_validate == "No" && data[i].exp_type
+                == "MUTANT") { %>
+              <p class="actualtop all-p log-font">
+                Actual : <b class="case"> CONTROL</b>
+              </p>
+              <% } else { %>
+              <p class=" actualtop all-p log-font">
+                Actual : <b class="case"> <%= data[i].exp_type %></b>
+              </p>
+              <% } %>
+              <p class="all-p log-font">
+                Predicted : <b class="case"> <%= data[i].exp_type %></b>
+              </p>
+              <p class="all-p log-font">
+                Training Algorithm : <b class="case"> VGG-16</b>
+              </p>
+              <p class="all-p log-font">
+                Probabilities : <b> <%= data[i].pred_percentage %> </b>
+              </p>
 
-      $(function() {
-        var dtToday = new Date();
+              <p class="all-p log-font" id="search-container-<%= j %>">
+                Prediction On : <b> <%= data[i].create_at %> </b>
+              </p>
 
-        var month = dtToday.getMonth() + 1;
-        var day = dtToday.getDate();
-        var year = dtToday.getFullYear();
-        if (month < 10) month = "0" + month.toString();
-        if (day < 10) day = "0" + day.toString();
+              <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><br />
+                      <p class="modalFileName all-p"></p>
+                      <img src="" class="imagepreview" style="width: 100%;" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% } %> <% } %>
+        </div>
+      </div>
+      <div
+        class="tab-pane fade <%= typeof is_validated !== 'undefined' && is_validated!== null ? (is_validated === 'NO' ? 'active show' : '') : '' %>"
+        id="home" role="tabpanel" aria-labelledby="home-tab">
+        <!-- Predictions to be Validated Content -->
+        <div class="row rowmargin">
+          <section class="gallery-block cards-gallery">
+            <div class="container">
+              <div class="row">
+                <% for (var i = 0; i < data.length; i++) { %> <% if
+                  (data[i].exp_validate == 0 && !data[i].user_validate) { %>
+                <div class="col-md-4 gap">
+                  <div class="card border-0 transform-on-hover">
+                    <a class="lightbox" href="/prediction/view/validate/<%= data[i].exp_id %>">
+                      <img src="/uploads/<%= data[i].img %>" alt="Card Image" class="card-img-top scaled" />
+                    </a>
+                    <div class="card-body-prevpred">
+                      <p class="fileName all-p">
+                        <b> <%= data[i].img %> </b>
+                      </p>
+                      <a href="#" class="all-p log-font">Predicted : <b><%= data[i].exp_type %></b></a>
+                      <p class="all-p log-font">
+                        Training Algorithm : <b class="case"> VGG-16</b>
+                      </p>
+                      <p class="all-p log-font">
+                        Probabilities :
+                        <b> <%= data[i].pred_percentage %> </b>
+                      </p>
+                      <p class="all-p log-font">
+                        Prediction On : <b> <%= data[i].create_at %></b>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <% } %> <% } %>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <% include partials/footer %> -->
+  <!-- <script src="/javascripts/viewexperiment.js"></script> -->
+  <!-- <script src="/javascripts/prevprediction.js"></script> -->
+  <script src="/javascripts/croppr.js"></script>
+  <script src="/javascripts/cropper.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+  <script>
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
 
-        var maxDate = year + "-" + month + "-" + day;
-        $("#txtDate").attr("max", maxDate);
-      });
+    $(function () {
+      var dtToday = new Date();
 
-      function filterByDateFunc() {
-        var input = document.getElementById("txtDate");
-        // filter = input.value.replace(/-/gi,"/");
-        var filter = input.value;
-        var showflag = false;
-        var countResult = 0;
-        var initial = filter.split("-");
-        filter = [initial[1], initial[2], initial[0]].join("/");
-        for (var k = 0; k < $(".img-responsive").length; k++) {
-          var searchableDiv = document
-            .getElementById("search-container-" + k)
-            .innerText.trim();
-          if (searchableDiv.indexOf(filter) <= -1) {
-            $("#filter-div-" + k).css("display", "none");
-          } else {
-            $("#filter-div-" + k).css("display", "");
-            showflag = true;
-            countResult += 1;
-            document.getElementById("count-result").innerHTML =
-              "Found " + countResult + " results";
-          }
-        }
-        if (showflag == false) {
-          $("#count-result").css("display", "none");
-          $(".show-msg").css("display", "block");
+      var month = dtToday.getMonth() + 1;
+      var day = dtToday.getDate();
+      var year = dtToday.getFullYear();
+      if (month < 10) month = "0" + month.toString();
+      if (day < 10) day = "0" + day.toString();
+
+      var maxDate = year + "-" + month + "-" + day;
+      $("#txtDate").attr("max", maxDate);
+    });
+
+    function filterByDateFunc() {
+      var input = document.getElementById("txtDate");
+      // filter = input.value.replace(/-/gi,"/");
+      var filter = input.value;
+      var showflag = false;
+      var countResult = 0;
+      var initial = filter.split("-");
+      filter = [initial[1], initial[2], initial[0]].join("/");
+      for (var k = 0; k < $(".img-responsive").length; k++) {
+        var searchableDiv = document
+          .getElementById("search-container-" + k)
+          .innerText.trim();
+        if (searchableDiv.indexOf(filter) <= -1) {
+          $("#filter-div-" + k).css("display", "none");
         } else {
-          $("#count-result").css("display", "block");
-          $(".show-msg").css("display", "none");
+          $("#filter-div-" + k).css("display", "");
+          showflag = true;
+          countResult += 1;
+          document.getElementById("count-result").innerHTML =
+            "Found " + countResult + " results";
         }
       }
-
-      function searchPrevExpFunc() {
-        var input = document.getElementById("container-search");
-        var showMonthFlag = false;
-        var countMonthResult = 0;
-        filter = input.value.toLowerCase();
-        for (var k = 0; k < $(".img-responsive").length; k++) {
-          var searchableDiv = document
-            .getElementById("filter-div-" + k)
-            .children[0].innerText.toLowerCase()
-            .trim();
-          if (searchableDiv.indexOf(filter) <= -1) {
-            $("#filter-div-" + k).css("display", "none");
-          } else {
-            $("#filter-div-" + k).css("display", "");
-            showMonthFlag = true;
-            countMonthResult += 1;
-            document.getElementById("count-result").innerHTML =
-              "Found " + countMonthResult + " results";
-          }
-        }
-        if (showMonthFlag == false) {
-          $("#count-result").css("display", "none");
-          $(".show-msg").css("display", "block");
-        } else {
-          $("#count-result").css("display", "block");
-          $(".show-msg").css("display", "none");
-        }
-      }
-
-      function filterByMonthFunc() {
-        var input = document.getElementById("startDate");
-        var filterMonth = input.value;
-        var showMonthFlag = false;
-        var countMonthResult = 0;
-        for (var k = 0; k < $(".img-responsive").length; k++) {
-          var searchableDiv = document
-            .getElementById("search-container-" + k)
-            .innerText.trim();
-          var fMonth = searchableDiv
-            .replace(/ /gi, "")
-            .substring(13, 23)
-            .split("/");
-          var getFinalMonth = [fMonth[0], fMonth[2]].join("/");
-          if (filterMonth.indexOf(getFinalMonth) <= -1) {
-            $("#filter-div-" + k).css("display", "none");
-          } else {
-            $("#filter-div-" + k).css("display", "");
-            showMonthFlag = true;
-            countMonthResult += 1;
-            document.getElementById("count-result").innerHTML =
-              "Found " + countMonthResult + " results";
-          }
-        }
-        if (showMonthFlag == false) {
-          $("#count-result").css("display", "none");
-          $(".show-msg").css("display", "block");
-        } else {
-          $("#count-result").css("display", "block");
-          $(".show-msg").css("display", "none");
-        }
-      }
-
-      $(function() {
-        $(".date-picker").datepicker({
-          dateFormat: "mm/yy",
-          changeMonth: true,
-          changeYear: true,
-          showButtonPanel: true,
-          onClose: function(dateText, inst) {
-            function isDonePressed() {
-              return (
-                $("#ui-datepicker-div")
-                  .html()
-                  .indexOf(
-                    "ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover"
-                  ) > -1
-              );
-            }
-
-            if (isDonePressed()) {
-              var month = $(
-                "#ui-datepicker-div .ui-datepicker-month :selected"
-              ).val();
-              var year = $(
-                "#ui-datepicker-div .ui-datepicker-year :selected"
-              ).val();
-              $(this)
-                .datepicker("setDate", new Date(year, month, 1))
-                .trigger("change");
-
-              $(".date-picker").focusout(); //Added to remove focus from datepicker input box on selecting date
-            }
-          },
-          beforeShow: function(input, inst) {
-            inst.dpDiv.addClass("month_year_datepicker");
-
-            if ((datestr = $(this).val()).length > 0) {
-              year = datestr.substring(datestr.length - 4, datestr.length);
-              month = datestr.substring(0, 2);
-              $(this).datepicker(
-                "option",
-                "defaultDate",
-                new Date(year, month - 1, 1)
-              );
-              $(this).datepicker("setDate", new Date(year, month - 1, 1));
-              $(".ui-datepicker-calendar").hide();
-            }
-          }
-        });
-      });
-
-      function showFilters() {
-        var filters = document.getElementsByClassName("filters");
-        if (
-          filters[0].style.display == "" ||
-          filters[0].style.display == "none"
-        ) {
-          $(".filters").css("display", "block");
-        } else {
-          $(".filters").css("display", "none");
-        }
-      }
-
-      function hideSearch() {
-        $(".rowmargintop").css("display", "none");
+      if (showflag == false) {
         $("#count-result").css("display", "none");
-        // $(".show-msg").css("display", "none");
+        $(".show-msg").css("display", "block");
+      } else {
+        $("#count-result").css("display", "block");
+        $(".show-msg").css("display", "none");
       }
+    }
 
-      function showSearch() {
-        $(".rowmargintop").css("display", "block");
-        var noresult = document.getElementsByClassName("show-msg");
-        if (
-          noresult[0].style.display == "" ||
-          noresult[0].style.display == "none"
-        ) {
-          $("#count-result").css("display", "block");
+    function searchPrevExpFunc() {
+      var input = document.getElementById("container-search");
+      var showMonthFlag = false;
+      var countMonthResult = 0;
+      filter = input.value.toLowerCase();
+      for (var k = 0; k < $(".img-responsive").length; k++) {
+        var searchableDiv = document
+          .getElementById("filter-div-" + k)
+          .children[0].innerText.toLowerCase()
+          .trim();
+        if (searchableDiv.indexOf(filter) <= -1) {
+          $("#filter-div-" + k).css("display", "none");
         } else {
-          $("#count-result").css("display", "none");
+          $("#filter-div-" + k).css("display", "");
+          showMonthFlag = true;
+          countMonthResult += 1;
+          document.getElementById("count-result").innerHTML =
+            "Found " + countMonthResult + " results";
         }
       }
+      if (showMonthFlag == false) {
+        $("#count-result").css("display", "none");
+        $(".show-msg").css("display", "block");
+      } else {
+        $("#count-result").css("display", "block");
+        $(".show-msg").css("display", "none");
+      }
+    }
 
-      $(function() {
-        $(".pop").on("click", function() {
-          $(".imagepreview").attr(
-            "src",
+    function filterByMonthFunc() {
+      var input = document.getElementById("startDate");
+      var filterMonth = input.value;
+      var showMonthFlag = false;
+      var countMonthResult = 0;
+      for (var k = 0; k < $(".img-responsive").length; k++) {
+        var searchableDiv = document
+          .getElementById("search-container-" + k)
+          .innerText.trim();
+        var fMonth = searchableDiv
+          .replace(/ /gi, "")
+          .substring(13, 23)
+          .split("/");
+        var getFinalMonth = [fMonth[0], fMonth[2]].join("/");
+        if (filterMonth.indexOf(getFinalMonth) <= -1) {
+          $("#filter-div-" + k).css("display", "none");
+        } else {
+          $("#filter-div-" + k).css("display", "");
+          showMonthFlag = true;
+          countMonthResult += 1;
+          document.getElementById("count-result").innerHTML =
+            "Found " + countMonthResult + " results";
+        }
+      }
+      if (showMonthFlag == false) {
+        $("#count-result").css("display", "none");
+        $(".show-msg").css("display", "block");
+      } else {
+        $("#count-result").css("display", "block");
+        $(".show-msg").css("display", "none");
+      }
+    }
+
+    $(function () {
+      $(".date-picker").datepicker({
+        dateFormat: "mm/yy",
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        onClose: function (dateText, inst) {
+          function isDonePressed() {
+            return (
+              $("#ui-datepicker-div")
+              .html()
+              .indexOf(
+                "ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover"
+              ) > -1
+            );
+          }
+
+          if (isDonePressed()) {
+            var month = $(
+              "#ui-datepicker-div .ui-datepicker-month :selected"
+            ).val();
+            var year = $(
+              "#ui-datepicker-div .ui-datepicker-year :selected"
+            ).val();
             $(this)
-              .find("img")
-              .attr("src")
-          );
-          var imgName = $(this)
-            .find("img")
-            .attr("src")
-            .replace("/uploads/", "");
-          $(".modalFileName").css("display", "block");
-          $(".modalFileName").text(imgName);
-          $("#imagemodal").modal("show");
-        });
+              .datepicker("setDate", new Date(year, month, 1))
+              .trigger("change");
+
+            $(".date-picker").focusout(); //Added to remove focus from datepicker input box on selecting date
+          }
+        },
+        beforeShow: function (input, inst) {
+          inst.dpDiv.addClass("month_year_datepicker");
+
+          if ((datestr = $(this).val()).length > 0) {
+            year = datestr.substring(datestr.length - 4, datestr.length);
+            month = datestr.substring(0, 2);
+            $(this).datepicker(
+              "option",
+              "defaultDate",
+              new Date(year, month - 1, 1)
+            );
+            $(this).datepicker("setDate", new Date(year, month - 1, 1));
+            $(".ui-datepicker-calendar").hide();
+          }
+        }
       });
-    </script>
-  </body>
+    });
+
+    function showFilters() {
+      var filters = document.getElementsByClassName("filters");
+      if (
+        filters[0].style.display == "" ||
+        filters[0].style.display == "none"
+      ) {
+        $(".filters").css("display", "block");
+      } else {
+        $(".filters").css("display", "none");
+      }
+    }
+
+    function hideSearch() {
+      $(".rowmargintop").css("display", "none");
+      $("#count-result").css("display", "none");
+      // $(".show-msg").css("display", "none");
+    }
+
+    function showSearch() {
+      $(".rowmargintop").css("display", "block");
+      var noresult = document.getElementsByClassName("show-msg");
+      if (
+        noresult[0].style.display == "" ||
+        noresult[0].style.display == "none"
+      ) {
+        $("#count-result").css("display", "block");
+      } else {
+        $("#count-result").css("display", "none");
+      }
+    }
+
+    $(function () {
+      $(".pop").on("click", function () {
+        $(".imagepreview").attr(
+          "src",
+          $(this)
+          .find("img")
+          .attr("src")
+        );
+        var imgName = $(this)
+          .find("img")
+          .attr("src")
+          .replace("/uploads/", "");
+        $(".modalFileName").css("display", "block");
+        $(".modalFileName").text(imgName);
+        $("#imagemodal").modal("show");
+      });
+    });
+  </script>
+</body>
+
 </html>

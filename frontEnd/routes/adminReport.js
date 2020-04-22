@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
             'ORDER BY Date desc;',
             function (error, results, fields) {
                 if (error) throw error;
-                console.log(this.sql);
+                console.log("adminReport Query", this.sql);
                 res.render('adminReport', {
                     uname: user.user_name,
                     data: results
