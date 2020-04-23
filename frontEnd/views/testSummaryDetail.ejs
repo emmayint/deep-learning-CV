@@ -245,8 +245,13 @@
             $('.pop').on('click', function () {
                 $('.imagepreview').attr('src', $(this).find('img').attr('src'));
                 var proj_name = $(this).find('img').attr('src').split('/');
+                if($(this).find('img').attr('src').includes("/mutant/")){
+                    replace_string = "/testData/mutant/"
+                }else{
+                    replace_string = "/testData/control/"
+                }
                 var imgName = $(this).find('img').attr('src').replace(
-                    '/allProjects/<%= u_id %>/' + proj_name[3] + '/testData/control/', '');
+                    '/allProjects/<%= u_id %>/' + proj_name[3] + replace_string, '');
                 $('.modalFileName').css("display", "block");
                 $(".modalFileName").text(imgName);
                 $('#imagemodal').modal("show");
