@@ -47,7 +47,7 @@ from flask import jsonify
 from flask import Flask
 from flask import Flask, render_template
 
-from flask_mysqldb import MySQL
+# from flask_mysqldb import MySQL
 
 from glob import glob
 import datetime
@@ -61,7 +61,7 @@ import pymysql
 
 app = Flask(__name__)
 
-mysql = MySQL(app)
+# mysql = MySQL(app)
 
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
