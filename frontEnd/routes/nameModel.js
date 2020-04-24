@@ -5,14 +5,14 @@ const fs = require("fs");
 const db = require("../database/db");
 const mysql = require("mysql");
 
-router.get("/", function(req, res) {
+router.get("/", function (req, res) {
   var modelName = "";
   const mysql = require("mysql");
 
   if (req.isAuthenticated()) {
     let user = req.user;
     var sql = "SELECT model_fullname FROM Models";
-    db.query(sql, function(err, result) {
+    db.query(sql, function (err, result) {
       if (err) throw err;
       // console.log("-- Data received from Db");
       var string = JSON.stringify(result);
@@ -22,7 +22,7 @@ router.get("/", function(req, res) {
         // modelName: modelName,
         uname: user.user_name,
         // json: json,
-        nametaken: false
+        nametaken: false,
       });
     });
   } else {
@@ -31,13 +31,21 @@ router.get("/", function(req, res) {
 });
 
 // router.post("/", async function(req, res) {
-router.post("/", function(req, res) {
+router.post("/", function (req, res) {
   // let isLoading = true;
   let user = req.user;
   console.log(user);
   let userid = user.user_id;
-  let useremail = user.user_email;
+  let useremail = "";
   var modelName = req.body.modelName;
+
+  var sql = "SELECT email from users WHERE id=" + mysql.escape(userid) + "; ";
+  db.query(sql, function (err, result) {
+    var str = JSON.stringify(result);
+    var json = JSON.parse(str)[0];
+    useremail = json.email;
+    console.log("useremail db json", useremail);
+  });
 
   // check for duplicate modelName in DB
   var sql =
@@ -45,7 +53,7 @@ router.post("/", function(req, res) {
     mysql.escape(modelName + ".h5") +
     "); ";
   // console.log("sql ", sql);
-  db.query(sql, function(err, result) {
+  db.query(sql, function (err, result) {
     var str = JSON.stringify(result);
     var json = JSON.parse(str)[0];
     // console.log("json", json);
@@ -65,7 +73,7 @@ router.post("/", function(req, res) {
           train_batch_size: req.cookies.train_batch_size,
           test_batch_size: req.cookies.testSize,
           useremail: useremail,
-          exp_id: req.cookies.exp_id
+          exp_id: req.cookies.exp_id,
         };
         // console.log(useremail);
         // try {
@@ -73,7 +81,7 @@ router.post("/", function(req, res) {
         // const api_res = await axios.post("http://localhost:5000/train", body);
         const api_res = axios
           .post("http://localhost:5000/train", body)
-          .then(res => {
+          .then((res) => {
             console.log("flask response: ", res.data);
           })
           .catch(console.log);
@@ -82,7 +90,7 @@ router.post("/", function(req, res) {
         res.render("train", {
           modelName: modelName,
           uname: user.user_name,
-          useremail: useremail
+          useremail: useremail,
           // response: data
         });
         // } catch (err) {
@@ -94,7 +102,7 @@ router.post("/", function(req, res) {
           modelName: modelName,
           uname: user.user_name,
           json: json,
-          nametaken: true
+          nametaken: true,
         });
       }
     }
@@ -104,7 +112,7 @@ router.post("/", function(req, res) {
 });
 
 // Add mideleware to the route
-router.get("/", authenticationMiddleware(), function(req, res) {
+router.get("/", authenticationMiddleware(), function (req, res) {
   res.render("nameModel");
 });
 
