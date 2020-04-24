@@ -84,9 +84,9 @@ router.get("/:id/getModels/:trainingAlgo", function(req, res, next) {
     // SELECT selected_model,model_fullname FROM csc899.Models where user_id = 9;
     db.query(
       "SELECT model_fullname, favorite FROM Models m" +
-        " WHERE m.user_id = " +
+        " WHERE (m.user_id = " +
         user.user_id +
-        " AND m.selected_model= '" +
+        " OR isPublic = 0) AND m.selected_model= '" +
         trainingAlgo +
         "';",
       function(error, results, fields) {
