@@ -106,11 +106,11 @@ def train():
     exptitle = PROJECT_NAME + "-testData"
     # cur = mysql.connection.cursor()
     conn = pymysql.connect(
-        host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com',
-        port=3306,
-        user='admin',
-        passwd='admin123',
-        db='csc899')
+        host='',
+        port=,
+        user='',
+        passwd='',
+        db='')
     cur = conn.cursor()
     cur.execute("SELECT exp_id FROM experiments WHERE exp_title = '%s'" %
                 exptitle)

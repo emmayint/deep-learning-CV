@@ -48,10 +48,10 @@ import pymysql
 # print(device_lib.list_local_devices())
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com',
-app.config['MYSQL_USER'] = 'admin',
-app.config['MYSQL_HOST'] = 'admin123',
-app.config['MYSQL_DB'] = 'csc899'
+app.config['MYSQL_HOST'] = '',
+app.config['MYSQL_USER'] = '',
+app.config['MYSQL_HOST'] = '',
+app.config['MYSQL_DB'] = ''
 
 mysql = MySQL(app)
 
@@ -97,11 +97,11 @@ def train():
     # expid=0;
     exptitle = PROJECT_NAME + "-testData"
     conn = pymysql.connect(
-        host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com',
-        port=3306,
-        user='admin',
-        passwd='admin123',
-        db='csc899')
+        host='',
+        port=,
+        user='',
+        passwd='',
+        db='')
     cur = conn.cursor()
     cur.execute("SELECT * FROM users")
     print(cur.description)
