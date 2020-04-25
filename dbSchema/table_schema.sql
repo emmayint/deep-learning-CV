@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
--- Host: csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com    Database: csc899
+-- Host:     Database: csc899
 -- ------------------------------------------------------
 -- Server version	5.7.26-log
 

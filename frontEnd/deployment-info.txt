@@ -26,7 +26,7 @@ pip3 install pymysql
 Change url in logger.ejs and cmcell.ejs, or set with env.
 
 Set db connection with env
-conn = pymysql.connect(host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com', port=3306, user='admin', passwd='admin123', db='csc899')
+conn = pymysql.connect(host='', port=, user='', passwd='', db='')
 
 Edit url in logger.ejs, cmcell.ejs
  
