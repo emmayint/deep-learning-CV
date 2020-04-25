@@ -69,3 +69,7 @@ public/uploads/
 .DS_Store 
 package-lock.json
 yarn.lock
+
+train_app.py
+train_aws.py
+train_local.py
