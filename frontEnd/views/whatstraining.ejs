@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>What's model training</title>
+    <% include partials/head %>
+    <link href="/stylesheets/default.css" rel="stylesheet" />
+    <link href="/stylesheets/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <br /><br /><br />
+    <!-- Navigation Bar -->
+    <% include partials/default-header %>
+
+    <div>
+      <div class="container">
+        <div class="row">
+          <h2 style="width:100%">Training your models</h2>
+          <p>
+            <a
+              href="training-manual.pdf"
+              rel="noopener noreferrer"
+              target="_blank"
+              >View training instructions</a
+            >
+          </p>
+
+          <p>
+            <strong>What's a model?</strong>
+            <br />A machine learning model is an algorithm which learns features
+            from the given data to produce labels, i.e., controls or mutants.
+            Just like a lab assistant, a model can classify images by learning
+            from relevant data. In other words, it tries to relate the given
+            data with its labels, just as the human brain does.
+          </p>
+          <p>
+            <strong>What's training?</strong>
+            <br />While training for machine learning, you pass an algorithm
+            with training data (control and mutant embryo images). The learning
+            algorithm finds patterns in the training data such that the input
+            parameters correspond to the target. The output of the training
+            process is a machine learning model which you can then use to make
+            predictions. This process is also called “learning”. Here we use
+            transfer learning which is a process to take a network model that
+            has already been trained for a given task, and make it perform a
+            second similar task.<br />
+            <br />
+            In this application, the steps involved here are
+          </p>
+          <div>
+            <ul>
+              <li>
+                Collect data.
+              </li>
+              <li>
+                Create project, define categories of your data, and upload data.
+              </li>
+              <li>
+                Customize hyperparameters (optional)
+              </li>
+              <li>
+                Name and train your model
+              </li>
+              <li>
+                View model evaluation once it's finished training.
+              </li>
+            </ul>
+          </div>
+          <p></p>
+          <div></div>
+
+          <!-- <p>
+            Assuming the original task is similar to the new task, using a
+            network that has already been designed & trained allows us to take
+            advantage of the feature extraction that happens in the front layers
+            of the network without developing that feature extraction network
+            from scratch.
+          </p>
+          <br /> -->
+          <!-- <p>With respect to the controls vs mutants example:</p>
+          <br /> -->
+          <!-- <ul>
+            <li>
+              The original task would be classifying the images into the 1000s
+              of Imagenet categories.
+            </li>
+            <li>
+              The new task would be to classify the images into just 2
+              categories i.e., controls or mutants.
+            </li>
+          </ul> -->
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>

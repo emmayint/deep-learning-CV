@@ -1,14 +1,23 @@
 let express = require("express");
 let router = express.Router();
-
-global.selectedModel = "";
+const fs = require("fs");
 
 router.get("/", function(req, res) {
+  // var selectedModel = "";
   if (req.isAuthenticated()) {
     let user = req.user;
-    console.log("User in selectModle: ", user);
+    userid = user.user_id;
+    res.cookie("userid", userid);
+    res.cookie("selectedModel", "VGG16");
+    // res.cookie("selectedModel", "");
+    if (!fs.existsSync("./public/allProjects/" + userid)) {
+      fs.mkdirSync("./public/allProjects/" + userid, {
+        recursive: true
+      });
+    }
     res.render("selectModel", {
-      selectedModel: selectedModel,
+      // selectedModel: selectedModel,
+      selectedModel: req.cookies.selectedModel,
       uname: user.user_name
     });
   } else {
@@ -18,10 +27,10 @@ router.get("/", function(req, res) {
 
 router.post("/", function(req, res) {
   let user = req.user;
-  console.log("post /selectModel with body:", req.body);
-  selectedModel = req.body.selectedModel;
+  res.cookie("selectedModel", "VGG16");
+  // res.cookie("selectedModel", req.body.selectedModel);
   res.render("selectModel", {
-    selectedModel: selectedModel,
+    selectedModel: "VGG16",
     uname: user.user_name
   });
 });
@@ -39,4 +48,4 @@ function authenticationMiddleware() {
   };
 }
 
-module.exports = router;
+module.exports.router = router;

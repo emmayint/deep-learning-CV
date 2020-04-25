@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Log & Confusion Matrix</title>
+    <% include partials/head %>
+    <link
+      href="/stylesheets/selectModel.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- head for cm -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"
+    ></script>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"/> copied to /stylesheets/selectModel.css-->
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <br /><br /><br />
+    <% include partials/train_header %>
+    <div class="container">
+      <div class="content-container">
+        <!-- progress bar -->
+        <div class="progress-container">
+          <div class="progress-track-finished"></div>
+          <div class="progress-track-completed step4"></div>
+          <div class="complete-bullet-completed"></div>
+          <div class="complete-text">
+            <span class="step-text">Complete</span>
+          </div>
+          <div id="step1" class="progress-step-complete">
+            <span class="step-text">Choose model</span>
+          </div>
+          <div id="step2" class="progress-step-complete">
+            <span class="step-text">Select data</span>
+          </div>
+          <div id="step3" class="progress-step-complete">
+            <span class="step-text">Customize inputs</span>
+          </div>
+          <div id="step4" class="progress-step-complete">
+            <span class="step-text">Name+train</span>
+          </div>
+        </div>
+        <h1 class="step-title">
+          Your model <%= modelName%> is successfully trained.
+        </h1>
+        <div class="step-container">
+          <style>
+            .loader {
+              border: 16px solid #f3f3f3;
+              border-radius: 50%;
+              border-top: 16px solid #3498db;
+              width: 60px;
+              height: 60px;
+              -webkit-animation: spin 2s linear infinite; /* Safari */
+              animation: spin 2s linear infinite;
+              margin: 20px auto;
+            }
+            /* Safari */
+            @-webkit-keyframes spin {
+              0% {
+                -webkit-transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+              }
+            }
+            @keyframes spin {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+            .line {
+              fill: none;
+              stroke: steelblue;
+              stroke-width: 2px;
+            }
+          </style>
+          <h6><strong>This model's test accuracy = <%= test_accuracy%> </strong></h6>
+          <p>(Click on a cell in the matrix to view image(s) that are predicted differently from their label, 
+            <% var explink= "http://localhost:5001/testSummaryDetail/" + exp_id%>
+            or <a target="_blank" rel="noopener noreferrer"  href=<%=explink%>>view test data as experiment</a>)
+          </p>
+          <!-- <div id="dataView"></div> -->
+          <div style="display:block">
+            <div style="display:inline-block" id="container"></div>
+            <!-- <div style="display:inline-block" id="legend"></div> -->
+
+          </div>
+          <div style="display:block">
+            <p><a
+            onclick="window.open('https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/', '_blank', 'top=100 left=300,width=800,height=500');"
+            href=""
+            >(what's confusion matrix?)</a></p>
+            <br>
+            
+            <p><strong> Model details:</strong></p>
+            <ul>
+              <li>selected base model: <%=selected_model%> </li>
+              <li>training data size: <%=train_size%> </li>
+              <li>epoch: <%=epoch%></li>
+            </ul>
+          </div>
+
+          
+<br>
+        <div style="display:inline-block; float:left" id="linegraph"></div>
+          <div style="height: 400px"></div>
+            <h6>Not happy with your model? You can <a target="_blank" rel="noopener noreferrer" href="/selectModel">restart training</a> or
+              <a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= project_name%>"
+                >compare all trained models of this project</a>. 
+            Here are possible ways to improve your next training:</h6>
+
+            <%if(epoch<20){%>
+              <p><strong>Hyperparameter Tuning</strong><br>
+                Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
+                <br>If you model's learning curve does not plateau in the graph, try add more epochs to your next training.
+                <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">(Read more about hyperparameters)</a>
+                <br>You may also experiment with the size of your batches, optimizer and learning rate. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">(Read more about Hyperparameter Optimization)</a></p>
+              
+              <p><strong>Simply add more data</strong><br>
+                Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
+                <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">(Read more about data tactics)</a></p>
+                
+              <p><strong>Clean Your Data</strong><br>
+                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
+                <a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">(Read more about data quality, scope and quantity)</a></p>
+                  
+              <p><strong>Select features and examples</strong><br>
+              If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
+             
+            <%}else if(train_size<1000){%>
+              <p><strong>Simply add more data</strong><br>
+              Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
+               <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">(Read more about data tactics)</a></p>
+              
+              <p><strong>Clean Your Data</strong><br>
+                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
+                <a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">(Read more about data quality, scope and quantity)</a></p>
+
+              <p><strong>Select features and examples</strong><br>
+              If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
+            
+              <p><strong>Hyperparameter Tuning</strong><br>
+              Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
+              <br>If you model's learning curve does not plateau, try add more epochs to your next training.
+               <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">(Read more about hyperparameters)</a>
+              <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">(Read more about Hyperparameter Optimization)</a></p>
+              
+            <%}else{%>
+              
+                <p><strong>Clean Your Data</strong><br>
+                Can you improve the signal in your data? Perhaps there are missing or corrupt observations that can be fixed or removed, or outlier values outside of reasonable ranges that can be fixed or removed in order to lift the quality of your data.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://machinelearningmastery.com/machine-learning-performance-improvement-cheat-sheet/">Read more about data quality, scope and quantity</a></p>
+  
+                <p><strong>Add more data</strong><br>
+                Your trainning data size is <%=train_size%>, which is not a significant amount. Try increasing your sample by providing new data, which could translate into new cases or new features. 
+                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/how-to-build-a-data-set-for-your-machine-learning-project-5b3b871881ac">Read more about data tactics</a></p>
+                  
+                <p><strong>Select features and examples</strong><br>
+                If estimate variance is high and your algorithm is relying on many features, you need to prune some features for better results by picking those with the highest predictive value is advisable.</p>
+              
+                <p><strong>Hyperparameter Tuning</strong><br>
+                Finding the best hyper-parameters is usually done manually. It’s a simple task of trial and error, with some intelligent guesstimating. You’ll simply try as many hyperparameter settings as you have time for, and see which one gives you the best results.
+                <br>If you model's learning curve does not plateau, try add more epochs to your next training.
+                <br><a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/3-ways-to-improve-your-machine-learning-results-without-more-data-f2f0fe78976e">Read more about hyperparameters</a>
+                <br>You may also experiment with the size of your batches and the number of training epochs. <a target="_blank" rel="noopener noreferrer" href="https://towardsdatascience.com/deep-learning-performance-cheat-sheet-21374b9c4f45">Read more about Hyperparameter Optimization</a></p>
+                
+              <%}%>
+              <%
+              var action = "/model/note?modelName="+ modelName;
+              %>
+              <%=action%>
+              <form method="POST" action= <%=action%>>
+                <label for="note"
+                >Leave a note for this model here</label><br />  
+                <textarea name="note" rows="4" cols="70"></textarea>
+                <button
+                  id="notebutton"
+                  type="submit"
+                  class="next-button">
+                  Submit note
+                </button>
+                <script>
+                  document.getElementById('notebutton').addEventListener('click', function (e) {
+                      // e.preventDefault();
+                      alert("note added to this model");
+                  });
+              </script>
+              </form>
+              
+            
+          <!-- <img src="/allProjects/43/frog_embryo/testData/control/2139289.jpg" /> -->
+          <!-- <p>-view full log</p>
+          <% response.toString().split('\n').forEach(function(ln){%>
+          <p><%= ln%></p>
+          <% })%> -->
+        </div>
+      </div>
+      <div class="footer-nav">
+        <button class="nav-button">
+          Discard model
+        </button>
+
+        <button class="nav-button next-button">
+          Rename model
+        </button>
+
+        <button class="nav-button next-button">
+          Mark as favorite
+        </button>
+        <button class="nav-button next-button">
+          Mark as private
+        </button>
+        
+
+    </div>
+    <!-- <br>
+    <a href="/params">Go back to customize input</a> -->
+    <script src="/javascripts/cm.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+
+      console.log("cm_string", <%- JSON.stringify(cm_string) %>)
+      console.log("labels_string json?", <%- labels_string %>)
+      var labels_array = <%- JSON.parse(labels_string) %>;
+      console.log("labels_array js array?", labels_array);
+      var cm_array = <%- JSON.stringify(cm_string) %>.split(",").map(function(item) {
+        return parseInt(item, 10);
+      });
+      console.log("cm_array",cm_array);
+
+      function listToMatrix(list, n) {
+        var matrix = [],
+          i,
+          k;
+        for (i = 0, k = -1; i < list.length; i++) {
+          if (i % n === 0) {
+            k++;
+            matrix[k] = [];
+          }
+          // matrix[k].push(list[i]);
+          matrix[k].push({text: list[i], link: "http://localhost:5001/cmcell?modelName="+ <%- JSON.stringify(modelName) %> +"&cmcell="+k+(i%n)});
+        }
+        return matrix;
+      }
+      var confusionMatrix = listToMatrix(cm_array, labels_array.length);
+      // var confusionMatrix = [
+      //   [
+      //     { text: 50, link: "http://localhost:5001/cmcell?modelName=modelName&cmcell=00" },
+      //     { text: 6, link: "http://localhost:5001/cmcell?modelName=modelName&cmcell=01" }
+      //   ],
+      //   [
+      //     { text: 3, link: "http://localhost:5001/cmcell?modelName=modelName&cmcell=10" },
+      //     { text: 40, link: "http://localhost:5001/cmcell?modelName=modelName&cmcell=11" }
+      //   ]
+      // ];
+      console.log("confusionMatrix: ", confusionMatrix);
+
+      var labels = labels_array
+      Matrix({
+        container: "#container",
+        data: confusionMatrix,
+        labels: labels,
+        start_color: "#ffffff",
+        end_color: "#2267e6"
+      });
+    </script>
+    <script>
+      // set the dimensions and margins of the graph
+      var margin = { top: 20, right: 20, bottom: 90, left: 50 },
+        width = 750 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+      // set the ranges
+      var x = d3
+        .scaleLinear()
+        .domain(1)
+        .range([0, width]);
+      var y = d3.scaleLinear().range([height, 0]);
+
+      // define the 1st line
+      var valueline = d3
+        .line()
+        .x(function(d) {
+          return x(d.epoch);
+        })
+        .y(function(d) {
+          return y(d.accuracy);
+        });
+      // define the 2nd line
+      // var valueline2 = d3
+      //   .line()
+      //   .x(function(d) {
+      //     return x(d.epoch);
+      //   })
+      //   .y(function(d) {
+      //     return y(d.loss);
+      //   });
+
+      // define the 3rd line
+      var valueline3 = d3
+        .line()
+        .x(function(d) {
+          return x(d.epoch);
+        })
+        .y(function(d) {
+          return y(d.val_accuracy);
+        });
+      
+      // define the 4th line
+      // var valueline4 = d3
+      //   .line()
+      //   .x(function(d) {
+      //     return x(d.epoch);
+      //   })
+      //   .y(function(d) {
+      //     return y(d.val_loss);
+      //   });
+
+      // append the svg object to the body of the page
+      // appends a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var svg = d3
+        .select(linegraph)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var log = <%- JSON.stringify(logPath) %>
+      console.log("logPath ", log)
+      // Get the data
+      // d3.csv("/allProjects/43/frog_embryo/models/data2.csv", function(error, data) {
+      d3.csv(log, function(error, data) {
+
+        if (error) throw error;
+
+        // format the data
+        data.forEach(function(d) {
+          d.epoch = d.epoch;
+          d.accuracy = +d.accuracy;
+          d.loss = +d.loss;
+          d.val_accuracy = +d.val_accuracy;
+          d.val_loss = +d.val_loss;
+        });
+
+        // Scale the range of the data
+        x.domain(
+          d3.extent(data, function(d) {
+            return Math.max(d.epoch);
+          })
+        );
+
+        y.domain([
+          d3.min(data, function(d) {
+            return Math.min(d.accuracy, d.val_accuracy);
+          }),
+          d3.max(data, function(d) {
+            return Math.max(d.accuracy, d.loss, d.val_accuracy, d.val_loss);
+          })
+        ]);
+
+        // Add the valueline path.
+        svg
+          .append("path")
+          .data([data])
+          .attr("class", "line")
+          .style("stroke", "blue")
+          .attr("d", valueline);
+
+        // Add the valueline3 path.
+        svg
+          .append("path")
+          .data([data])
+          .attr("class", "line")
+          .style("stroke", "red")
+          .attr("d", valueline3);
+
+        // Add the X Axis
+        // svg.append("g")
+        //     .attr("transform", "translate(0," + height + ")")
+        //     .call(d3.axisBottom(x));
+
+        // Add the X Axis
+        svg
+          .append("g")
+          .attr("class", "axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(
+            d3
+              .axisBottom(x)
+              .tickFormat(function(d) {
+                return d + 1;
+              })
+              .ticks(
+                d3.max(data, function(d) {
+                  return Math.max(d.epoch);
+                })
+              )
+          );
+
+        // Add the Y Axis
+        svg.append("g").call(d3.axisLeft(y));
+
+        svg
+          .append("text")
+          .attr(
+            "transform",
+            "translate(" + width / 2 + " ," + (height + margin.top + 20) + ")"
+          )
+          .style("text-anchor", "middle")
+          .text("epoch");
+          
+        svg
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left)
+          .attr("x", 0 - height / 2)
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("train and validation accuracy");
+
+        svg.append("text")
+          .attr("transform", "translate("+(width/2)+","+y(data[data.length-1].accuracy)+")")
+          .attr("dy", ".35em")
+          .attr("text-anchor", "start")
+          .style("fill", "blue")
+          .text("accuracy");
+
+        svg.append("text")
+            .attr("transform", "translate("+(width/2)+","+y(data[data.length-1].accuracy*0.92)+")")
+            .attr("dy", ".35em")
+            .attr("text-anchor", "start")
+            .style("fill", "red")
+            .text("val_accuracy");
+            });
+      
+    </script>
+    <% include partials/footer %>
+  </body>
+</html>

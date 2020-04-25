@@ -1,0 +1,41 @@
+pip3 install pathlib
+pip3 install Flask
+pip3 install numpy
+pip3 install Pillow
+pip3 install matplotlib
+pip3 install tensorflow
+pip3 install Flask-Mail
+pip3 install mlxtend
+pip3 install pymysql
+
+
+
+# obsolete:
+# (install brew)
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+# brew install mysql
+# pip3 install flask-mysql
+# pip3 install mysqlclient
+# pip3 install flask_mysqldb
+# pip3 install keras
+# pip3 install theano
+# pip3 install imagenet_utils
+# 
+
+
+Change url in logger.ejs and cmcell.ejs, or set with env.
+
+Set db connection with env
+conn = pymysql.connect(host='csc899.cdmwsy3s9uyu.us-west-1.rds.amazonaws.com', port=3306, user='admin', passwd='admin123', db='csc899')
+
+Edit url in logger.ejs, cmcell.ejs
+ 
+error "cannot find crt1.o No such file or directory"
+    $ find /usr/ -name crti*
+        /usr/lib64/crti.o
+        then add this path to LIBRARY_PATH variable
+    $ export LIBRARY_PATH=/usr/lib64:$LIBRARY_PATH
+
+OSError: Unable to create file (unable to open file: name = ‘/newvolume/backEnd_ML_API/model/newvolumetest.h5’, errno = 13, error message = ‘Permission denied’, flags = 13, o_flags = 242)
+    $ chmod 777 ....
+

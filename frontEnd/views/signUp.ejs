@@ -1,71 +1,119 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Sign Up</title>
     <% include partials/head %>
     <link href="/stylesheets/login.css" rel="stylesheet" />
-
-</head>
-<body>
+    ​
+  </head>
+  <body>
     <% include partials/login-header %>
-<div class="container login-container">
-    <div class="row">
+    <div class="container login-container">
+      <div class="row">
         <div class="signup-form">
-            <form action="/signUp" method="POST">
-                <h2>Create Account</h2>
-                <p class="lead">Please fill in this form to create an account. It's free! </p>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input type="text" class="form-control" name="username" placeholder="Username" required="required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-paper-plane"></i></span>
-                        <input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required="required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="icon-stack input-group-addon">
-                            <i class="fa fa-lock"></i>
-                            <i class="fa fa-check"></i>
-                        </span>
-                        <input type="password" class="form-control" name="passwordMatch" id="passwordMatch" placeholder="Confirm Password"
-                            required="required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
-                </div>
-            </form>
-            <div class="text-center">Already have an account? <a href="/">Login here</a>.</div>
+          <form action="/signUp" method="POST">
+            <h2>Create Account</h2>
+            <p class="lead">
+              Please fill in this form to create an account. It's free!
+            </p>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon"
+                  ><i class="fa fa-user"></i
+                ></span>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="username"
+                  placeholder="Username"
+                  required="required"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon"
+                  ><i class="fa fa-paper-plane"></i
+                ></span>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  placeholder="Email Address"
+                  required="required"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-addon"
+                  ><i class="fa fa-lock"></i
+                ></span>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  id="password"
+                  placeholder="Password"
+                  required="required"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <span class="icon-stack input-group-addon">
+                  <i class="fa fa-lock"></i>
+                  <i class="fa fa-check"></i>
+                </span>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="passwordMatch"
+                  id="passwordMatch"
+                  placeholder="Confirm Password"
+                  required="required"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <button
+                type="submit"
+                class="btn btn-primary btn-block btn-lg"
+                onclick="signUpSuccessMsg()"
+              >
+                Sign Up
+              </button>
+            </div>
+          </form>
+          <div id="signup" class="successmsg">
+            <p align="center">
+              Registeration Successful. <br />You will be redirected to the
+              Login page in sometime...
+            </p>
+          </div>
+          <div class="text-center">
+            Already have an account? <a href="/">Login here</a>.
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
-<script type="text/javascript">
-    window.onload = function () {
-        document.getElementById("password").onchange = validatePassword;
-        document.getElementById("passwordMatch").onchange = validatePassword;
-    }
-
-    function validatePassword() {
-        var pass2 = document.getElementById("passwordMatch").value;
-        var pass1 = document.getElementById("password").value;
-        if (pass1 !== pass2)
-            document.getElementById("passwordMatch").setCustomValidity("Passwords Don't Match");
-        else
-            document.getElementById("passwordMatch").setCustomValidity('');
-    }
-</script>
-<% include partials/footer %>
-</body>
+    ​
+    <script type="text/javascript">
+          window.onload = function () {
+              document.getElementById("password").onchange = validatePassword;
+              document.getElementById("passwordMatch").onchange = validatePassword;
+          }
+          function validatePassword() {
+              var pass2 = document.getElementById("passwordMatch").value;
+              var pass1 = document.getElementById("password").value;
+              if (pass1 !== pass2)
+                  document.getElementById("passwordMatch").setCustomValidity("Passwords Don't Match");
+              else
+                  document.getElementById("passwordMatch").setCustomValidity('');
+          }function signUpSuccessMsg(){
+              document.getElementById("signup").style.display  = "block";
+          }
+    </script>
+    <% include partials/footer %>
+  </body>
 </html>

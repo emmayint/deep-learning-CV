@@ -1,0 +1,40 @@
+<nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark py-0">
+    <span style="font-size: 25px; color: tomato;">
+        <i class="fas fa-sitemap fa-fw"></i></span>
+    <a class="navbar-brand" href="/default" style="padding-left: 15px;">Image Classification Portal</a>
+    <div class="vl"></div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <!-- <li class="active"><a href="/Home" class="home-header">Home</a></li> -->
+            <!-- <li class="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                  Experiment<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/addExperiment">Add Experiment</a></li>
+                    <li><a href="/gallary">Gallary</a></li>
+                    <li><a href="/summary">Summary</a></li>
+                  </ul>
+              </li> -->
+            </ul>
+        <div class="vl"></div>
+        <ul class="navbar-nav">
+            <li class="active" style="padding-top: 6%;">
+                <a href="#" class="nav-link " style="padding-right: 20px;">
+                    Welcome,
+                    <%= uname %>!</a>
+            </li>
+            <li class="nav-item dropdown ml-auto active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user fa-fw"></i></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <form class="form" id="form" method="POST" action="/logout" style="padding:0px;">
+                    <a class="dropdown-item" href="/logout" onclick="document.getElementById('form').submit(); return false;">Logout</a>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

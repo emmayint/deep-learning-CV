@@ -4,11 +4,12 @@
     <title>Welcome to imagePrediction</title>
     <% include partials/head %>
     <link href="/stylesheets/default.css" rel="stylesheet" />
+    <link href="/stylesheets/style.css" rel="stylesheet" />
   </head>
   <body>
     <br /><br /><br />
     <!-- Navigation Bar -->
-    <% include partials/home-header %>
+    <% include partials/default-header %>
 
     <div>
       <div class="container">
@@ -27,9 +28,20 @@
             <span><i class="fas fa-cogs fa-5x"></i></span>
             <h4>Train a Model</h4>
             <p>
-              Please select this option if you want to train a model for making
-              predictions
+              Train a model (virtual lab assistant) that can classify images<br />
+              <!-- <a target="_blank" rel="noopener noreferrer" href="/whatstraining"
+                >click to view instructions
+                <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+              ></a> -->
+              <a
+                href="training-manual.pdf"
+                rel="noopener noreferrer"
+                target="_blank"
+                >View instructions
+                <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+              ></a>
             </p>
+
             <a href="/selectModel"
               ><button type="button" class="btn btn-primary site-btn">
                 Start Right Now
@@ -43,7 +55,14 @@
             <span><i class="fas fa-network-wired fa-5x"></i></span>
             <h4>Make a prediction</h4>
             <p>
-              Please select this option if you want to make a predictions
+              Please select this option if you want to make a predictions<br />
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="/whatsprediction"
+                >click to view details
+                <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+              ></a>
             </p>
             <a href="/Home"
               ><button type="button" class="btn btn-primary site-btn">
@@ -52,6 +71,22 @@
             >
           </div>
         </div>
+        <% if (uname == 'admin') { %>
+        <div class="col-sm-12 col-md-3">
+          <div class="col-md-12 feature-box">
+            <span><i class="fas fa-columns fa-5x"></i></span>
+            <h4>View Admin Report</h4>
+            <p>
+              Please select this option if you want to view admin report
+            </p>
+            <a href="/adminReport"
+              ><button type="button" class="btn btn-primary site-btn">
+                Start Right Now
+              </button></a
+            >
+          </div>
+        </div>
+        <% } %>
       </div>
     </div>
     <% include partials/footer %>

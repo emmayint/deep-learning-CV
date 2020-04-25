@@ -1,0 +1,9 @@
+pathlib
+Flask
+numpy
+Pillow
+matplotlib
+tensorflow
+Flask-Mail
+mlxtend
+pymysql

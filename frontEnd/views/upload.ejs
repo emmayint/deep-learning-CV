@@ -1,182 +1,209 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add datasets</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <title>Select Data</title>
+    <% include partials/head %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" href="/stylesheets/viewexperiment.css"> -->
-    <!-- <link rel='stylesheet' type="text/css" href='../stylesheets/styles.css'/> -->
     <link href="/stylesheets/selectModel.css" rel="stylesheet" type="text/css">
-
+</head>
 <body>
-<div class="container">
     <!-- Navigation Bar -->
+    <br /><br /><br />
+    <% include partials/train_header %>
     <div class="container">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/default">Home </a>
+        <div class="add-categories content-container">
+            <!-- progress bar -->
+            <div class="progress-container">
+                <div class="progress-track"></div>
+                <div class="progress-track-completed step2"></div>
+                <div class="complete-bullet"></div>
+                <div class="complete-text">
+                    <span class="step-text">Complete</span>
                 </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                    <a href="#" class="nav-link " style="padding-right: 20px;">
-                                        Welcome,
-                                        <%= uname %>!</a>
-                                </li>
-                        <li>
-                            <form class="form logout-link" id="form" method="POST" action="/logout">
-                                <a href="/logout"
-                                   onclick="document.getElementById('form').submit(); return false;"></span>
-                                    Logout
-                                </a>
-                            </form>
-                        </li>
-                    </ul>
+                <div id="step1" class="progress-step-complete">
+                    <span class="step-text">Choose model</span>
+                </div>
+                <div id="step2" class="progress-step-complete">
+                    <span class="step-text">Select data</span>
+                </div>
+                <div id="step3" class="progress-step">
+                    <span class="step-text">Customize inputs</span>
+                </div>
+                <div id="step4" class="progress-step">
+                    <span class="step-text">Name+train</span>
                 </div>
             </div>
-        </nav>
-
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="add-categories content-container">
-        <!-- progress bar -->
-        <div class="progress-container">
-            <div class="progress-track"></div>
-            <div class="progress-track-completed step2"></div>
-            <div class="complete-bullet"></div>
-            <div class="complete-text">
-                <span class="step-text">Complete</span>
-            </div>
-            <div id="step1" class="progress-step-complete">
-                <span class="step-text">Choose model</span>
-            </div>
-            <div id="step2" class="progress-step-complete">
-                <span class="step-text">Select data</span>
-            </div>
-            <div id="step3" class="progress-step">
-                <span class="step-text">Customize inputs</span>
-            </div>
-            <div id="step4" class="progress-step">
-                <span class="step-text">Name+train</span>
-            </div>
-        </div>
-        <h1 class="step-title">2. Upload files</h1>
-        <div class="upload-steps-container">
-            <div class="step-container upload-container">
-                <!-- <form class="form" method="POST" action="/upload" enctype="application/x-www-form-urlencoded" > -->
-                <!-- the above will pass the text input, but cant upload the file -->
-                <h4 class="step-directions-upload">1. Name a new project or select a project<span class="required-field">*</span></h4>
-                <%if(projectName){%><h5>You've selected project: <%= projectName%></h5><%}%>
-                <div class="category-container">
-                    <% projects.forEach(function(project){ %>
-                        <form class="form category-item" id="<%= project %>" method="POST" action="/upload/selectProject" enctype="application/x-www-form-urlencoded" >
-                            <button class="category-item-button" type="submit" onclick="onClickHandler()" name="projectName" value=<%= project %> >
-                                <span class="category-item-text"><%= project %></span>
+            <h1 class="step-title">2. Upload files</h1>
+            <div class="upload-steps-container">
+                <div class="step-container upload-container">
+                    <!-- <form class="form" method="POST" action="/upload" enctype="application/x-www-form-urlencoded" > -->
+                    <!-- the above will pass the text input, but cant upload the file -->
+                    <h4 class="step-directions-upload">1). Name a new project or select a project<span class="required-field">*</span><span></span></h4>
+                    <%if(projectName){%><p>You've selected project: <%= projectName%>. (<a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= projectName%>">view trained models of this project <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+                        ></a>)</p><%}%>
+                    <!-- <%if(projectName){%><p class="selected-project">You've selected project: <%= projectName%>. (<a target="_blank" rel="noopener noreferrer" href="/viewMoodels?projectName=<%= projectName%>">view trained models of this project</a>)</p><%}%> -->
+                    <div class="category-container">
+                        <% projects.forEach(function(project){ %>
+                            <%if(project!=".DS_Store"){%>
+                            <form class="form category-item" id="<%= project %>" method="POST" action="/upload/selectProject" enctype="application/x-www-form-urlencoded" >
+                                <button class="category-item-button" type="submit" onclick="onClickHandler()" name="projectName" value=<%= project %> >
+                                    <%if(projectName && projectName==project){%><span class="category-item-text"><strong><%= project %></strong></span>
+                                    <%}else{%>
+                                        <span class="category-item-text"><%= project %></span>
+                                    <%}%>
+                                </button>
+                            </form> 
+                            <%}%>
+                        <% })%>
+                    </div>
+                    <!-- <label class="select-category-text" for="projectName">name project</label> -->
+                    
+                    <form class="form" method="POST" action="/upload/nameProject" enctype="application/x-www-form-urlencoded" >
+                        <div class="new-category-input-container">
+                            <input class="new-category-input" type="text" pattern="^\S+$" oninvalid="setCustomValidity('Must not contain space')" oninput="setCustomValidity('')" class="form-control" placeholder="project name" name="projectName" required >
+                            <br>
+                            <button class="new-category-button" type="submit">
+                                create project
                             </button>
-                        </form> 
-                    <% })%>
-                </div>
-                <!-- <label class="select-category-text" for="projectName">name project</label> -->
-                
-                <form class="form" method="POST" action="/upload/nameProject" enctype="application/x-www-form-urlencoded" >
-                    <div class="new-category-input-container">
-                        <input class="new-category-input" type="text" class="form-control" placeholder="project name" name="projectName" required >
-                        <br>
-                        <button class="new-category-button" type="submit">
-                            create project
-                        </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="horizontal-line">
+
+                    <h4 class="step-directions-upload">2). Add category<span class="required-field">*</span></h4>
+                    <!-- <p>your categories:</p> -->
+                    <!-- <label class="select-category-text" for="category"> NOTE: category names should not contain spaces.</label> -->
+                    <form class="form" method="POST" action="/upload/createDir" enctype="application/x-www-form-urlencoded" >
+                        <div class="new-category-input-container">
+                            <input class="new-category-input" type="text" pattern="^\S+$" oninvalid="setCustomValidity('Must not contain space')" oninput="setCustomValidity('')" class="form-control" placeholder="category name" name="category" required >
+                            <br>
+                            <button class="new-category-button" type="submit">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                    <span><strong>Training data folders in /datasets:</strong> </span>
+                    <div class="category-container">
+                        <% trainfiles.forEach(function(trainfile){ %>
+                            <form class="form category-item" id="<%= trainfile %>" method="POST" action="/upload/selectDir" enctype="application/x-www-form-urlencoded" >
+                                <button class="category-item-button" type="submit" onclick="onClickHandler()" name="category" value=<%= trainfile %> >
+                                    <span><i class="fas fa-folder category-item-icon"></i></span>
+                                    <span class="category-item-text"><%= trainfile %></span>
+                                </button>                            
+                            </form> 
+                        <% })%>
                     </div>
-                </form>
-                
-                <br>
-                <h4 class="step-directions-upload">2. Add category<span class="required-field">*</span></h4>
-                <!-- <p>your categories:</p> -->
-                <label class="select-category-text" for="category"> NOTE: category names should not contain spaces.</label>
-                <form class="form" method="POST" action="/upload/createDir" enctype="application/x-www-form-urlencoded" >
-                    <div class="new-category-input-container">
-                        <input class="new-category-input" type="text" class="form-control" placeholder="category name" name="category" required >
-                        <br>
-                        <button class="new-category-button" type="submit">
-                            Add
-                        </button>
+                    <!-- <form class="form" id="createTestDir" method="POST" action="/upload/createTestDir" enctype="application/x-www-form-urlencoded" >
+                        <P><strong>Part of the data in your training datasets will be split out for model accurace testing. If you want to specify your own testing data, click 
+                            <a onclick="document.getElementById('createTestDir').submit();">here</a></strong>
+                        </P>
+                    </form> -->
+                    <span><strong>Testing data folders in /testData:</strong> </span>
+                    <div class="category-container">
+                        <% trainfiles.forEach(function(trainfile){ %>
+                            <form class="form category-item" id="<%= trainfile %>" method="POST" action="/upload/selectTestDir" enctype="application/x-www-form-urlencoded" >
+                                <button class="category-item-button" type="submit" onclick="onClickHandler()" name="category" value=<%= trainfile %> >
+                                    <span><i class="fas fa-folder category-item-icon"></i></span>
+                                    <span class="category-item-text"><%= trainfile %></span>
+                                </button>                            
+                            </form> 
+                        <% })%>
                     </div>
-                </form>
-                <span><strong>Training data:</strong> </span>
-                <div class="category-container">
-                    <% trainfiles.forEach(function(trainfile){ %>
-                        <form class="form category-item" id="<%= trainfile %>" method="POST" action="/upload/selectDir" enctype="application/x-www-form-urlencoded" >
-                            <button class="category-item-button" type="submit" onclick="onClickHandler()" name="category" value=<%= trainfile %> >
-                                <i class="icon fa fa-folder-o category-item-icon"></i>
-                                <span class="category-item-text"><%= trainfile %></span>
-                            </button>                            
-                        </form> 
-                        <br>
-                    <% })%>
-                </div>
-                <!-- <form class="form" id="createTestDir" method="POST" action="/upload/createTestDir" enctype="application/x-www-form-urlencoded" >
-                    <P><strong>Part of the data in your training datasets will be split out for model accurace testing. If you want to specify your own testing data, click 
-                        <a onclick="document.getElementById('createTestDir').submit();">here</a></strong>
-                    </P>
-                </form> -->
-                <span><strong>Testing data:</strong> </span>
-                <div class="category-container">
-                    <% trainfiles.forEach(function(trainfile){ %>
-                        <form class="form category-item" id="<%= trainfile %>" method="POST" action="/upload/selectTestDir" enctype="application/x-www-form-urlencoded" >
-                            <button class="category-item-button" type="submit" onclick="onClickHandler()" name="category" value=<%= trainfile %> >
-                                <i class="icon fa fa-folder-o category-item-icon"></i>
-                                <span class="category-item-text"><%= trainfile %></span>
-                            </button>                            
-                        </form> 
-                        <br>
-                    <% })%>
-                </div>
-                <br>
-                <h4 class="step-directions-upload">3. Select a folder above and upload file(s) to it<span class="required-field">*</span></h4>
-                <% if(selectedDir != ""){%>                    
-                    <form class="form upload-form" method="POST" action="/upload/createFile" enctype="multipart/form-data" >
+
+                    <hr class="horizontal-line">
+                    <h4 class="step-directions-upload">3). Select a folder above and upload file(s) to it<span class="required-field">*</span></h4>
+                    <%if(selectedDir){%>
+                        <div>You selected <strong> <%=  selectedDir.split(projectName)[1]%></strong>
+                        <%if(imgs){%>
+                            <span> (currently <%=imgs.length%> images in it).</span>
+                        <%}%>
+                        </div>
+                    <%}%>
+                    
+                    <% if(selectedDir != ""){%>                    
+                        <form class="form upload-form" method="POST" action="/upload/createFile" enctype="multipart/form-data" >
+                            <!-- <div class="selected-category-text"> <span class="selected-category"> </span></div>  -->
                             <input
                                 class="choose-files-button"
                                 name="file"
                                 type="file"
                                 multiple
                             >
-                            <p class="selected-category-text"> Files will be uploaded to : <span class="selected-category"><%=  selectedDir%></span></p> 
-                            <button class="btn btn-lg btn-primary btn-block upload-files-button" type="submit">
+                            <button class="btn btn-block upload-files-button" id="upload-files-button" type="submit">
                                 upload files
                             </button>
-                    </form>
+                        </form>
+                    <%}%>
+                </div>
+            </div>
+            <div>
+            <!-- <img id="selected-image" alt="has to be in /public dir" src="/cats/cats_00002.jpg" /> -->
+            </div>
+            <div class="footer-nav">
+                <a href="/selectModel">
+                    <button class="nav-button">
+                        Prev
+                    </button>
+                </a>
+                <%if(projectName){%>
+                <a href="/params">
+                    <button class="nav-button next-button">
+                        Next
+                    </button>
+                </a>
                 <%}%>
             </div>
-        </div>
-
-
-        <div class="footer-nav">
-            <a href="/selectModel">
-                <button class="nav-button">
-                    Prev
-                </button>
-            </a>
-            <a href="/params">
-                <button class="nav-button next-button">
-                    Next
-                </button>
-            </a>
+            <div>
+                <% if(selectedDir){%>
+                    <p>total <%=imgs.length%> images in <%=selectedDir.split(projectName)[1]%></p>
+                    <table>
+                    <%if(imgs){
+                        var i =0;
+                        imgs.forEach(function(ln){ 
+                            if(ln!=""){ 
+                                var path = selectedDir.split("public")[1] + "/" + ln; 
+                                console.log("path ",path);%>
+                                <%if(i%5==0){%>
+                                <tr>
+                                    <td>
+                                        <img src= <%= path%> style="width: 150px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                    
+                               
+                                <%}else if(i%5==4){%>
+                                    <td>
+                                        <img src= <%= path%> style="width: 150px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                </tr>
+                                <%}else{%>
+                                    <td>
+                                        <img src= <%= path%> style="width: 150px"/> 
+                                        <figcaption><%= ln%></figcaption>
+                                        <!-- <button>delete</button> -->
+                                        <br>
+                                    </td>
+                                <%}%>
+                                <%i++;%>
+                                <!-- <p><%=i%></p> -->
+                        <% }})%> 
+                    <%}%>
+                </table>
+                <%}%>            
+            </div>
         </div>
     </div>
-</div>
-<script>
-    function onClickHandler() {
-
-    }
-</script>
+    <script>
+        document.getElementById('upload-files-button').addEventListener('click', function (e) {
+            // e.preventDefault();
+            alert("Files will be uploaded");
+        });
+    </script>
+    <% include partials/footer %>
 </body>
 </html>

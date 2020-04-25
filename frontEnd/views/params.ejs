@@ -1,109 +1,141 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Add datasets</title>
-        <link
-            href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-            rel="stylesheet"
-            id="bootstrap-css"
-        />
-        <!-- <link rel='stylesheet' href='/stylesheets/style.css'/>
-            <link rel="stylesheet" href="/stylesheets/viewexperiment.css"> -->
-            <link href="/stylesheets/selectModel.css" rel="stylesheet" type="text/css">
-    </head>
-
+  <head>
+    <title>Customize Inputs</title>
+    <% include partials/head %>
+    <link
+      href="/stylesheets/selectModel.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
   <body>
+    <!-- Navigation Bar -->
+    <br /><br /><br />
+    <% include partials/train_header %>
     <div class="container">
-        <!-- Navigation Bar --> 
-        <div class="container">
-            <nav class="navbar navbar-default navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/default">Home </a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                        <a href="#" class="nav-link " style="padding-right: 20px;">
-                                            Welcome,
-                                            <%= uname %>!</a>
-                                    </li>
-                            <li>
-                                <form class="form logout-link" id="form" method="POST" action="/logout">
-                                    <a href="/logout"
-                                        onclick="document.getElementById('form').submit(); return false;"></span>
-                                        Logout</a> 
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+      <div class="add-categories content-container">
+        <!-- progress bar -->
+        <div class="progress-container">
+          <div class="progress-track"></div>
+          <div class="progress-track-completed step3"></div>
+          <div class="complete-bullet"></div>
+          <div class="complete-text">
+            <span class="step-text">Complete</span>
+          </div>
+          <div id="step1" class="progress-step-complete">
+            <span class="step-text">Choose model</span>
+          </div>
+          <div id="step2" class="progress-step-complete">
+            <span class="step-text">Select data</span>
+          </div>
+          <div id="step3" class="progress-step-complete">
+            <span class="step-text">Customize inputs</span>
+          </div>
+          <div id="step4" class="progress-step">
+            <span class="step-text">Name+train</span>
+          </div>
         </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="content-container row divtop">
-            <!-- progress bar -->
-            <div class="progress-container">
-                <div class="progress-track"></div>
-                <div class="progress-track-completed step3"></div>
-                <div class="complete-bullet"></div>
-                <div class="complete-text">
-                    <span class="step-text">Complete</span>
-                </div>
-                <div id="step1" class="progress-step-complete">
-                    <span class="step-text">Choose model</span>
-                </div>
-                <div id="step2" class="progress-step-complete">
-                    <span class="step-text">Select data</span>
-                </div>
-                <div id="step3" class="progress-step-complete">
-                    <span class="step-text">Customize inputs</span>
-                </div>
-                <div id="step4" class="progress-step">
-                    <span class="step-text">Name+train</span>
-                </div>
+        <h1 class="step-title">3. Customize model inputs <span style="color: red;">(Optional)</span></h1>
+        <div class="step-container params-content">
+          <h4 class="step-directions">
+            Set model inputs below 
+          </h4>
+          <a
+            onclick="window.open('https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9', '_blank', 'top=100 left=300,width=800,height=500');"
+            href="/params"
+            >What are these hyperparameters? <i class="fa fa-external-link-alt fa-xs" aria-hidden="true"></i
+              ></a
+          >
+          <p><strong>If you're training the model for the first time, you can skip to next step.</strong></p>
+          <p>
+            <!-- (training data size = <%= (trainSize*0.75).toFixed(0)%>; validation data size=<%=trainSize-(trainSize*0.25).toFixed(0)%>) -->
+          </p>
+
+          <form
+            class="params-form"
+            id="params-form"
+            method="POST"
+            action="/params"
+          >
+            epoch: <input type="number" name="epoch" min="1" max="50" value=
+            <%=epoch%>> (commonly 20 to 50 epochs)
+            <br />
+            <br />
+            train_batch_size: <input type="number" name="train_batch_size"
+            min="1" max=<%= (trainSize * 0.75).toFixed(0)%> value= <%= train_batch_size%>> <span>(between <%=train_batch_size%> and <%=(trainSize*0.75).toFixed(0)%>)</span> 
+            <br />
+            <br />
+            <!-- test_batch_size: <input type="number" name="test_batch_size" min="1"
+            max=<%=testSize%> value= <%= test_batch_size%>> -->
+            validation_batch_size: <input type="number" name="validation_batch_size" min="1"
+            max=<%=(trainSize * 0.25).toFixed(0)%> value= <%= validation_batch_size%>> (between <%=validation_batch_size%> and <%=trainSize-(trainSize*0.75).toFixed(0)%>)
+
+            <br />
+            <br />
+            <button type="button" id="advanced-input-button">
+              advanced inputs
+            </button>
+            <br />
+            <br />
+            <div id="advanced-input-container" style="display:none">
+              optimizer:
+              <select name="optimizer" value= <%= optimizer%>> form="params-form">
+                <option value="Adam" <%= optimizer == "Adam"? "selected" : "" %>>Adam</option>
+                <option value="SGD" <%= optimizer == "SGD" ? 'selected' : '' %>>SGD</option>
+              </select>
+              <br />
+              <br />
+              learning rate: <input type="number" name="learningRate"
+              min="0.00001" max="0.01" step="any" value= <%= learningRate%>>
             </div>
-            <h1 class="step-title">3. Customize model inputs (optional)</h1>
-            <div class="step-container params-content">
-                <h4 class="step-directions">Customize model inputs below (optional)</h4>
-                <a onclick="window.open('https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9', '_blank', 'top=100 left=300,width=800,height=500');"href="/params">what are these hyperparameters?</a>
-                <form  class="params-form" method="POST" action="/params">
-                    epoch: <input type="number" name="epoch" min="1" max="20" value= <%= epoch%>>
-                    <br>
-                    <br>
-                    batch_size: <input type="number" name="batch_size" min="1" max="100" value= <%= batch_size%>>
-                    <br>
-                    <br>
-                    steps_per_epoch: <input type="number" name="steps_per_epoch" min="1" max="100" value= <%= steps_per_epoch%>>
-                    <br>
-                    <br>
-                    <button class="params-submit-button btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-                </form>
-            </div>
-            <!-- <br>
+            <br />
+            <button class="params-submit-button btn btn-block" type="submit">
+              Submit
+            </button>
+          </form>
+
+          <!-- <button id="advanced-input-button">advanced inputs</button> -->
+        </div>
+        <!-- <br>
             <a href="/upload">Go back to upload data</a>
             <br>
             <a href="/nameModel">next </a> -->
-            <div class="footer-nav">
-                    <a href="/upload">
-                        <button class="nav-button">
-                            Prev
-                        </button>
-                    </a>
-                    <a href="/nameModel">
-                        <button class="nav-button next-button">
-                            Next
-                        </button>
-                    </a>
-            </div>
+        <div class="footer-nav">
+          <a href="/upload">
+            <button class="nav-button">
+              Prev
+            </button>
+          </a>
+          <a href="/nameModel">
+            <button id="next-button" class="nav-button next-button">
+              Next
+            </button>
+          </a>
         </div>
+      </div>
     </div>
-</body>
+    <script>
+      document
+        .getElementById("advanced-input-button")
+        .addEventListener("click", function() {
+          var element = document.getElementById("advanced-input-container");
+          if (window.getComputedStyle(element).display === "block") {
+            element.style.display = "none";
+          } else {
+            element.style.display = "block";
+          }
+        });
+      
+      document.getElementById("next-button").addEventListener("click", function(event){
+            event.preventDefault();
+            //form submission logic goes here
+            document.forms["params-form"].submit();
+
+            //redirect to next page
+            window.location.href = "/nameModel";
+        });
+    </script>
+    <% include partials/footer %>
+  </body>
+</html>

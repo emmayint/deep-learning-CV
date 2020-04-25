@@ -37,7 +37,7 @@ app = Flask(__name__)
 def get_model():
     global model
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
-    models_path =os.path.join(APP_ROOT, 'allProjects', 'p4','models/') # TODO projectName/models
+    models_path =os.path.join(APP_ROOT, 'public', 'allProjects', 'p4','models/') # TODO projectName/models
     vgg16_path = os.path.join(models_path, 'vgg16model.h5')
     model = load_model(vgg16_path)
     # model = load_model('vgg16model.h5')

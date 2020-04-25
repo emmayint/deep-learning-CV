@@ -2,21 +2,10 @@ const db = require('../database/db');
 let express = require('express');
 let router = express.Router();
 
-// @route   GET /home
-// @desc    Retrieve all the experiment created by the user
-// @access  Private
 router.get('/', function (req, res, next) {
     if (req.isAuthenticated()) {
         let user = req.user;
-
-db.query('SELECT experiment_images.exp_id, experiment_images.user_id, DATE_FORMAT(experiments.exp_birth_date,"%d/%m/%Y") AS exp_birth_date, experiments.exp_title, MIN(experiment_images.exp_images) AS exp_images '
-            + 'FROM experiments, experiment_images '
-            + 'WHERE experiments.users_id = experiment_images.user_id AND experiments.exp_id = experiment_images.exp_id AND experiments.users_id = ' + user.user_id + ' '
-            + 'GROUP BY experiment_images.exp_id, experiments.exp_title;', function (error, results, fields) {
-            if (error) throw error;
-        console.log('user authenticated');
-            res.render('home', {uname: user.user_name, data: results});
-        });
+            res.render('home', {uname: user.user_name});
     } else {
         res.redirect('/');
     }

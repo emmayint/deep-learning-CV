@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Log & Confusion Matrix</title>
+    <% include partials/head %>
+    <link
+      href="/stylesheets/selectModel.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- head for cm -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"
+    ></script>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"/> copied to /stylesheets/selectModel.css-->
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <br /><br /><br />
+    <% include partials/train_header %>
+    <div class="container">
+      <div class="content-container">
+        <!-- progress bar -->
+        <div class="progress-container">
+          <div class="progress-track-finished"></div>
+          <div class="progress-track-completed step4"></div>
+          <div class="complete-bullet-completed"></div>
+          <div class="complete-text">
+            <span class="step-text">Complete</span>
+          </div>
+          <div id="step1" class="progress-step-complete">
+            <span class="step-text">Choose model</span>
+          </div>
+          <div id="step2" class="progress-step-complete">
+            <span class="step-text">Select data</span>
+          </div>
+          <div id="step3" class="progress-step-complete">
+            <span class="step-text">Customize inputs</span>
+          </div>
+          <div id="step4" class="progress-step-complete">
+            <span class="step-text">Name+train</span>
+          </div>
+        </div>
+        <h1 class="step-title">
+          Your model <%= modelName%> is successfully trained.
+        </h1>
+        <div class="step-container">
+          <style>
+            .loader {
+              border: 16px solid #f3f3f3;
+              border-radius: 50%;
+              border-top: 16px solid #3498db;
+              width: 60px;
+              height: 60px;
+              -webkit-animation: spin 2s linear infinite; /* Safari */
+              animation: spin 2s linear infinite;
+              margin: 20px auto;
+            }
+            /* Safari */
+            @-webkit-keyframes spin {
+              0% {
+                -webkit-transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+              }
+            }
+            @keyframes spin {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          </style>
+
+          <!-- <div id="dataView"></div> -->
+          <div style="display:inline-block; float:left" id="container"></div>
+          <div style="display:inline-block; float:left" id="legend"></div>
+          <h5>
+            <!-- imgPath: <%= imgPath%> <br>
+            classes: <%= classes%> <br>
+            classes_array: <%= JSON.parse(classes)%><br> -->
+
+            <% var classes_array = JSON.parse(classes) %>
+            These <%= classes_array[cell[0]]%> image are predicted as <%= classes_array[cell[1]]%>:
+          </h5>
+          <div>
+            <% imgsArr.split(',').forEach(function(ln){ if(ln!=""){ var path =
+            imgPath + ln; console.log("path ",path);%>
+            <!-- <h6>
+                <%= ln%>
+            </h6> -->
+            <img src= <%= path%> style="width: 300px"/> 
+            <figcaption><%= ln%></figcaption>
+            
+            <br> <br><% }})%> 
+            <!-- <img src="/allProjects/43/frog_embryo/testData/control/2139289.jpg" /> -->
+          </div>
+        </div>
+      </div>
+      <div class="footer-nav">
+        <% var link = "http://localhost:5001/logger?modelName=" + modelName;
+        console.log("-- link", link); %>
+        <a href=<%=link%> >
+          <!-- <button class="nav-button next-button"> -->
+            Back to Confusion Matrix
+          <!-- </button> -->
+        </a>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>

@@ -11,7 +11,7 @@ body {
 }
 
 .imgmetadata {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   color: #636363;
   text-align: left;
@@ -25,9 +25,13 @@ body {
 }
 .example-button {
   color: white;
-  font: 14px "Open Sans", sans-serif;
-  background: #636363;
-  margin-top: 90px;
+  /* font: 15px "Roboto", sans-serif; */
+  font-size: 15px;
+  font-weight: bold;
+  background: #19aa8d;
+  margin-top: 9%;
+  border:none;
+  margin-right: 1%;
 }
 
 .imgid {
@@ -35,12 +39,12 @@ body {
 }
 .cropBtn {
   background: #179b81;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
 }
 
-.topmargin {
-  margin-top: 80px;
+.viewexp-topmargin {
+  margin-top: 4%;
 }
 
 .fileName {
