@@ -13,17 +13,24 @@ const mysql = require("mysql");
 // Setting up upload function using multer
 let uploadTrain = multer({
   storage: multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
       cb(null, req.cookies.selectedDir);
     },
     filename: (req, file, cb) => {
       // console.log("uploading", file.originalname);
       cb(null, path.basename(file.originalname));
+    },
+  }),
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, false);
     }
-  })
+  },
 });
 
-router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
+router.post("/createFile", uploadTrain.array("file", 200), function (req, res) {
   let json;
   // add images to DB experiment_images table
   if (req.cookies.selectTestDir == 1) {
@@ -32,7 +39,7 @@ router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
     var sql =
       "SELECT exp_id FROM experiments WHERE exp_title = " +
       mysql.escape(expTitle);
-    db.query(sql, function(err, result) {
+    db.query(sql, function (err, result) {
       var string = JSON.stringify(result);
       json = JSON.parse(string);
       // insert uploaded image files
@@ -60,7 +67,7 @@ router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
             now,
             req.cookies.selectedCategory,
             "T",
-            req.cookies.selectedDir + "/" + array[k]
+            req.cookies.selectedDir + "/" + array[k],
           ]
         );
       }
@@ -75,7 +82,7 @@ router.post("/createFile", uploadTrain.array("file", 200), function(req, res) {
   // res.redirect("/upload");
 });
 
-router.get("/", function(req, res) {
+router.get("/", function (req, res) {
   // display all categories in current project
   if (req.isAuthenticated()) {
     let allProjectBuf = Buffer.from(
@@ -126,7 +133,7 @@ router.get("/", function(req, res) {
                 projectName: req.cookies.projectName,
                 selectedDir: req.cookies.selectedDir,
                 uname: user.user_name,
-                imgs: req.cookies.imgs
+                imgs: req.cookies.imgs,
               });
             }
           });
@@ -137,7 +144,7 @@ router.get("/", function(req, res) {
             projectName: req.cookies.projectName,
             selectedDir: req.cookies.selectedDir,
             uname: user.user_name,
-            imgs: req.cookies.imgs
+            imgs: req.cookies.imgs,
           });
         }
       }
@@ -147,7 +154,7 @@ router.get("/", function(req, res) {
   }
 });
 
-router.post("/nameProject", function(req, res) {
+router.post("/nameProject", function (req, res) {
   console.log("post /nameProject with body:", req.body);
   // projectName = req.body.projectName;
   res.cookie("projectName", req.body.projectName);
@@ -167,7 +174,7 @@ router.post("/nameProject", function(req, res) {
   db.query(
     "INSERT IGNORE INTO experiments (users_id, exp_title, exp_birth_date, exp_type) VALUES (?, ?, ?, ?)",
     [user.user_id, expTitle, now, "T"],
-    function(error, results, fields) {
+    function (error, results, fields) {
       if (error) throw error;
       console.log("results.insertId (exp_id)", results.insertId);
     }
@@ -189,7 +196,7 @@ router.post("/nameProject", function(req, res) {
         req.body.projectName +
         "/datasets",
       {
-        recursive: true
+        recursive: true,
       }
     );
   }
@@ -209,7 +216,7 @@ router.post("/nameProject", function(req, res) {
         req.body.projectName +
         "/testData",
       {
-        recursive: true
+        recursive: true,
       }
     );
   }
@@ -229,7 +236,7 @@ router.post("/nameProject", function(req, res) {
         req.body.projectName +
         "/models",
       {
-        recursive: true
+        recursive: true,
       }
     );
   }
@@ -237,7 +244,7 @@ router.post("/nameProject", function(req, res) {
 });
 
 // create categories in each project /datasets and /testData
-router.post("/createDir", function(req, res) {
+router.post("/createDir", function (req, res) {
   console.log("post /createDir, ", "body:", req.body);
   category = req.body.category;
 
@@ -259,7 +266,7 @@ router.post("/createDir", function(req, res) {
         "/datasets/" +
         category,
       {
-        recursive: true
+        recursive: true,
       }
     );
   }
@@ -281,7 +288,7 @@ router.post("/createDir", function(req, res) {
         "/testData/" +
         category,
       {
-        recursive: true
+        recursive: true,
       }
     );
   }
@@ -289,7 +296,7 @@ router.post("/createDir", function(req, res) {
 });
 
 // select a category directory to upload
-router.post("/selectDir", function(req, res) {
+router.post("/selectDir", function (req, res) {
   res.cookie("selectedCategory", req.body.category);
   var selected_dir =
     "./public/allProjects/" +
@@ -309,7 +316,7 @@ router.post("/selectDir", function(req, res) {
 });
 
 // same as /selectDir, but with /../testDate/selectedCategory/ as target folder
-router.post("/selectTestDir", function(req, res) {
+router.post("/selectTestDir", function (req, res) {
   res.cookie("selectedCategory", req.body.category);
   var selected_dir =
     "./public/allProjects/" +
@@ -328,7 +335,7 @@ router.post("/selectTestDir", function(req, res) {
 });
 
 // select a project
-router.post("/selectProject", function(req, res) {
+router.post("/selectProject", function (req, res) {
   console.log("post /selectProject with body:", req.body);
   res.cookie("projectName", req.body.projectName);
   res.cookie("epoch", -1);
@@ -379,7 +386,7 @@ router.post("/selectProject", function(req, res) {
 // });
 
 // Add mideleware to the route
-router.get("/", authenticationMiddleware(), function(req, res) {
+router.get("/", authenticationMiddleware(), function (req, res) {
   res.render("upload");
 });
 

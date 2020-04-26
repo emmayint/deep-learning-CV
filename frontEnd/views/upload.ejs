@@ -111,7 +111,7 @@
                     </div>
 
                     <hr class="horizontal-line">
-                    <h4 class="step-directions-upload">3). Select a folder above and upload file(s) to it<span class="required-field">*</span></h4>
+                    <h4 class="step-directions-upload">3). Select a folder above and upload <span style="color: red;">jpg </span>file(s) to it<span class="required-field">*</span></h4>
                     <%if(selectedDir){%>
                         <div>You selected <strong> <%=  selectedDir.split(projectName)[1]%></strong>
                         <%if(imgs){%>
@@ -201,7 +201,7 @@
     <script>
         document.getElementById('upload-files-button').addEventListener('click', function (e) {
             // e.preventDefault();
-            alert("Files will be uploaded");
+            alert("Only jpg files will be uploaded");
         });
     </script>
     <% include partials/footer %>
