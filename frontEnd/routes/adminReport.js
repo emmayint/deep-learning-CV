@@ -3,7 +3,7 @@ let express = require('express');
 let router = express.Router();
 
 // @route   GET /summary
-// @desc    Retrieve summary of all experiments conducted by the user
+// @desc    Retrieve summary of all the experiments performed by all the users in a table like view
 // @access  Private
 router.get('/', function (req, res, next) {
     if (req.isAuthenticated() && req.user.user_name === 'admin') {

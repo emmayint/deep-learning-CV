@@ -77,11 +77,13 @@ router.get("/:id", function(req, res, next) {
   }
 });
 
+// @route   GET /:id/getModels/:trainingAlgo
+// @desc    Retrieve models by user id and selected training algorithm
+// @access  Private
 router.get("/:id/getModels/:trainingAlgo", function(req, res, next) {
   if (req.isAuthenticated()) {
     let user = req.user;
     let trainingAlgo = req.params.trainingAlgo;
-    // SELECT selected_model,model_fullname FROM csc899.Models where user_id = 9;
     db.query(
       "SELECT model_fullname, favorite FROM Models m" +
         " WHERE m.user_id = " +
@@ -100,11 +102,12 @@ router.get("/:id/getModels/:trainingAlgo", function(req, res, next) {
   }
 });
 
+// @route   GET /:id/getTrainingAlgo
+// @desc    Retrieve training algorithms by user id
+// @access  Private
 router.get("/:id/getTrainingAlgo", function(req, res, next) {
   if (req.isAuthenticated()) {
     let user = req.user;
-
-    // SELECT selected_model,model_fullname FROM csc899.Models where user_id = 9;
     db.query(
       "SELECT distinct selected_model FROM Models m" +
         " WHERE m.user_id = " +

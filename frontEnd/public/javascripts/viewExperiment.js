@@ -335,6 +335,7 @@ function checkCrop(e) {
   });
 }
 
+// Function to populate Training algorithm and Model dropdowns
 function populate_models_data(trainingalgo_data) {
   var training_algo_arr = new Array("Select Training Algorithm");
 
